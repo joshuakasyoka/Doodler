@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from '../Button/Button';
 import { DoodlerLogo } from '../../assets/logo';
 import { IconPlus, IconGalleryToggle } from '../../icons';
+import { NewDoodleModal } from '../NewDoodleModal/NewDoodleModal';
 import image3 from '../../assets/img/image 3.png';
 import image13 from '../../assets/img/image 13.png';
 import image14 from '../../assets/img/image 14.png';
@@ -11,6 +12,7 @@ import './Gallery.css';
 export interface GalleryProps {
   onBack: () => void;
   onSectionClick?: (sectionTitle: string) => void;
+  onNavigateToDoodle?: () => void;
 }
 
 const GALLERY_SECTIONS = [
@@ -36,10 +38,26 @@ const GALLERY_SECTIONS = [
   },
 ];
 
-export const Gallery: React.FC<GalleryProps> = ({ onBack, onSectionClick }) => {
+export const Gallery: React.FC<GalleryProps> = ({ onBack, onSectionClick, onNavigateToDoodle }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const handleCardClick = (sectionTitle: string) => {
     if (onSectionClick) {
       onSectionClick(sectionTitle);
+    }
+  };
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleConfirmModal = () => {
+    if (onNavigateToDoodle) {
+      onNavigateToDoodle();
     }
   };
 
@@ -51,7 +69,7 @@ export const Gallery: React.FC<GalleryProps> = ({ onBack, onSectionClick }) => {
           <Button variant="outline" size="small" startIcon={<IconGalleryToggle size={16} />} onClick={onBack}>
             Overzicht
           </Button>
-          <Button variant="primary" size="small" startIcon={<IconPlus size={16} />}>
+          <Button variant="primary" size="small" startIcon={<IconPlus size={16} />} onClick={handleOpenModal}>
             Nieuwe doodle
           </Button>
         </div>
@@ -86,6 +104,11 @@ export const Gallery: React.FC<GalleryProps> = ({ onBack, onSectionClick }) => {
           </div>
         </div>
       </div>
+      <NewDoodleModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        onConfirm={handleConfirmModal}
+      />
     </div>
   );
 };

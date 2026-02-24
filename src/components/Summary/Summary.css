@@ -21,7 +21,11 @@
 }
 
 .doodler-summary__section:hover {
-  opacity: 0.8;
+  opacity: 1;
+}
+
+.doodler-summary__section:hover .doodler-summary__image-display .doodler-image-display {
+  border: 1px solid var(--doodler-color-black);
 }
 
 .doodler-summary__chip {
@@ -43,6 +47,10 @@
   flex-direction: column;
   width: 100%;
   height: 100%;
+  border: 1px solid transparent;
+  border-radius: var(--doodler-spacing-16);
+  transition: border-color 0.2s ease;
+  box-sizing: border-box;
 }
 
 .doodler-summary__image-display .doodler-image-display__container {

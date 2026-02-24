@@ -16,7 +16,7 @@ export interface Activity {
 }
 
 export interface ActivitiesOverviewProps {
-  onNavigateToDoodle?: () => void;
+  onNavigateToDoodle?: (stepIndex?: number) => void;
   onNavigateToGallery?: () => void;
 }
 
@@ -211,7 +211,7 @@ export const ActivitiesOverview: React.FC<ActivitiesOverviewProps> = ({ onNaviga
                         <Button 
                           variant="primary" 
                           size="small"
-                          onClick={onNavigateToDoodle}
+                          onClick={() => onNavigateToDoodle?.(0)}
                         >
                           Open
                         </Button>
@@ -223,7 +223,7 @@ export const ActivitiesOverview: React.FC<ActivitiesOverviewProps> = ({ onNaviga
                       <CellButton
                         state={activity.krachten}
                         onToggle={() => handleCellToggle(index, 'krachten')}
-                        onNavigate={onNavigateToDoodle}
+                        onNavigate={() => onNavigateToDoodle?.(0)}
                         onOpenModal={handleOpenModal}
                       />
                     </td>
@@ -231,7 +231,7 @@ export const ActivitiesOverview: React.FC<ActivitiesOverviewProps> = ({ onNaviga
                       <CellButton
                         state={activity.klachten}
                         onToggle={() => handleCellToggle(index, 'klachten')}
-                        onNavigate={onNavigateToDoodle}
+                        onNavigate={() => onNavigateToDoodle?.(1)}
                         onOpenModal={handleOpenModal}
                       />
                     </td>
@@ -239,7 +239,7 @@ export const ActivitiesOverview: React.FC<ActivitiesOverviewProps> = ({ onNaviga
                       <CellButton
                         state={activity.inzichten}
                         onToggle={() => handleCellToggle(index, 'inzichten')}
-                        onNavigate={onNavigateToDoodle}
+                        onNavigate={() => onNavigateToDoodle?.(2)}
                         onOpenModal={handleOpenModal}
                       />
                     </td>
@@ -247,7 +247,7 @@ export const ActivitiesOverview: React.FC<ActivitiesOverviewProps> = ({ onNaviga
                       <CellButton
                         state={activity.aanpak}
                         onToggle={() => handleCellToggle(index, 'aanpak')}
-                        onNavigate={onNavigateToDoodle}
+                        onNavigate={() => onNavigateToDoodle?.(3)}
                         onOpenModal={handleOpenModal}
                       />
                     </td>

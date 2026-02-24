@@ -165,10 +165,10 @@ export const Prototype: React.FC = () => {
     }));
   });
 
-  const handleNavigateToDoodle = () => {
+  const handleNavigateToDoodle = (stepIndex: number = 0) => {
     setShowActivitiesOverview(false);
     setShowKrachtenPage(true);
-    setCurrentKrachtenStep(0);
+    setCurrentKrachtenStep(stepIndex);
   };
 
   const handleNextStep = () => {
@@ -283,6 +283,7 @@ export const Prototype: React.FC = () => {
       <Gallery
         onBack={() => setShowGallery(false)}
         onSectionClick={handleGallerySectionClick}
+        onNavigateToDoodle={handleNavigateToDoodle}
       />
     );
   }
