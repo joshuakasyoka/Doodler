@@ -1,0 +1,65 @@
+/* Responsive utility classes and mixins */
+
+/* Mobile-first approach: base styles are for mobile, then we enhance for larger screens */
+
+/* Container queries for responsive images */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Prevent horizontal scroll */
+.container {
+  width: 100%;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--doodler-spacing-16);
+  padding-right: var(--doodler-spacing-16);
+}
+
+@media (min-width: 768px) {
+  .container {
+    padding-left: var(--doodler-spacing-24);
+    padding-right: var(--doodler-spacing-24);
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    padding-left: var(--doodler-spacing-32);
+    padding-right: var(--doodler-spacing-32);
+  }
+}
+
+/* Responsive text utilities */
+.text-responsive {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  .text-responsive {
+    font-size: 16px;
+  }
+}
+
+/* Hide/show utilities */
+.hide-mobile {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .hide-mobile {
+    display: block;
+  }
+
+  .show-mobile {
+    display: none;
+  }
+}
+
+/* Touch-friendly spacing */
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+}

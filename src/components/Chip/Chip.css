@@ -1,0 +1,30 @@
+.doodler-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--doodler-spacing-4) var(--doodler-spacing-8);
+  font-family: var(--doodler-font-body);
+  font-size: 12px;
+  font-weight: var(--doodler-font-weight-normal);
+  line-height: 1.5;
+  border-radius: var(--doodler-radius-chip);
+  white-space: nowrap;
+}
+
+/* Variants */
+.doodler-chip--default {
+  background-color: var(--doodler-color-black);
+  color: var(--doodler-color-white);
+}
+
+.doodler-chip--secondary {
+  background-color: var(--doodler-color-white);
+  color: var(--doodler-color-text-primary);
+  border: 1px solid var(--doodler-color-outline-grey);
+}
+
+.doodler-chip--outline {
+  background-color: transparent;
+  color: var(--doodler-color-white);
+  border: 1px solid var(--doodler-color-outline-grey);
+}

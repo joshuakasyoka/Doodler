@@ -1,0 +1,305 @@
+.doodler-prototype {
+  min-height: 100vh;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: 
+    radial-gradient(
+      ellipse 1450px 600px at 70% 71%,
+      rgba(255, 246, 204, 0.9) 0%,
+      rgba(238, 219, 204, 0.3) 100%
+    ),
+    linear-gradient(90deg, rgb(255, 255, 255) 0%, rgb(255, 255, 255) 100%);
+  padding: var(--doodler-spacing-32);
+  position: relative;
+  overflow: hidden;
+}
+
+.doodler-prototype__header {
+  display: flex;
+  align-items: center;
+  gap: var(--doodler-spacing-16);
+  margin-bottom: var(--doodler-spacing-16);
+}
+
+.doodler-prototype__back-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: var(--doodler-spacing-8);
+  color: var(--doodler-color-text-primary);
+  transition: opacity 0.2s ease;
+  min-width: 44px;
+  min-height: 44px;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.doodler-prototype__back-button:hover {
+  opacity: 0.7;
+}
+
+.doodler-prototype__back-button:active {
+  opacity: 0.5;
+}
+
+@media (min-width: 768px) {
+  .doodler-prototype__back-button {
+    min-width: auto;
+    min-height: auto;
+    padding: var(--doodler-spacing-4);
+  }
+}
+
+.doodler-prototype__logo {
+  height: 40px;
+  width: auto;
+  color: var(--doodler-color-black);
+}
+
+.doodler-prototype__logo path {
+  fill: currentColor;
+}
+
+.doodler-prototype__screen {
+  background-color: var(--doodler-color-white);
+  border-radius: var(--doodler-spacing-16);
+  padding: var(--doodler-spacing-16);
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.doodler-prototype__steps {
+  margin-bottom: var(--doodler-spacing-16);
+}
+
+.doodler-prototype__step-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--doodler-spacing-16);
+  flex: 1;
+  min-height: 0;
+}
+
+.doodler-prototype__summary-content {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.doodler-prototype__step-title {
+  display: flex;
+  flex-direction: column;
+  gap: var(--doodler-spacing-12);
+  align-items: center;
+  text-align: center;
+}
+
+.doodler-prototype__step-title--left {
+  align-items: flex-start;
+  text-align: left;
+}
+
+.doodler-prototype__heading {
+  font-family: var(--doodler-font-heading);
+  font-size: 24px;
+  font-weight: var(--doodler-font-weight-normal);
+  line-height: 1.2;
+  color: var(--doodler-color-text-primary);
+  margin: 0;
+  width: auto;
+  font-variation-settings: var(--doodler-font-variation-settings);
+  white-space: nowrap;
+  text-align: center;
+}
+
+.doodler-prototype__subtitle {
+  font-family: var(--doodler-font-body);
+  font-size: 14px;
+  font-weight: var(--doodler-font-weight-normal);
+  line-height: 1.4;
+  color: var(--doodler-color-text-secondary);
+  margin: 0;
+  max-width: 100%;
+  text-align: center;
+}
+
+.doodler-prototype__step-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--doodler-spacing-16);
+  flex: 1;
+  min-height: 0;
+  align-items: stretch;
+}
+
+@media (max-width: 767px) {
+  .doodler-prototype__step-content {
+    flex: 0 0 auto;
+    min-height: auto;
+  }
+}
+
+.doodler-prototype__right-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  gap: var(--doodler-spacing-16);
+}
+
+.doodler-prototype__right-content .doodler-button {
+  align-self: flex-end;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .doodler-prototype__right-content .doodler-button {
+    width: auto;
+    align-self: flex-end;
+  }
+}
+
+.doodler-prototype__top-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--doodler-spacing-12);
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.doodler-prototype__annotations {
+  display: flex;
+  flex-direction: column;
+  gap: var(--doodler-spacing-12);
+}
+
+.doodler-prototype__annotation {
+  border: 1px solid var(--doodler-color-outline-grey);
+  border-radius: var(--doodler-spacing-12);
+  padding: var(--doodler-spacing-12);
+  display: flex;
+  flex-direction: column;
+  gap: var(--doodler-spacing-12);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.doodler-prototype__annotation:hover {
+  border-color: var(--doodler-color-active);
+  background-color: rgba(29, 32, 33, 0.02);
+}
+
+.doodler-prototype__annotation-icon {
+  position: absolute;
+  top: var(--doodler-spacing-12);
+  right: var(--doodler-spacing-12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+.doodler-prototype__annotation:hover .doodler-prototype__annotation-icon {
+  opacity: 1;
+}
+
+.doodler-prototype__annotation-chip {
+  display: inline-flex;
+}
+
+.doodler-prototype__annotation-description {
+  font-family: var(--doodler-font-body);
+  font-size: 14px;
+  font-weight: var(--doodler-font-weight-normal);
+  line-height: 16px;
+  color: var(--doodler-color-text-primary);
+  margin: 0;
+}
+
+.doodler-prototype__actions {
+  display: flex;
+  gap: var(--doodler-spacing-12);
+  align-items: center;
+  justify-content: flex-end;
+  padding-top: var(--doodler-spacing-16);
+  flex-shrink: 0;
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+  .doodler-prototype {
+    padding: var(--doodler-spacing-16);
+  }
+}
+
+/* Tablet and up */
+@media (min-width: 768px) {
+  .doodler-prototype {
+    padding: var(--doodler-spacing-32);
+  }
+
+  .doodler-prototype__header {
+    margin-bottom: var(--doodler-spacing-24);
+  }
+
+  .doodler-prototype__logo {
+    height: 40px;
+  }
+
+  .doodler-prototype__screen {
+    padding: var(--doodler-spacing-24);
+  }
+
+  .doodler-prototype__steps {
+    margin-bottom: var(--doodler-spacing-24);
+  }
+
+  .doodler-prototype__step-section {
+    gap: var(--doodler-spacing-24);
+  }
+
+  .doodler-prototype__step-title {
+    gap: var(--doodler-spacing-24);
+  }
+
+  .doodler-prototype__heading {
+    font-size: 30px;
+    width: 140px;
+  }
+
+  .doodler-prototype__step-content {
+    flex-direction: row;
+    gap: var(--doodler-spacing-12);
+    align-items: stretch;
+  }
+
+  .doodler-prototype__right-content {
+    gap: 0;
+  }
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+  .doodler-prototype {
+    padding: var(--doodler-spacing-32);
+  }
+
+  .doodler-prototype__screen {
+    padding: var(--doodler-spacing-32);
+  }
+}

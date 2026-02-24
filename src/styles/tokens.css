@@ -1,0 +1,36 @@
+:root {
+  /* Colors */
+  --doodler-color-active: #1D2021;
+  --doodler-color-hover: #2A2E2F;
+  --doodler-color-black: #292E31;
+  --doodler-color-beige: #FCEFDC;
+  --doodler-color-grey: #F4F4F4;
+  --doodler-color-outline-grey: #E9E9E9;
+  --doodler-color-white: #FFFFFF;
+  --doodler-color-text-primary: #303030;
+  --doodler-color-text-secondary: rgba(0, 0, 0, 0.5);
+  --doodler-color-surface-tertiary: #171717;
+
+  /* Spacing */
+  --doodler-spacing-4: 4px;
+  --doodler-spacing-8: 8px;
+  --doodler-spacing-12: 12px;
+  --doodler-spacing-16: 16px;
+  --doodler-spacing-24: 24px;
+  --doodler-spacing-32: 32px;
+
+  /* Breakpoints */
+  --doodler-breakpoint-mobile: 768px;
+  --doodler-breakpoint-tablet: 1024px;
+
+  /* Radius */
+  --doodler-radius-button: 8px;
+  --doodler-radius-chip: 16px;
+
+  /* Typography */
+  --doodler-font-heading: "Bricolage Grotesque", system-ui, sans-serif;
+  --doodler-font-body: "Inter", system-ui, sans-serif;
+  --doodler-font-weight-normal: 400;
+  --doodler-font-weight-medium: 500;
+  --doodler-font-variation-settings: "opsz" 14, "wdth" 100;
+}

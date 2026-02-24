@@ -1,0 +1,43 @@
+.doodler-content {
+  border: 1px solid var(--doodler-color-outline-grey);
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: var(--doodler-spacing-12) var(--doodler-spacing-12);
+  border-radius: var(--doodler-spacing-16);
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .doodler-content {
+    padding: var(--doodler-spacing-16) var(--doodler-spacing-12);
+  }
+}
+
+.doodler-content__item {
+  display: flex;
+  flex-direction: column;
+}
+
+.doodler-content__paragraph {
+  font-family: var(--doodler-font-body);
+  font-size: 14px;
+  font-weight: var(--doodler-font-weight-normal);
+  line-height: 1.5;
+  color: var(--doodler-color-text-primary);
+  margin: 0;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.doodler-content__title {
+  font-weight: var(--doodler-font-weight-medium);
+}
+
+.doodler-content__description {
+  font-weight: var(--doodler-font-weight-normal);
+}
+
+.doodler-content__spacer {
+  height: 20px;
+}

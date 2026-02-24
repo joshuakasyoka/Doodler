@@ -1,0 +1,57 @@
+.doodler-edit-annotation {
+  border: 1px solid var(--doodler-color-black);
+  border-radius: var(--doodler-spacing-16);
+  padding: var(--doodler-spacing-12);
+  display: flex;
+  flex-direction: column;
+  gap: var(--doodler-spacing-12);
+  width: 100%;
+}
+
+.doodler-edit-annotation__input-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.doodler-edit-annotation__input {
+  width: 100%;
+  border: 1px solid transparent;
+  border-radius: var(--doodler-radius-button);
+  padding: var(--doodler-spacing-12);
+  font-family: var(--doodler-font-body);
+  font-size: 14px;
+  font-weight: var(--doodler-font-weight-normal);
+  line-height: 16px;
+  color: var(--doodler-color-text-primary);
+  background-color: var(--doodler-color-grey);
+  resize: none;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.doodler-edit-annotation__input--header {
+  font-family: var(--doodler-font-heading);
+  font-variation-settings: var(--doodler-font-variation-settings);
+}
+
+.doodler-edit-annotation__input--description {
+  font-family: var(--doodler-font-body);
+  color: var(--doodler-color-text-secondary);
+}
+
+.doodler-edit-annotation__input::placeholder {
+  color: var(--doodler-color-text-secondary);
+}
+
+.doodler-edit-annotation__input:focus {
+  outline: none;
+  background-color: var(--doodler-color-white);
+  border-color: var(--doodler-color-active);
+}
+
+.doodler-edit-annotation__actions {
+  display: flex;
+  gap: var(--doodler-spacing-8);
+  align-items: center;
+  justify-content: flex-end;
+}

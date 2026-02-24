@@ -1,0 +1,117 @@
+.doodler-steps-component {
+  display: flex;
+  flex-direction: column;
+  gap: var(--doodler-spacing-8);
+  width: 100%;
+}
+
+.doodler-steps-component__navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  font-family: var(--doodler-font-heading);
+  font-size: 14px;
+  font-weight: var(--doodler-font-weight-normal);
+  line-height: 16px;
+  font-variation-settings: var(--doodler-font-variation-settings);
+  flex-wrap: wrap;
+  gap: var(--doodler-spacing-8);
+}
+
+@media (min-width: 768px) {
+  .doodler-steps-component__navigation {
+    font-size: 16px;
+    flex-wrap: nowrap;
+    gap: 0;
+  }
+}
+
+.doodler-steps-component__step {
+  position: relative;
+  color: var(--doodler-color-text-secondary);
+  transition: color 0.2s ease;
+  display: inline-block;
+}
+
+.doodler-steps-component__step--active {
+  color: var(--doodler-color-black);
+}
+
+.doodler-steps-component__icon {
+  position: absolute;
+  left: calc(100% + 8px);
+  top: 50%;
+  transform: translateY(-50%);
+  width: 12px;
+  height: 12px;
+  color: var(--doodler-color-text-secondary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.doodler-steps-component__progress-bar {
+  width: 100%;
+  height: 8px;
+  background-color: var(--doodler-color-grey);
+  border-radius: var(--doodler-spacing-4);
+  overflow: visible;
+  position: relative;
+}
+
+.doodler-steps-component__progress-fill {
+  height: 100%;
+  background-color: var(--doodler-color-black);
+  border-radius: var(--doodler-spacing-4);
+  transition: width 0.3s ease;
+}
+
+.doodler-steps-component__progress-check {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--doodler-color-surface-tertiary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.doodler-steps-component__label {
+  font-family: var(--doodler-font-heading);
+  font-size: 14px;
+  font-weight: var(--doodler-font-weight-normal);
+  line-height: 16px;
+  color: var(--doodler-color-text-secondary);
+  text-align: center;
+  font-variation-settings: var(--doodler-font-variation-settings);
+}
+
+@media (min-width: 768px) {
+  .doodler-steps-component__label {
+    font-size: 16px;
+  }
+}
+
+.doodler-steps-component__navigation--summary {
+  justify-content: center;
+}
+
+.doodler-steps-component__step--summary {
+  color: var(--doodler-color-text-secondary);
+  text-align: center;
+}
+
+.doodler-steps-component__step--clickable {
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.doodler-steps-component__step--clickable:hover {
+  opacity: 0.7;
+}
+
+.doodler-steps-component__label--summary {
+  color: var(--doodler-color-text-secondary);
+}

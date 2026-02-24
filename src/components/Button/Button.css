@@ -1,0 +1,84 @@
+.doodler-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--doodler-spacing-8);
+  font-family: var(--doodler-font-heading);
+  font-weight: var(--doodler-font-weight-medium);
+  font-variation-settings: var(--doodler-font-variation-settings);
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+/* Variants */
+.doodler-button--primary {
+  background-color: var(--doodler-color-active);
+  color: var(--doodler-color-white);
+}
+
+.doodler-button--primary:hover:not(:disabled) {
+  background-color: var(--doodler-color-hover);
+}
+
+.doodler-button--outline {
+  background-color: transparent;
+  color: var(--doodler-color-active);
+  border: 1px solid var(--doodler-color-active);
+}
+
+.doodler-button--outline:hover:not(:disabled) {
+  background-color: rgba(29, 32, 33, 0.05);
+}
+
+/* Sizes */
+.doodler-button--large {
+  height: 48px;
+  padding: var(--doodler-spacing-16) var(--doodler-spacing-24);
+  font-size: 16px;
+  border-radius: var(--doodler-radius-button);
+  min-height: 48px;
+}
+
+.doodler-button--small {
+  height: 44px;
+  padding: var(--doodler-spacing-12) var(--doodler-spacing-16);
+  font-size: 14px;
+  border-radius: var(--doodler-radius-button);
+  min-height: 44px;
+}
+
+@media (min-width: 768px) {
+  .doodler-button--small {
+    height: 32px;
+    padding: var(--doodler-spacing-8) var(--doodler-spacing-16);
+    font-size: 12px;
+    min-height: 32px;
+  }
+}
+
+/* Icons */
+.doodler-button__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.doodler-button__icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Disabled state */
+.doodler-button--disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.doodler-button--disabled:hover {
+  background-color: inherit;
+}

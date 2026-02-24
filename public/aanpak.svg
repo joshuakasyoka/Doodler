@@ -1,0 +1,13 @@
+<svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Paper -->
+  <rect x="20" y="60" width="50" height="30" rx="1" stroke="#171717" stroke-width="2" fill="none" transform="rotate(-5 45 75)"/>
+  <!-- Wavy line on paper -->
+  <path d="M30 75Q35 70 40 75T50 75T60 75" stroke="#171717" stroke-width="2" fill="none" transform="rotate(-5 45 75)"/>
+  <!-- Pencil -->
+  <line x1="70" y1="25" x2="45" y2="70" stroke="#171717" stroke-width="3" stroke-linecap="round"/>
+  <!-- Pencil tip -->
+  <path d="M45 70L40 75L45 72L50 70L45 70Z" stroke="#171717" stroke-width="2" fill="none"/>
+  <!-- Pencil body lines -->
+  <line x1="65" y1="35" x2="50" y2="65" stroke="#171717" stroke-width="1.5"/>
+  <line x1="60" y1="30" x2="48" y2="68" stroke="#171717" stroke-width="1.5"/>
+</svg>

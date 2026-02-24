@@ -1,0 +1,65 @@
+.doodler-icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: var(--doodler-spacing-8);
+  transition: opacity 0.2s ease;
+  color: inherit;
+  min-width: 44px;
+  min-height: 44px;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (min-width: 768px) {
+  .doodler-icon-button {
+    padding: 0;
+    min-width: auto;
+    min-height: auto;
+  }
+}
+
+.doodler-icon-button:hover:not(:disabled) {
+  opacity: 0.7;
+}
+
+.doodler-icon-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Sizes */
+.doodler-icon-button--large {
+  width: auto;
+  height: auto;
+}
+
+.doodler-icon-button--large svg {
+  width: 24px;
+  height: 24px;
+}
+
+.doodler-icon-button--small {
+  width: auto;
+  height: auto;
+}
+
+.doodler-icon-button--small svg {
+  width: 20px;
+  height: 20px;
+}
+
+@media (min-width: 768px) {
+  .doodler-icon-button--large {
+    width: 24px;
+    height: 24px;
+  }
+
+  .doodler-icon-button--small {
+    width: 20px;
+    height: 20px;
+  }
+}

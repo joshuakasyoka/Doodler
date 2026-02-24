@@ -1,0 +1,103 @@
+.doodler-summary {
+  display: flex;
+  gap: var(--doodler-spacing-24);
+  width: 100%;
+  height: 100%;
+  overflow-x: auto;
+  flex: 1;
+  min-height: 0;
+}
+
+.doodler-summary__section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--doodler-spacing-16);
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+  height: 100%;
+}
+
+.doodler-summary__section:hover {
+  opacity: 0.8;
+}
+
+.doodler-summary__chip {
+  display: inline-flex;
+}
+
+.doodler-summary__image-display {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.doodler-summary__image-display .doodler-image-display {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+.doodler-summary__image-display .doodler-image-display__container {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+.doodler-summary__image-display .doodler-image-display__row {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+.doodler-summary__image-display .doodler-image-display__card {
+  flex: 1 1 0;
+  min-height: 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  width: 0;
+  height: 100%;
+}
+
+.doodler-summary__image-display .doodler-image-display__card-image {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 1;
+}
+
+.doodler-summary__image-display .doodler-image-display__card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+@media (max-width: 767px) {
+  .doodler-summary {
+    flex-direction: column;
+    gap: var(--doodler-spacing-16);
+  }
+
+  .doodler-summary__section {
+    width: 100%;
+  }
+}

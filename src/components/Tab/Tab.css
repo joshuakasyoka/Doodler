@@ -1,0 +1,46 @@
+.doodler-tab {
+  background-color: var(--doodler-color-grey);
+  display: flex;
+  gap: var(--doodler-spacing-12);
+  padding: var(--doodler-spacing-4);
+  border-radius: var(--doodler-spacing-16);
+  width: 100%;
+}
+
+.doodler-tab__item {
+  flex: 1 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--doodler-spacing-12) 10px;
+  border: none;
+  background: none;
+  border-radius: var(--doodler-spacing-12);
+  cursor: pointer;
+  font-family: var(--doodler-font-heading);
+  font-size: 14px;
+  font-weight: var(--doodler-font-weight-normal);
+  line-height: 1.4;
+  color: var(--doodler-color-text-primary);
+  font-variation-settings: var(--doodler-font-variation-settings);
+  transition: background-color 0.2s ease;
+  min-height: 44px;
+  touch-action: manipulation;
+}
+
+@media (min-width: 768px) {
+  .doodler-tab__item {
+    font-size: 16px;
+    line-height: 16px;
+    padding: 10px;
+    min-height: auto;
+  }
+}
+
+.doodler-tab__item:hover {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.doodler-tab__item--active {
+  background-color: var(--doodler-color-white);
+}
