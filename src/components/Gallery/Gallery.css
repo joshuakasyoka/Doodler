@@ -61,6 +61,8 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  flex: 1;
+  justify-content: center;
 }
 
 .doodler-gallery__title-section {
