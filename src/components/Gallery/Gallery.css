@@ -66,10 +66,7 @@
 }
 
 .doodler-gallery__title-section {
-  display: flex;
-  flex-direction: column;
-  gap: var(--doodler-spacing-24);
-  align-items: center;
+  margin-bottom: var(--doodler-spacing-24);
   text-align: center;
 }
 
@@ -79,7 +76,7 @@
   font-weight: var(--doodler-font-weight-normal);
   line-height: 16px;
   color: var(--doodler-color-text-primary);
-  margin: 0;
+  margin: 0 0 var(--doodler-spacing-12) 0;
   font-variation-settings: var(--doodler-font-variation-settings);
 }
 
@@ -99,6 +96,7 @@
   justify-content: center;
   align-items: center;
   width: 100%;
+  flex: 1;
   box-sizing: border-box;
 }
 
