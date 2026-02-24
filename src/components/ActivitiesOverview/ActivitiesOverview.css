@@ -130,6 +130,11 @@
 
 .doodler-activities-overview__row {
   border-bottom: 1px solid var(--doodler-color-grey);
+  transition: background-color 0.2s ease;
+}
+
+.doodler-activities-overview__row:hover {
+  background-color: var(--doodler-color-grey);
 }
 
 .doodler-activities-overview__row:last-child {
@@ -159,6 +164,11 @@
   line-height: 22.5px;
   color: var(--doodler-color-text-primary);
   font-variation-settings: var(--doodler-font-variation-settings);
+  position: relative;
+}
+
+.doodler-activities-overview__cell--activity .doodler-button {
+  transition: opacity 0.2s ease;
 }
 
 .doodler-activities-overview__icon-button {

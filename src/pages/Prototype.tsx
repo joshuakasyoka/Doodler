@@ -165,10 +165,6 @@ export const Prototype: React.FC = () => {
     }));
   });
 
-  const handleNextFromOverview = () => {
-    setShowActivitiesOverview(false);
-  };
-
   const handleNavigateToDoodle = () => {
     setShowActivitiesOverview(false);
     setShowKrachtenPage(true);
@@ -181,11 +177,6 @@ export const Prototype: React.FC = () => {
     }
   };
 
-  const handlePreviousStep = () => {
-    if (currentStep > 1) {
-      setCurrentStep(currentStep - 1);
-    }
-  };
 
   const handleBackToOverview = () => {
     setShowActivitiesOverview(true);
@@ -299,7 +290,6 @@ export const Prototype: React.FC = () => {
   if (showActivitiesOverview) {
     return (
       <ActivitiesOverview
-        onNextStep={handleNextFromOverview}
         onNavigateToDoodle={handleNavigateToDoodle}
         onNavigateToGallery={() => setShowGallery(true)}
       />

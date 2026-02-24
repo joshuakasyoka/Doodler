@@ -16,7 +16,6 @@ export interface Activity {
 }
 
 export interface ActivitiesOverviewProps {
-  onNextStep: () => void;
   onNavigateToDoodle?: () => void;
   onNavigateToGallery?: () => void;
 }
@@ -124,9 +123,10 @@ const CellButton: React.FC<CellButtonProps> = ({ state, onToggle, onNavigate, on
   );
 };
 
-export const ActivitiesOverview: React.FC<ActivitiesOverviewProps> = ({ onNextStep, onNavigateToDoodle, onNavigateToGallery }) => {
+export const ActivitiesOverview: React.FC<ActivitiesOverviewProps> = ({ onNavigateToDoodle, onNavigateToGallery }) => {
   const [activities, setActivities] = useState<Activity[]>(ACTIVITIES);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [hoveredRowIndex, setHoveredRowIndex] = useState<number | null>(null);
 
   const handleCellToggle = (activityIndex: number, columnKey: keyof Activity) => {
     setActivities((prev) => {
@@ -200,9 +200,24 @@ export const ActivitiesOverview: React.FC<ActivitiesOverviewProps> = ({ onNextSt
               </thead>
               <tbody>
                 {activities.map((activity, index) => (
-                  <tr key={index} className="doodler-activities-overview__row">
+                  <tr 
+                    key={index} 
+                    className="doodler-activities-overview__row"
+                    onMouseEnter={() => setHoveredRowIndex(index)}
+                    onMouseLeave={() => setHoveredRowIndex(null)}
+                  >
                     <td className="doodler-activities-overview__cell doodler-activities-overview__cell--activity">
-                      {activity.name}
+                      {hoveredRowIndex === index ? (
+                        <Button 
+                          variant="primary" 
+                          size="small"
+                          onClick={onNavigateToDoodle}
+                        >
+                          Open
+                        </Button>
+                      ) : (
+                        activity.name
+                      )}
                     </td>
                     <td className="doodler-activities-overview__cell">
                       <CellButton
