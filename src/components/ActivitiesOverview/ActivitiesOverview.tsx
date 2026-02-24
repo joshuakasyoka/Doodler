@@ -164,13 +164,13 @@ export const ActivitiesOverview: React.FC<ActivitiesOverviewProps> = ({ onNaviga
   const handleConfirmModal = () => {
     if (onNavigateToDoodle) {
       // Map column keys to step indices
-      const stepIndexMap: Record<keyof Activity, number> = {
+      const stepIndexMap: Record<'krachten' | 'klachten' | 'inzichten' | 'aanpak', number> = {
         krachten: 0,
         klachten: 1,
         inzichten: 2,
         aanpak: 3,
       };
-      const stepIndex = selectedColumnKey ? stepIndexMap[selectedColumnKey] : 0;
+      const stepIndex = selectedColumnKey && selectedColumnKey !== 'name' ? stepIndexMap[selectedColumnKey] : 0;
       onNavigateToDoodle(stepIndex);
     }
   };
@@ -183,7 +183,7 @@ export const ActivitiesOverview: React.FC<ActivitiesOverviewProps> = ({ onNaviga
           <Button variant="outline" size="small" startIcon={<IconGalleryToggle size={16} />} onClick={onNavigateToGallery}>
             Galerij
           </Button>
-          <Button variant="primary" size="small" startIcon={<IconPlus size={16} />} onClick={handleOpenModal}>
+          <Button variant="primary" size="small" startIcon={<IconPlus size={16} />} onClick={() => handleOpenModal()}>
             Nieuwe doodle
           </Button>
         </div>
