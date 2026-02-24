@@ -283,6 +283,16 @@
     align-items: flex-start;
   }
 
+  .doodler-gallery-detail__header-actions {
+    width: 100%;
+    flex-direction: column;
+    gap: var(--doodler-spacing-8);
+  }
+
+  .doodler-gallery-detail__header-actions .doodler-button {
+    width: 100%;
+  }
+
   .doodler-gallery-detail__screen {
     padding: var(--doodler-spacing-16);
   }

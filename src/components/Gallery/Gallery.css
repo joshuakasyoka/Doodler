@@ -50,15 +50,17 @@
   flex-direction: column;
   min-height: 0;
   overflow-y: auto;
+  box-sizing: border-box;
 }
 
 .doodler-gallery__content {
   display: flex;
   flex-direction: column;
   gap: var(--doodler-spacing-24);
-  flex: 1;
-  min-height: 0;
   width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 .doodler-gallery__title-section {
@@ -91,11 +93,11 @@
 .doodler-gallery__sections {
   display: flex;
   gap: var(--doodler-spacing-16);
-  flex: 1;
-  min-height: 0;
   padding: var(--doodler-spacing-16);
   justify-content: center;
   align-items: center;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .doodler-gallery__section-card {
@@ -113,6 +115,8 @@
   cursor: pointer;
   transition: border-color 0.2s ease;
   position: relative;
+  box-sizing: border-box;
+  margin: 0;
 }
 
 .doodler-gallery__section-card:hover {
@@ -169,25 +173,91 @@
 @media (max-width: 767px) {
   .doodler-gallery {
     padding: var(--doodler-spacing-16);
+    box-sizing: border-box;
+  }
+
+  .doodler-gallery__screen {
+    padding: var(--doodler-spacing-16);
+    width: 100%;
+    flex: 1;
+    min-height: 0;
+  }
+
+  .doodler-gallery__content {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  .doodler-gallery__title-section {
+    margin-bottom: var(--doodler-spacing-16);
+    gap: var(--doodler-spacing-12);
+  }
+
+  .doodler-gallery__title {
+    font-size: 24px;
+    margin-bottom: var(--doodler-spacing-8);
+  }
+
+  .doodler-gallery__subtitle {
+    font-size: 12px;
+    margin: 0;
   }
 
   .doodler-gallery__sections {
     flex-direction: column;
+    gap: var(--doodler-spacing-16);
+    padding: 0;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0;
   }
 
   .doodler-gallery__section-card {
+    width: 100%;
     height: auto;
     min-height: 200px;
+    max-width: none;
+    flex: none;
+    flex-shrink: 0;
+    box-sizing: border-box;
+    margin: 0;
+  }
+
+  .doodler-gallery__section-icon {
+    width: 80px;
+    height: 80px;
+  }
+
+  .doodler-gallery__section-title {
+    font-size: 14px;
+  }
+
+  .doodler-gallery__section-description {
+    font-size: 12px;
+    line-height: 16px;
+  }
+
+  .doodler-gallery__section-button {
+    opacity: 1;
+    margin-top: var(--doodler-spacing-12);
   }
 
   .doodler-gallery__header {
     flex-direction: column;
     gap: var(--doodler-spacing-16);
     align-items: flex-start;
+    margin-bottom: var(--doodler-spacing-16);
   }
 
   .doodler-gallery__header-actions {
     width: 100%;
     flex-direction: column;
+    gap: var(--doodler-spacing-8);
+  }
+
+  .doodler-gallery__header-actions .doodler-button {
+    width: 100%;
   }
 }

@@ -96,7 +96,7 @@ export const Gallery: React.FC<GalleryProps> = ({ onBack, onSectionClick, onNavi
                 <p className="doodler-gallery__section-description">{section.description}</p>
                 <div className="doodler-gallery__section-button">
                   <Button variant="outline" size="small">
-                    Nieuwe doodle
+                    Sectie openen
                   </Button>
                 </div>
               </div>
