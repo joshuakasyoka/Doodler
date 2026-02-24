@@ -251,7 +251,7 @@ export const GalleryDetail: React.FC<GalleryDetailProps> = ({ sectionTitle, onBa
             Overzicht
           </Button>
           <Button variant="primary" size="small" startIcon={<IconPlus size={16} />}>
-            Doodle toevoegen
+            Nieuwe doodle
           </Button>
         </div>
       </div>

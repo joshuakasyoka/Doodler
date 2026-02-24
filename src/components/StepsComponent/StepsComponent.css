@@ -67,15 +67,13 @@
   transition: width 0.3s ease;
 }
 
-.doodler-steps-component__progress-check {
-  position: absolute;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--doodler-color-surface-tertiary);
-  display: flex;
+.doodler-steps-component__check-icon {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
+  margin-left: var(--doodler-spacing-8);
+  color: var(--doodler-color-surface-tertiary);
+  vertical-align: middle;
 }
 
 .doodler-steps-component__label {
@@ -96,11 +94,17 @@
 
 .doodler-steps-component__navigation--summary {
   justify-content: center;
+  width: 100%;
 }
 
 .doodler-steps-component__step--summary {
   color: var(--doodler-color-text-secondary);
   text-align: center;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--doodler-spacing-8);
 }
 
 .doodler-steps-component__step--clickable {

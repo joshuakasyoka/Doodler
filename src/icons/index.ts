@@ -17,6 +17,10 @@ export { IconChevronDown } from './IconChevronDown';
 export { IconPlus } from './IconPlus';
 export { IconGallery } from './IconGallery';
 export { IconExport } from './IconExport';
+export { IconSend } from './IconSend';
+export { IconDocument } from './IconDocument';
+export { IconOverview } from './IconOverview';
+export { IconGalleryToggle } from './IconGalleryToggle';
 
 // Add more icon exports as needed
 // To add a new icon:

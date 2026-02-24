@@ -99,5 +99,42 @@
 
   .doodler-summary__section {
     width: 100%;
+    flex: 1;
+    min-height: 0;
+  }
+
+  .doodler-summary__image-display {
+    flex: 1;
+    min-height: 0;
+    height: 100%;
+  }
+
+  .doodler-summary__image-display .doodler-image-display {
+    flex: 1;
+    min-height: 0;
+    height: 100%;
+  }
+
+  .doodler-summary__image-display .doodler-image-display__container {
+    flex: 1;
+    min-height: 0;
+    height: 100%;
+  }
+
+  .doodler-summary__image-display .doodler-image-display__row {
+    flex: 1;
+    min-height: 0;
+    height: 100%;
+  }
+
+  .doodler-summary__image-display .doodler-image-display__card {
+    flex: 1;
+    min-height: 0;
+    height: 100%;
+  }
+
+  .doodler-summary__image-display .doodler-image-display__card-image {
+    flex: 1;
+    min-height: 0;
   }
 }

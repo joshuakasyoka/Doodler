@@ -11,7 +11,7 @@ import { Chip } from '../components/Chip/Chip';
 import { EditAnnotation } from '../components/EditAnnotation/EditAnnotation';
 import { Summary } from '../components/Summary/Summary';
 import { DoodlerLogo } from '../assets/logo';
-import { IconArrowLeft } from '../icons';
+import { IconArrowLeft, IconSend, IconDocument } from '../icons';
 import doodleImage from '../assets/img/Doodle.png';
 import './Prototype.css';
 
@@ -334,6 +334,14 @@ export const Prototype: React.FC = () => {
                   sections={sectionData}
                   onSectionClick={handleSummarySectionClick}
                 />
+                <div className="doodler-prototype__summary-actions">
+                  <Button variant="outline" size="small" startIcon={<IconSend size={16} />}>
+                    E-mail doodles
+                  </Button>
+                  <Button variant="primary" size="small" startIcon={<IconDocument size={16} />}>
+                    Print doodles
+                  </Button>
+                </div>
               </div>
             </div>
           </div>

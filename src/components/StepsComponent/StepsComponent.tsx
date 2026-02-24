@@ -27,6 +27,9 @@ export const StepsComponent: React.FC<StepsComponentProps> = ({
         <div className="doodler-steps-component__navigation doodler-steps-component__navigation--summary">
           <div className="doodler-steps-component__step doodler-steps-component__step--summary">
             Review
+            <div className="doodler-steps-component__check-icon">
+              <IconCheckCircle size={16} />
+            </div>
           </div>
         </div>
         <div className="doodler-steps-component__progress-bar">
@@ -34,9 +37,6 @@ export const StepsComponent: React.FC<StepsComponentProps> = ({
             className="doodler-steps-component__progress-fill"
             style={{ width: '100%' }}
           />
-          <div className="doodler-steps-component__progress-check">
-            <IconCheckCircle size={16} />
-          </div>
         </div>
         <p className="doodler-steps-component__label doodler-steps-component__label--summary">
           All Steps Complete

@@ -97,6 +97,16 @@
   height: 100%;
 }
 
+.doodler-prototype__summary-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--doodler-spacing-12);
+  flex-shrink: 0;
+  margin-top: var(--doodler-spacing-24);
+  padding-top: var(--doodler-spacing-16);
+}
+
 .doodler-prototype__step-title {
   display: flex;
   flex-direction: column;
@@ -117,7 +127,7 @@
   line-height: 1.2;
   color: var(--doodler-color-text-primary);
   margin: 0;
-  width: auto;
+  width: 100%;
   font-variation-settings: var(--doodler-font-variation-settings);
   white-space: nowrap;
   text-align: center;
@@ -279,7 +289,7 @@
 
   .doodler-prototype__heading {
     font-size: 30px;
-    width: 140px;
+    width: 100%;
   }
 
   .doodler-prototype__step-content {

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '../Button/Button';
+import { IconArrowUp } from '../../icons';
 import './EditAnnotation.css';
 
 export interface EditAnnotationProps {
@@ -75,7 +76,7 @@ export const EditAnnotation: React.FC<EditAnnotationProps> = ({
           rows={3}
         />
       </div>
-      <div className="doodler-edit-annotation__input-group">
+      <div className="doodler-edit-annotation__input-group doodler-edit-annotation__input-group--image-prompt">
         <input
           type="text"
           className="doodler-edit-annotation__input doodler-edit-annotation__input--image-prompt"
@@ -83,6 +84,9 @@ export const EditAnnotation: React.FC<EditAnnotationProps> = ({
           onChange={(e) => handleImagePromptChange(e.target.value)}
           placeholder="Image prompt"
         />
+        <div className="doodler-edit-annotation__input-icon">
+          <IconArrowUp size={16} />
+        </div>
       </div>
       <div className="doodler-edit-annotation__actions">
         <Button variant="outline" size="small" onClick={onCancel}>

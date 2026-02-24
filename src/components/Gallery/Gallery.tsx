@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from '../Button/Button';
 import { DoodlerLogo } from '../../assets/logo';
-import { IconPlus } from '../../icons';
+import { IconPlus, IconGalleryToggle } from '../../icons';
 import image3 from '../../assets/img/image 3.png';
 import image13 from '../../assets/img/image 13.png';
 import image14 from '../../assets/img/image 14.png';
@@ -48,11 +48,11 @@ export const Gallery: React.FC<GalleryProps> = ({ onBack, onSectionClick }) => {
       <div className="doodler-gallery__header">
         <DoodlerLogo className="doodler-gallery__logo" />
         <div className="doodler-gallery__header-actions">
-          <Button variant="outline" size="small" onClick={onBack}>
+          <Button variant="outline" size="small" startIcon={<IconGalleryToggle size={16} />} onClick={onBack}>
             Overzicht
           </Button>
           <Button variant="primary" size="small" startIcon={<IconPlus size={16} />}>
-            Doodle toevoegen
+            Nieuwe doodle
           </Button>
         </div>
       </div>

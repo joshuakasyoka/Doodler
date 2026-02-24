@@ -1,0 +1,31 @@
+import React from 'react';
+import { IconProps } from './IconPen';
+
+export const IconGalleryToggle: React.FC<IconProps> = ({ size = 20, ...props }) => {
+  const clipId = React.useId();
+  
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 20 20"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <g clipPath={`url(#${clipId})`}>
+        <path
+          fillRule="evenodd"
+          clipRule="evenodd"
+          d="M9.43 13.5C8.51214 12.5664 7.99847 11.3092 8 10C8 8.637 8.545 7.402 9.43 6.5H7C6.07174 6.5 5.1815 6.86875 4.52513 7.52513C3.86875 8.1815 3.5 9.07174 3.5 10C3.5 10.9283 3.86875 11.8185 4.52513 12.4749C5.1815 13.1313 6.07174 13.5 7 13.5H9.43ZM2 10C2 8.67392 2.52678 7.40215 3.46447 6.46447C4.40215 5.52678 5.67392 5 7 5H13C14.3261 5 15.5979 5.52678 16.5355 6.46447C17.4732 7.40215 18 8.67392 18 10C18 11.3261 17.4732 12.5979 16.5355 13.5355C15.5979 14.4732 14.3261 15 13 15H7C5.67392 15 4.40215 14.4732 3.46447 13.5355C2.52678 12.5979 2 11.3261 2 10Z"
+          fill="currentColor"
+        />
+      </g>
+      <defs>
+        <clipPath id={clipId}>
+          <rect width="16" height="16" fill="white" transform="translate(2 2)" />
+        </clipPath>
+      </defs>
+    </svg>
+  );
+};

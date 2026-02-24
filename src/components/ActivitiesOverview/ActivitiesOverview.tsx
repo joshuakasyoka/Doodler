@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button } from '../Button/Button';
-import { IconCheck, IconPlus, IconGallery } from '../../icons';
+import { IconCheck, IconPlus, IconOverview } from '../../icons';
 import { DoodlerLogo } from '../../assets/logo';
 import { NewDoodleModal } from '../NewDoodleModal/NewDoodleModal';
 import './ActivitiesOverview.css';
@@ -168,7 +168,7 @@ export const ActivitiesOverview: React.FC<ActivitiesOverviewProps> = ({ onNaviga
       <div className="doodler-activities-overview__header">
         <DoodlerLogo className="doodler-activities-overview__logo" />
         <div className="doodler-activities-overview__header-actions">
-          <Button variant="outline" size="small" startIcon={<IconGallery size={16} />} onClick={onNavigateToGallery}>
+          <Button variant="outline" size="small" startIcon={<IconOverview size={16} />} onClick={onNavigateToGallery}>
             Galerij
           </Button>
           <Button variant="primary" size="small" startIcon={<IconPlus size={16} />} onClick={handleOpenModal}>

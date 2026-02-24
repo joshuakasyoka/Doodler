@@ -51,6 +51,7 @@
   min-height: 0;
   overflow-y: auto;
   gap: var(--doodler-spacing-24);
+  box-sizing: border-box;
 }
 
 .doodler-gallery-detail__content {
@@ -160,6 +161,7 @@
 
 .doodler-gallery-detail__doodle-card {
   min-height: 467px;
+  height: 467px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -167,6 +169,15 @@
   position: relative;
   width: 100%;
   transition: opacity 0.2s ease;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.doodler-gallery-detail__doodle-card .doodler-image-display {
+  width: 100%;
+  height: 100%;
+  flex: 1;
+  min-height: 0;
 }
 
 .doodler-gallery-detail__doodle-card::before {

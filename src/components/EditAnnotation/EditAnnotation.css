@@ -11,6 +11,11 @@
 .doodler-edit-annotation__input-group {
   display: flex;
   flex-direction: column;
+  position: relative;
+}
+
+.doodler-edit-annotation__input-group--image-prompt {
+  position: relative;
 }
 
 .doodler-edit-annotation__input {
@@ -39,6 +44,10 @@
   color: var(--doodler-color-text-secondary);
 }
 
+.doodler-edit-annotation__input--image-prompt {
+  padding-right: calc(var(--doodler-spacing-12) + 16px + var(--doodler-spacing-8));
+}
+
 .doodler-edit-annotation__input::placeholder {
   color: var(--doodler-color-text-secondary);
 }
@@ -47,6 +56,28 @@
   outline: none;
   background-color: var(--doodler-color-white);
   border-color: var(--doodler-color-active);
+}
+
+.doodler-edit-annotation__input-icon {
+  position: absolute;
+  right: var(--doodler-spacing-12);
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+  color: var(--doodler-color-text-primary);
+  cursor: pointer;
+  transition: opacity 0.2s ease, color 0.2s ease;
+  padding: var(--doodler-spacing-4);
+  border-radius: var(--doodler-spacing-4);
+}
+
+.doodler-edit-annotation__input-icon:hover {
+  opacity: 0.7;
+  color: var(--doodler-color-active);
+  background-color: rgba(29, 32, 33, 0.05);
 }
 
 .doodler-edit-annotation__actions {

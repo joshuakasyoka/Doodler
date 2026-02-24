@@ -17,6 +17,13 @@
     flex: 0 0 auto;
     max-height: none;
   }
+
+  /* Allow ImageDisplay to fill height when inside summary */
+  .doodler-summary__image-display .doodler-image-display {
+    flex: 1 !important;
+    min-height: 0 !important;
+    height: 100% !important;
+  }
 }
 
 .doodler-image-display__caption {
