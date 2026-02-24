@@ -10,6 +10,7 @@ import { Button } from '../components/Button/Button';
 import { Chip } from '../components/Chip/Chip';
 import { EditAnnotation } from '../components/EditAnnotation/EditAnnotation';
 import { Summary } from '../components/Summary/Summary';
+import { Toast } from '../components/Toast/Toast';
 import { DoodlerLogo } from '../assets/logo';
 import { IconArrowLeft, IconSend, IconDocument } from '../icons';
 import doodleImage from '../assets/img/Doodle.png';
@@ -118,35 +119,104 @@ const AnnotationItem: React.FC<AnnotationItemProps> = ({ annotation, onClick }) 
   );
 };
 
-const KRACHTEN_ANNOTATIONS = [
-  {
-    chip: 'Chip',
-    description: 'Here is my annotation description',
-    imagePrompt: 'A detailed illustration showing the client\'s strengths and positive qualities',
-  },
-  {
-    chip: 'Chip',
-    description: 'Here is my annotation description',
-    imagePrompt: 'A visual representation of the client\'s challenges and areas of concern',
-  },
-  {
-    chip: 'Chip',
-    description: 'Here is my annotation description',
-    imagePrompt: 'An artistic depiction of insights and understanding about the client',
-  },
-  {
-    chip: 'Chip',
-    description: 'Here is my annotation description',
-    imagePrompt: 'A comprehensive visualization of the treatment approach and plan',
-  },
-];
+// Section-specific annotations for each step
+const STEP_ANNOTATIONS = {
+  Krachten: [
+    {
+      chip: 'Taalvaardig',
+      description: 'Sterke verbale vaardigheden en communicatie',
+      imagePrompt: 'A detailed illustration showing the client\'s strengths and positive qualities',
+    },
+    {
+      chip: 'Nieuwsgierig',
+      description: 'Actieve vraagstelling en interesse',
+      imagePrompt: 'A visual representation of curiosity and learning',
+    },
+    {
+      chip: 'Sociaal',
+      description: 'Goede sociale vaardigheden en teamwerk',
+      imagePrompt: 'An artistic depiction of social skills and collaboration',
+    },
+    {
+      chip: 'Gezinsondersteuning',
+      description: 'Warme, betrokken gezinsomgeving',
+      imagePrompt: 'A comprehensive visualization of family support',
+    },
+  ],
+  Klachten: [
+    {
+      chip: 'Stress',
+      description: 'Hoge stressniveaus en spanning',
+      imagePrompt: 'A visual representation of stress and tension',
+    },
+    {
+      chip: 'Onzekerheid',
+      description: 'Gebrek aan zelfvertrouwen',
+      imagePrompt: 'An artistic depiction of uncertainty and self-doubt',
+    },
+    {
+      chip: 'Communicatie',
+      description: 'Moeite met uitdrukken van gevoelens',
+      imagePrompt: 'A detailed illustration of communication challenges',
+    },
+    {
+      chip: 'Concentratie',
+      description: 'Moeite met focus en aandacht',
+      imagePrompt: 'A comprehensive visualization of concentration difficulties',
+    },
+  ],
+  Inzichten: [
+    {
+      chip: 'Emotioneel bewust',
+      description: 'Goed inzicht in eigen emoties',
+      imagePrompt: 'A detailed illustration of emotional awareness',
+    },
+    {
+      chip: 'Behoefte aan structuur',
+      description: 'Werkt beter met duidelijke routines',
+      imagePrompt: 'A visual representation of need for structure',
+    },
+    {
+      chip: 'Creatief denken',
+      description: 'Sterke creatieve probleemoplossing',
+      imagePrompt: 'An artistic depiction of creative thinking',
+    },
+    {
+      chip: 'Zelfreflectie',
+      description: 'Goed vermogen tot zelfreflectie',
+      imagePrompt: 'A comprehensive visualization of self-reflection',
+    },
+  ],
+  Aanpak: [
+    {
+      chip: 'Ontspanning',
+      description: 'Ontspanningstechnieken en stressmanagement',
+      imagePrompt: 'A detailed illustration of relaxation techniques',
+    },
+    {
+      chip: 'Zelfvertrouwen',
+      description: 'Bouwen aan zelfvertrouwen en zelfbeeld',
+      imagePrompt: 'A visual representation of building confidence',
+    },
+    {
+      chip: 'Gezinscommunicatie',
+      description: 'Verbeteren van gezinscommunicatie',
+      imagePrompt: 'An artistic depiction of family communication',
+    },
+    {
+      chip: 'Monitoring',
+      description: 'Verdere evaluatie en follow-up',
+      imagePrompt: 'A comprehensive visualization of monitoring and evaluation',
+    },
+  ],
+};
 
 export const Prototype: React.FC = () => {
   const [showActivitiesOverview, setShowActivitiesOverview] = useState(true);
   const [showKrachtenPage, setShowKrachtenPage] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
   const [activeTab, setActiveTab] = useState(0);
-  const [annotations, setAnnotations] = useState(KRACHTEN_ANNOTATIONS);
+  const [annotations, setAnnotations] = useState(() => STEP_ANNOTATIONS.Krachten);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [cards, setCards] = useState(TREATMENT_PLAN_CARDS);
   const [currentKrachtenStep, setCurrentKrachtenStep] = useState(0);
@@ -154,6 +224,8 @@ export const Prototype: React.FC = () => {
   const [showGallery, setShowGallery] = useState(false);
   const [showGalleryDetail, setShowGalleryDetail] = useState(false);
   const [selectedGallerySection, setSelectedGallerySection] = useState<string>('');
+  const [toastMessage, setToastMessage] = useState<string>('');
+  const [showToast, setShowToast] = useState(false);
   
   // Store data for each section - initialize with default data
   const [sectionData, setSectionData] = useState(() => {
@@ -169,6 +241,16 @@ export const Prototype: React.FC = () => {
     setShowActivitiesOverview(false);
     setShowKrachtenPage(true);
     setCurrentKrachtenStep(stepIndex);
+    // Update annotations based on the step
+    const stepName = KRACHTEN_STEPS[stepIndex] as keyof typeof STEP_ANNOTATIONS;
+    setAnnotations(STEP_ANNOTATIONS[stepName]);
+    // Update cards to match annotations
+    const stepAnnotations = STEP_ANNOTATIONS[stepName];
+    setCards(stepAnnotations.map((ann) => ({
+      imageUrl: doodleImage,
+      title: ann.chip,
+      description: ann.description,
+    })));
   };
 
   const handleNextStep = () => {
@@ -190,8 +272,18 @@ export const Prototype: React.FC = () => {
     updateSectionData(currentKrachtenStep);
     
     if (currentKrachtenStep < KRACHTEN_STEPS.length - 1) {
-      setCurrentKrachtenStep(currentKrachtenStep + 1);
+      const nextStep = currentKrachtenStep + 1;
+      setCurrentKrachtenStep(nextStep);
       setEditingIndex(null);
+      // Update annotations and cards for the new step
+      const stepName = KRACHTEN_STEPS[nextStep] as keyof typeof STEP_ANNOTATIONS;
+      setAnnotations(STEP_ANNOTATIONS[stepName]);
+      const stepAnnotations = STEP_ANNOTATIONS[stepName];
+      setCards(stepAnnotations.map((ann) => ({
+        imageUrl: doodleImage,
+        title: ann.chip,
+        description: ann.description,
+      })));
     } else {
       // We're on the last step (Aanpak), show summary
       setShowSummary(true);
@@ -218,12 +310,31 @@ export const Prototype: React.FC = () => {
   const handleSummarySectionClick = (index: number) => {
     setShowSummary(false);
     setCurrentKrachtenStep(index);
+    // Update annotations and cards for the clicked section
+    const stepName = KRACHTEN_STEPS[index] as keyof typeof STEP_ANNOTATIONS;
+    setAnnotations(STEP_ANNOTATIONS[stepName]);
+    const stepAnnotations = STEP_ANNOTATIONS[stepName];
+    setCards(stepAnnotations.map((ann) => ({
+      imageUrl: doodleImage,
+      title: ann.chip,
+      description: ann.description,
+    })));
   };
 
   const handlePreviousKrachtenStep = () => {
     if (currentKrachtenStep > 0) {
-      setCurrentKrachtenStep(currentKrachtenStep - 1);
+      const prevStep = currentKrachtenStep - 1;
+      setCurrentKrachtenStep(prevStep);
       setEditingIndex(null);
+      // Update annotations and cards for the previous step
+      const stepName = KRACHTEN_STEPS[prevStep] as keyof typeof STEP_ANNOTATIONS;
+      setAnnotations(STEP_ANNOTATIONS[stepName]);
+      const stepAnnotations = STEP_ANNOTATIONS[stepName];
+      setCards(stepAnnotations.map((ann) => ({
+        imageUrl: doodleImage,
+        title: ann.chip,
+        description: ann.description,
+      })));
     }
   };
 
@@ -232,7 +343,7 @@ export const Prototype: React.FC = () => {
   };
 
   const handleSaveAnnotation = (index: number, chip: string, description: string, imagePrompt: string) => {
-    setAnnotations((prev) => {
+    setAnnotations((prev: typeof STEP_ANNOTATIONS.Krachten) => {
       const updated = [...prev];
       updated[index] = { chip, description, imagePrompt };
       return updated;
@@ -263,6 +374,23 @@ export const Prototype: React.FC = () => {
   const handleBackFromGalleryDetail = () => {
     setShowGalleryDetail(false);
     setSelectedGallerySection('');
+  };
+
+  const handleShowToast = (message: string) => {
+    setToastMessage(message);
+    setShowToast(true);
+  };
+
+  const handleCloseToast = () => {
+    setShowToast(false);
+  };
+
+  const handleEmailDoodles = () => {
+    handleShowToast('Doodles worden per e-mail verzonden');
+  };
+
+  const handlePrintDoodles = () => {
+    handleShowToast('Doodles worden afgedrukt');
   };
 
   if (showGalleryDetail) {
@@ -336,19 +464,24 @@ export const Prototype: React.FC = () => {
                   onSectionClick={handleSummarySectionClick}
                 />
                 <div className="doodler-prototype__summary-actions">
-                  <Button variant="outline" size="small" startIcon={<IconSend size={16} />}>
+                  <Button variant="outline" size="small" startIcon={<IconSend size={16} />} onClick={handleEmailDoodles}>
                     E-mail doodles
                   </Button>
-                  <Button variant="primary" size="small" startIcon={<IconDocument size={16} />}>
+                  <Button variant="primary" size="small" startIcon={<IconDocument size={16} />} onClick={handlePrintDoodles}>
                     Print doodles
                   </Button>
                 </div>
               </div>
             </div>
           </div>
+          <Toast
+            message={toastMessage}
+            isVisible={showToast}
+            onClose={handleCloseToast}
+          />
         </div>
-      );
-    }
+    );
+  }
 
     return (
       <div className="doodler-prototype">
@@ -373,6 +506,15 @@ export const Prototype: React.FC = () => {
               onStepClick={(index) => {
                 setCurrentKrachtenStep(index);
                 setEditingIndex(null);
+                // Update annotations and cards for the clicked step
+                const stepName = KRACHTEN_STEPS[index] as keyof typeof STEP_ANNOTATIONS;
+                setAnnotations(STEP_ANNOTATIONS[stepName]);
+                const stepAnnotations = STEP_ANNOTATIONS[stepName];
+                setCards(stepAnnotations.map((ann) => ({
+                  imageUrl: doodleImage,
+                  title: ann.chip,
+                  description: ann.description,
+                })));
               }}
             />
           </div>
@@ -493,6 +635,11 @@ export const Prototype: React.FC = () => {
           </div>
         </div>
       </div>
+      <Toast
+        message={toastMessage}
+        isVisible={showToast}
+        onClose={handleCloseToast}
+      />
     </div>
   );
 };

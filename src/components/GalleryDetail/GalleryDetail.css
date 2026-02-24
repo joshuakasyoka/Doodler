@@ -14,6 +14,7 @@
   position: relative;
   overflow: hidden;
   gap: var(--doodler-spacing-16);
+  box-sizing: border-box;
 }
 
 .doodler-gallery-detail__header {
@@ -36,7 +37,7 @@
 
 .doodler-gallery-detail__header-actions {
   display: flex;
-  gap: var(--doodler-spacing-8);
+  gap: var(--doodler-spacing-16);
   align-items: center;
 }
 
@@ -49,9 +50,11 @@
   display: flex;
   flex-direction: column;
   min-height: 0;
+  max-height: 100%;
   overflow-y: auto;
   gap: var(--doodler-spacing-24);
   box-sizing: border-box;
+  height: 0; /* Force flex item to respect flex constraints */
 }
 
 .doodler-gallery-detail__content {

@@ -1,0 +1,65 @@
+.doodler-toast {
+  position: fixed;
+  top: var(--doodler-spacing-24);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  animation: slideDown 0.3s ease-out;
+}
+
+.doodler-toast__content {
+  background-color: var(--doodler-color-active);
+  color: var(--doodler-color-white);
+  padding: var(--doodler-spacing-12) var(--doodler-spacing-24);
+  border-radius: var(--doodler-radius-button);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 200px;
+  max-width: 400px;
+}
+
+.doodler-toast__message {
+  font-family: var(--doodler-font-body);
+  font-size: 14px;
+  font-weight: var(--doodler-font-weight-normal);
+  line-height: 1.4;
+  text-align: center;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+@media (max-width: 767px) {
+  .doodler-toast {
+    top: var(--doodler-spacing-16);
+    left: var(--doodler-spacing-16);
+    right: var(--doodler-spacing-16);
+    transform: none;
+  }
+
+  .doodler-toast__content {
+    width: 100%;
+    max-width: none;
+  }
+
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}

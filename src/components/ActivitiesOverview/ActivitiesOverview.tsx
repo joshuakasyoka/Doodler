@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button } from '../Button/Button';
-import { IconCheck, IconPlus, IconOverview } from '../../icons';
+import { IconCheck, IconPlus, IconGalleryToggle } from '../../icons';
 import { DoodlerLogo } from '../../assets/logo';
 import { NewDoodleModal } from '../NewDoodleModal/NewDoodleModal';
 import './ActivitiesOverview.css';
@@ -40,10 +40,11 @@ interface CellButtonProps {
   state: CellState;
   onToggle?: () => void;
   onNavigate?: () => void;
-  onOpenModal?: () => void;
+  onOpenModal?: (columnKey?: keyof Activity) => void;
+  columnKey?: keyof Activity;
 }
 
-const CellButton: React.FC<CellButtonProps> = ({ state, onToggle, onNavigate, onOpenModal }) => {
+const CellButton: React.FC<CellButtonProps> = ({ state, onToggle, onNavigate, onOpenModal, columnKey }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   if (state === 'empty') {
@@ -58,7 +59,7 @@ const CellButton: React.FC<CellButtonProps> = ({ state, onToggle, onNavigate, on
             !isHovered ? 'doodler-activities-overview__icon-button--hidden' : ''
           }`}
           type="button"
-          onClick={onOpenModal}
+          onClick={() => onOpenModal?.(columnKey)}
           aria-label="Navigate to Doodle"
         >
           <IconPlus size={12} />
@@ -127,6 +128,7 @@ export const ActivitiesOverview: React.FC<ActivitiesOverviewProps> = ({ onNaviga
   const [activities, setActivities] = useState<Activity[]>(ACTIVITIES);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [hoveredRowIndex, setHoveredRowIndex] = useState<number | null>(null);
+  const [selectedColumnKey, setSelectedColumnKey] = useState<keyof Activity | null>(null);
 
   const handleCellToggle = (activityIndex: number, columnKey: keyof Activity) => {
     setActivities((prev) => {
@@ -149,17 +151,27 @@ export const ActivitiesOverview: React.FC<ActivitiesOverviewProps> = ({ onNaviga
     });
   };
 
-  const handleOpenModal = () => {
+  const handleOpenModal = (columnKey?: keyof Activity) => {
+    setSelectedColumnKey(columnKey || null);
     setIsModalOpen(true);
   };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
+    setSelectedColumnKey(null);
   };
 
   const handleConfirmModal = () => {
     if (onNavigateToDoodle) {
-      onNavigateToDoodle();
+      // Map column keys to step indices
+      const stepIndexMap: Record<keyof Activity, number> = {
+        krachten: 0,
+        klachten: 1,
+        inzichten: 2,
+        aanpak: 3,
+      };
+      const stepIndex = selectedColumnKey ? stepIndexMap[selectedColumnKey] : 0;
+      onNavigateToDoodle(stepIndex);
     }
   };
 
@@ -168,7 +180,7 @@ export const ActivitiesOverview: React.FC<ActivitiesOverviewProps> = ({ onNaviga
       <div className="doodler-activities-overview__header">
         <DoodlerLogo className="doodler-activities-overview__logo" />
         <div className="doodler-activities-overview__header-actions">
-          <Button variant="outline" size="small" startIcon={<IconOverview size={16} />} onClick={onNavigateToGallery}>
+          <Button variant="outline" size="small" startIcon={<IconGalleryToggle size={16} />} onClick={onNavigateToGallery}>
             Galerij
           </Button>
           <Button variant="primary" size="small" startIcon={<IconPlus size={16} />} onClick={handleOpenModal}>
@@ -225,6 +237,7 @@ export const ActivitiesOverview: React.FC<ActivitiesOverviewProps> = ({ onNaviga
                         onToggle={() => handleCellToggle(index, 'krachten')}
                         onNavigate={() => onNavigateToDoodle?.(0)}
                         onOpenModal={handleOpenModal}
+                        columnKey="krachten"
                       />
                     </td>
                     <td className="doodler-activities-overview__cell">
@@ -233,6 +246,7 @@ export const ActivitiesOverview: React.FC<ActivitiesOverviewProps> = ({ onNaviga
                         onToggle={() => handleCellToggle(index, 'klachten')}
                         onNavigate={() => onNavigateToDoodle?.(1)}
                         onOpenModal={handleOpenModal}
+                        columnKey="klachten"
                       />
                     </td>
                     <td className="doodler-activities-overview__cell">
@@ -241,6 +255,7 @@ export const ActivitiesOverview: React.FC<ActivitiesOverviewProps> = ({ onNaviga
                         onToggle={() => handleCellToggle(index, 'inzichten')}
                         onNavigate={() => onNavigateToDoodle?.(2)}
                         onOpenModal={handleOpenModal}
+                        columnKey="inzichten"
                       />
                     </td>
                     <td className="doodler-activities-overview__cell">
@@ -249,6 +264,7 @@ export const ActivitiesOverview: React.FC<ActivitiesOverviewProps> = ({ onNaviga
                         onToggle={() => handleCellToggle(index, 'aanpak')}
                         onNavigate={() => onNavigateToDoodle?.(3)}
                         onOpenModal={handleOpenModal}
+                        columnKey="aanpak"
                       />
                     </td>
                   </tr>
