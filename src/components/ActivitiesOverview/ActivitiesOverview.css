@@ -167,6 +167,22 @@
   position: relative;
 }
 
+.doodler-activities-overview__activity-cell-content {
+  display: flex;
+  align-items: center;
+  gap: var(--doodler-spacing-12);
+  width: 100%;
+  min-width: 0;
+}
+
+.doodler-activities-overview__activity-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .doodler-activities-overview__cell--activity .doodler-button {
   transition: opacity 0.2s ease;
 }

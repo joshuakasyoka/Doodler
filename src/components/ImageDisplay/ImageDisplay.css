@@ -46,6 +46,10 @@
   font-variation-settings: var(--doodler-font-variation-settings);
   text-align: center;
   word-wrap: break-word;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
 }
 
 @media (min-width: 768px) {
@@ -151,6 +155,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
 }
 
 .doodler-image-display__card-image img {
@@ -165,6 +170,29 @@
   height: 100%;
   background-color: var(--doodler-color-white);
   border-radius: 6px;
+}
+
+.doodler-image-display__card-edit-icon {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--doodler-color-text-primary);
+  pointer-events: none;
+  z-index: 10;
+}
+
+.doodler-image-display__card-edit-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.doodler-image-display__card {
+  cursor: pointer;
 }
 
 .doodler-image-display__card-title {
@@ -192,6 +220,23 @@
   min-width: 0;
   white-space: pre-wrap;
   word-wrap: break-word;
+}
+
+/* Hide edit icon in summary/review section */
+.doodler-summary__image-display .doodler-image-display__card-edit-icon {
+  display: none !important;
+}
+
+/* Truncate title in summary section to 1 line */
+.doodler-summary__image-display .doodler-image-display__card-title {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  line-height: 16px;
+  max-height: 16px;
 }
 
 /* Truncate description in summary section to 2 lines */

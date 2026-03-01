@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { IconPen } from '../../icons';
 import './ImageDisplay.css';
 
 export interface TreatmentPlanCard {
@@ -11,12 +12,47 @@ export interface TreatmentPlanCard {
 export interface ImageDisplayProps {
   caption: string;
   cards: TreatmentPlanCard[];
+  onCardClick?: (index: number) => void;
 }
 
 export const ImageDisplay: React.FC<ImageDisplayProps> = ({
   caption,
   cards,
+  onCardClick,
 }) => {
+  const [hoveredCardIndex, setHoveredCardIndex] = useState<number | null>(null);
+
+  const renderCard = (index: number) => {
+    const card = cards[index];
+    if (!card) return null;
+
+    return (
+      <div
+        className="doodler-image-display__card"
+        onMouseEnter={() => setHoveredCardIndex(index)}
+        onMouseLeave={() => setHoveredCardIndex(null)}
+        onClick={() => onCardClick?.(index)}
+      >
+        <div className="doodler-image-display__card-image">
+          {card.imageUrl ? (
+            <img src={card.imageUrl} alt={card.imageAlt || card.title} />
+          ) : (
+            <div className="doodler-image-display__card-placeholder" />
+          )}
+          {hoveredCardIndex === index && (
+            <div className="doodler-image-display__card-edit-icon">
+              <IconPen size={18} />
+            </div>
+          )}
+        </div>
+        <h3 className="doodler-image-display__card-title">{card.title}</h3>
+        <p className="doodler-image-display__card-description">
+          {card.description}
+        </p>
+      </div>
+    );
+  };
+
   return (
     <div className="doodler-image-display">
       <div className="doodler-image-display__caption">
@@ -24,60 +60,12 @@ export const ImageDisplay: React.FC<ImageDisplayProps> = ({
       </div>
       <div className="doodler-image-display__container">
         <div className="doodler-image-display__row">
-          <div className="doodler-image-display__card">
-            <div className="doodler-image-display__card-image">
-              {cards[0]?.imageUrl ? (
-                <img src={cards[0].imageUrl} alt={cards[0].imageAlt || cards[0].title} />
-              ) : (
-                <div className="doodler-image-display__card-placeholder" />
-              )}
-            </div>
-            <h3 className="doodler-image-display__card-title">{cards[0]?.title}</h3>
-            <p className="doodler-image-display__card-description">
-              {cards[0]?.description}
-            </p>
-          </div>
-          <div className="doodler-image-display__card">
-            <div className="doodler-image-display__card-image">
-              {cards[1]?.imageUrl ? (
-                <img src={cards[1].imageUrl} alt={cards[1].imageAlt || cards[1].title} />
-              ) : (
-                <div className="doodler-image-display__card-placeholder" />
-              )}
-            </div>
-            <h3 className="doodler-image-display__card-title">{cards[1]?.title}</h3>
-            <p className="doodler-image-display__card-description">
-              {cards[1]?.description}
-            </p>
-          </div>
+          {renderCard(0)}
+          {renderCard(1)}
         </div>
         <div className="doodler-image-display__row">
-          <div className="doodler-image-display__card">
-            <div className="doodler-image-display__card-image">
-              {cards[2]?.imageUrl ? (
-                <img src={cards[2].imageUrl} alt={cards[2].imageAlt || cards[2].title} />
-              ) : (
-                <div className="doodler-image-display__card-placeholder" />
-              )}
-            </div>
-            <h3 className="doodler-image-display__card-title">{cards[2]?.title}</h3>
-            <p className="doodler-image-display__card-description">
-              {cards[2]?.description}
-            </p>
-          </div>
-          <div className="doodler-image-display__card">
-            <div className="doodler-image-display__card-image">
-              {cards[3]?.imageUrl ? (
-                <img src={cards[3].imageUrl} alt={cards[3].imageAlt || cards[3].title} />
-              ) : (
-                <div className="doodler-image-display__card-placeholder" />
-              )}
-            </div>
-            <h3 className="doodler-image-display__card-title">{cards[3]?.title}</h3>
-            <p className="doodler-image-display__card-description">
-              {cards[3]?.description}
-            </p>
-          </div>
+          {renderCard(2)}
+          {renderCard(3)}
         </div>
       </div>
     </div>

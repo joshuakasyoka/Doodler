@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '../Button/Button';
+import { Toast } from '../Toast/Toast';
 import { IconArrowUp } from '../../icons';
 import './EditAnnotation.css';
 
@@ -23,6 +24,8 @@ export const EditAnnotation: React.FC<EditAnnotationProps> = ({
   const [chip, setChip] = useState(initialChip);
   const [description, setDescription] = useState(initialDescription);
   const [imagePrompt, setImagePrompt] = useState(initialImagePrompt);
+  const [toastMessage, setToastMessage] = useState<string>('');
+  const [showToast, setShowToast] = useState(false);
 
   useEffect(() => {
     setChip(initialChip);
@@ -55,6 +58,19 @@ export const EditAnnotation: React.FC<EditAnnotationProps> = ({
     onSave(chip, description, imagePrompt);
   };
 
+  const handleShowToast = (message: string) => {
+    setToastMessage(message);
+    setShowToast(true);
+  };
+
+  const handleCloseToast = () => {
+    setShowToast(false);
+  };
+
+  const handleIconClick = () => {
+    handleShowToast('Doodle bijgewerkt');
+  };
+
   return (
     <div className="doodler-edit-annotation">
       <div className="doodler-edit-annotation__input-group">
@@ -63,7 +79,7 @@ export const EditAnnotation: React.FC<EditAnnotationProps> = ({
           className="doodler-edit-annotation__input doodler-edit-annotation__input--header"
           value={chip}
           onChange={(e) => handleChipChange(e.target.value)}
-          placeholder="Header"
+          placeholder="Koptekst"
           autoFocus
         />
       </div>
@@ -72,7 +88,7 @@ export const EditAnnotation: React.FC<EditAnnotationProps> = ({
           className="doodler-edit-annotation__input doodler-edit-annotation__input--description"
           value={description}
           onChange={(e) => handleDescriptionChange(e.target.value)}
-          placeholder="Here is my caption description"
+          placeholder="Hier is mijn beschrijving"
           rows={3}
         />
       </div>
@@ -82,10 +98,10 @@ export const EditAnnotation: React.FC<EditAnnotationProps> = ({
           className="doodler-edit-annotation__input doodler-edit-annotation__input--image-prompt"
           value={imagePrompt}
           onChange={(e) => handleImagePromptChange(e.target.value)}
-          placeholder="Image prompt"
+          placeholder="Werk de prompt bij om de doodle te wijzigen"
         />
-        <div className="doodler-edit-annotation__input-icon">
-          <IconArrowUp size={16} />
+        <div className="doodler-edit-annotation__input-icon" onClick={handleIconClick}>
+          <IconArrowUp size={12} />
         </div>
       </div>
       <div className="doodler-edit-annotation__actions">
@@ -96,6 +112,11 @@ export const EditAnnotation: React.FC<EditAnnotationProps> = ({
           Save Annotation
         </Button>
       </div>
+      <Toast
+        message={toastMessage}
+        isVisible={showToast}
+        onClose={handleCloseToast}
+      />
     </div>
   );
 };

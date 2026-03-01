@@ -1,0 +1,98 @@
+.doodler-widget-overlay {
+  position: fixed;
+  bottom: var(--doodler-spacing-24);
+  right: var(--doodler-spacing-24);
+  z-index: 1000;
+  animation: slideInUp 0.3s ease-out;
+}
+
+@keyframes slideInUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.doodler-widget-overlay__container {
+  background-color: var(--doodler-color-white);
+  border-radius: var(--doodler-spacing-16);
+  box-shadow: 
+    0px 0px 0px 0px rgba(0, 0, 0, 0.06),
+    0px 1px 2px 0px rgba(0, 0, 0, 0.06),
+    0px 2px 4px 0px rgba(0, 0, 0, 0.04),
+    0px 4px 8px 0px rgba(0, 0, 0, 0.08),
+    0px 8px 16px 0px rgba(0, 0, 0, 0.12);
+  padding: 16px;
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--doodler-spacing-16);
+}
+
+.doodler-widget-overlay__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--doodler-spacing-4);
+}
+
+.doodler-widget-overlay__logo {
+  height: 28px;
+  width: auto;
+  color: var(--doodler-color-active);
+}
+
+.doodler-widget-overlay__logo path {
+  fill: currentColor;
+}
+
+.doodler-widget-overlay__close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: var(--doodler-spacing-4);
+  color: var(--doodler-color-text-primary);
+  transition: opacity 0.2s ease;
+  min-width: 24px;
+  min-height: 24px;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.doodler-widget-overlay__close:hover {
+  opacity: 0.7;
+}
+
+
+.doodler-widget-overlay__text {
+  font-family: 'Inter', -apple-system, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.4;
+  color: var(--doodler-color-text-secondary);
+  margin: 0;
+  text-align: left;
+  width: 100%;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.doodler-widget-overlay__buttons {
+  display: flex;
+  flex-direction: row;
+  gap: var(--doodler-spacing-8);
+}
+
+.doodler-widget-overlay__button {
+  flex: 0 0 auto;
+}

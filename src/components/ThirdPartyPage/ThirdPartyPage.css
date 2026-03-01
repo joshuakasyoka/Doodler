@@ -1,0 +1,86 @@
+.doodler-third-party-page {
+  min-height: 100vh;
+  height: 100vh;
+  width: 100%;
+  background-color: #f5f5f5;
+  overflow: hidden;
+}
+
+.doodler-third-party-page__content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+.doodler-third-party-page__header {
+  background-color: #ffffff;
+  border-bottom: 1px solid #e0e0e0;
+  padding: var(--doodler-spacing-16) var(--doodler-spacing-24);
+  height: 64px;
+  display: flex;
+  align-items: center;
+}
+
+.doodler-third-party-page__header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.doodler-third-party-page__placeholder-logo {
+  width: 120px;
+  height: 32px;
+  background-color: #e0e0e0;
+  border-radius: 4px;
+}
+
+.doodler-third-party-page__nav {
+  display: flex;
+  gap: var(--doodler-spacing-16);
+  align-items: center;
+}
+
+.doodler-third-party-page__nav-item {
+  width: 80px;
+  height: 24px;
+  background-color: #e0e0e0;
+  border-radius: 4px;
+}
+
+.doodler-third-party-page__main {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.doodler-third-party-page__sidebar {
+  width: 240px;
+  background-color: #ffffff;
+  border-right: 1px solid #e0e0e0;
+  padding: var(--doodler-spacing-16);
+  display: flex;
+  flex-direction: column;
+  gap: var(--doodler-spacing-12);
+}
+
+.doodler-third-party-page__sidebar-item {
+  height: 40px;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+}
+
+.doodler-third-party-page__workspace {
+  flex: 1;
+  background-color: #fafafa;
+  position: relative;
+  overflow: hidden;
+}
+
+.doodler-third-party-page__workspace-content {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  padding: var(--doodler-spacing-24);
+}

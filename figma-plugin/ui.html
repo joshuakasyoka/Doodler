@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: #fff;
+      padding: 24px;
+      color: #303030;
+    }
+    h2 { font-size: 15px; font-weight: 500; margin-bottom: 8px; }
+    p {
+      font-size: 12px;
+      color: rgba(48,48,48,0.6);
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+    ul {
+      font-size: 12px;
+      color: rgba(48,48,48,0.6);
+      padding-left: 16px;
+      margin-bottom: 20px;
+      line-height: 1.8;
+    }
+    button {
+      width: 100%;
+      height: 44px;
+      background: #1D2021;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: inherit;
+      cursor: pointer;
+    }
+    button:hover { background: #2A2E2F; }
+    button:disabled { opacity: 0.4; cursor: not-allowed; }
+    .status {
+      margin-top: 12px;
+      font-size: 12px;
+      color: rgba(48,48,48,0.5);
+      text-align: center;
+      min-height: 18px;
+    }
+  </style>
+</head>
+<body>
+  <h2>Doodler UI Components</h2>
+  <p>Generates the full component library on the current page:</p>
+  <ul>
+    <li>Button (Primary/Outline × Large/Small)</li>
+    <li>Chip (Default / Secondary / Outline)</li>
+    <li>Icon Button (Large / Small)</li>
+    <li>Tab</li>
+    <li>Toast</li>
+    <li>Content</li>
+    <li>Steps Component</li>
+  </ul>
+  <button id="btn" onclick="run()">Generate Components</button>
+  <div class="status" id="status"></div>
+  <script>
+    function run() {
+      document.getElementById('btn').disabled = true;
+      document.getElementById('btn').textContent = 'Generating…';
+      document.getElementById('status').textContent = 'Building components…';
+      parent.postMessage({ pluginMessage: { type: 'generate' } }, '*');
+    }
+  </script>
+</body>
+</html>

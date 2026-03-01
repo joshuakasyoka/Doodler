@@ -7,23 +7,32 @@ export interface NewDoodleModalProps {
   isOpen: boolean;
   onClose: () => void;
   onConfirm: () => void;
+  preselectedCategory?: 'krachten' | 'klachten' | 'inzichten' | 'aanpak';
 }
 
-const DROPDOWN_OPTIONS = ['Krachten', 'Klachten', 'Inzichten', 'Aanpak'];
+const DROPDOWN_OPTIONS = ['Krachten', 'Kies onderdeel', 'Inzichten', 'Aanpak'];
 
 const ACTIVITY_OPTIONS = [
-  'Cliënt Intake',
-  'Verklarende analyse',
-  'Behandel doelen',
-  'Psycho educatie',
-  'Gesperks verslag',
-  'Signalerings plan',
+  'Intake',
+  'Adviesgesprek',
+  'Behandelplan',
+  'Psycho-educatie',
+  'Gesperksverslag',
+  'Signaleringsplan',
 ];
+
+const CATEGORY_MAP: Record<'krachten' | 'klachten' | 'inzichten' | 'aanpak', string> = {
+  krachten: 'Krachten',
+  klachten: 'Kies onderdeel',
+  inzichten: 'Inzichten',
+  aanpak: 'Aanpak',
+};
 
 export const NewDoodleModal: React.FC<NewDoodleModalProps> = ({
   isOpen,
   onClose,
   onConfirm,
+  preselectedCategory,
 }) => {
   const [selectedContact1, setSelectedContact1] = useState<string>('');
   const [selectedContact2, setSelectedContact2] = useState<string>('');
@@ -31,6 +40,22 @@ export const NewDoodleModal: React.FC<NewDoodleModalProps> = ({
   const [openDropdown2, setOpenDropdown2] = useState(false);
   const dropdown1Ref = useRef<HTMLDivElement>(null);
   const dropdown2Ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (isOpen) {
+      if (preselectedCategory) {
+        const categoryName = CATEGORY_MAP[preselectedCategory];
+        if (categoryName) {
+          setSelectedContact1(categoryName);
+        }
+      } else {
+        // Reset when opening without preselection
+        setSelectedContact1('');
+      }
+      // Always reset second dropdown when opening
+      setSelectedContact2('');
+    }
+  }, [isOpen, preselectedCategory]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -86,7 +111,7 @@ export const NewDoodleModal: React.FC<NewDoodleModalProps> = ({
         <div className="doodler-new-doodle-modal__content">
           <div className="doodler-new-doodle-modal__dropdown-group">
             <label className="doodler-new-doodle-modal__label">
-              Selecteer wat u wilt visualiseren
+              Selecteer wat je wilt visualiseren
             </label>
             <div className="doodler-new-doodle-modal__dropdown-wrapper" ref={dropdown1Ref}>
               <div 
@@ -97,7 +122,7 @@ export const NewDoodleModal: React.FC<NewDoodleModalProps> = ({
                 }}
               >
                 <span className="doodler-new-doodle-modal__dropdown-text">
-                  {selectedContact1 || 'Kies een contactmoment'}
+                  {selectedContact1 || 'Kies onderdeel'}
                 </span>
                 <IconChevronDown size={16} />
               </div>
@@ -151,10 +176,10 @@ export const NewDoodleModal: React.FC<NewDoodleModalProps> = ({
           </div>
 
           <div className="doodler-new-doodle-modal__upload-group">
-            <label className="doodler-new-doodle-modal__label">Bron toevoegen</label>
+            <label className="doodler-new-doodle-modal__label">Bestand toevoegen</label>
             <div className="doodler-new-doodle-modal__upload">
               <IconPlus size={16} />
-              <span className="doodler-new-doodle-modal__upload-text">Databron toevoegen</span>
+              <span className="doodler-new-doodle-modal__upload-text">Bestand toevoegen</span>
             </div>
           </div>
         </div>

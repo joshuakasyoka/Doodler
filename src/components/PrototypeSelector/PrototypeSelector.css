@@ -1,0 +1,61 @@
+.doodler-prototype-selector {
+  min-height: 100vh;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: 
+    radial-gradient(
+      ellipse 1450px 600px at 70% 71%,
+      rgba(255, 246, 204, 0.9) 0%,
+      rgba(238, 219, 204, 0.3) 100%
+    ),
+    linear-gradient(90deg, rgb(255, 255, 255) 0%, rgb(255, 255, 255) 100%);
+  padding: var(--doodler-spacing-32);
+}
+
+.doodler-prototype-selector__container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--doodler-spacing-24);
+  max-width: 600px;
+  width: 100%;
+}
+
+.doodler-prototype-selector__title {
+  margin-bottom: var(--doodler-spacing-32);
+}
+
+.doodler-prototype-selector__logo {
+  height: 60px;
+  width: auto;
+  color: var(--doodler-color-active);
+}
+
+.doodler-prototype-selector__logo path {
+  fill: currentColor;
+}
+
+.doodler-prototype-selector__title {
+  font-family: var(--doodler-font-heading);
+  font-size: 32px;
+  font-weight: var(--doodler-font-weight-normal);
+  line-height: 1.2;
+  color: var(--doodler-color-text-primary);
+  margin: 0;
+  text-align: center;
+  font-variation-settings: var(--doodler-font-variation-settings);
+}
+
+.doodler-prototype-selector__buttons {
+  display: flex;
+  flex-direction: row;
+  gap: var(--doodler-spacing-16);
+  justify-content: center;
+  align-items: center;
+}
+
+.doodler-prototype-selector__buttons .doodler-button {
+  flex: 0 0 auto;
+}

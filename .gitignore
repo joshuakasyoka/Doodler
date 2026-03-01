@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Large binary files
+figma-plugin/EDP.jpg
+src/assets/img/Mayra.png

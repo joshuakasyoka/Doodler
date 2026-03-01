@@ -144,6 +144,17 @@
   text-align: center;
 }
 
+.doodler-prototype__description {
+  font-family: var(--doodler-font-body);
+  font-size: 14px;
+  font-weight: var(--doodler-font-weight-normal);
+  line-height: 1.4;
+  color: var(--doodler-color-text-secondary);
+  margin: 0;
+  max-width: 100%;
+  text-align: center;
+}
+
 .doodler-prototype__step-content {
   display: flex;
   flex-direction: column;

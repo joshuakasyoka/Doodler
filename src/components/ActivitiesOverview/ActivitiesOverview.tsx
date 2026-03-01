@@ -21,12 +21,12 @@ export interface ActivitiesOverviewProps {
 }
 
 const ACTIVITIES: Activity[] = [
-  { name: 'Cliënt Intake', krachten: 'added', klachten: 'empty', inzichten: 'added', aanpak: 'added' },
-  { name: 'Verklarende analyse', krachten: 'empty', klachten: 'empty', inzichten: 'empty', aanpak: 'empty' },
-  { name: 'Behandel doelen', krachten: 'added', klachten: 'empty', inzichten: 'empty', aanpak: 'added' },
-  { name: 'Psycho educatie', krachten: 'empty', klachten: 'added', inzichten: 'empty', aanpak: 'added' },
-  { name: 'Gesperks verslag', krachten: 'added', klachten: 'added', inzichten: 'added', aanpak: 'added' },
-  { name: 'Signalerings plan', krachten: 'added', klachten: 'empty', inzichten: 'added', aanpak: 'added' },
+  { name: 'Intake', krachten: 'added', klachten: 'empty', inzichten: 'added', aanpak: 'added' },
+  { name: 'Adviesgesprek', krachten: 'added', klachten: 'added', inzichten: 'added', aanpak: 'added' },
+  { name: 'Behandelplan', krachten: 'added', klachten: 'empty', inzichten: 'empty', aanpak: 'added' },
+  { name: 'Psycho-educatie', krachten: 'empty', klachten: 'added', inzichten: 'empty', aanpak: 'added' },
+  { name: 'Gesperksverslag', krachten: 'added', klachten: 'added', inzichten: 'added', aanpak: 'added' },
+  { name: 'Signaleringsplan', krachten: 'added', klachten: 'empty', inzichten: 'added', aanpak: 'added' },
 ];
 
 const COLUMNS = [
@@ -191,9 +191,9 @@ export const ActivitiesOverview: React.FC<ActivitiesOverviewProps> = ({ onNaviga
       <div className="doodler-activities-overview__screen">
         <div className="doodler-activities-overview__content">
           <div className="doodler-activities-overview__title-section">
-            <h1 className="doodler-activities-overview__title">Patiëntoverzicht</h1>
+            <h1 className="doodler-activities-overview__title">Cliëntoverzicht</h1>
             <p className="doodler-activities-overview__description">
-              Een overzicht van de doodles die zijn gemaakt tijdens het zorgtraject van uw cliënt.
+              Een overzicht van de doodles die zijn gemaakt tijdens het zorgtraject van je cliënt.
             </p>
           </div>
           <div className="doodler-activities-overview__table-container">
@@ -219,17 +219,18 @@ export const ActivitiesOverview: React.FC<ActivitiesOverviewProps> = ({ onNaviga
                     onMouseLeave={() => setHoveredRowIndex(null)}
                   >
                     <td className="doodler-activities-overview__cell doodler-activities-overview__cell--activity">
-                      {hoveredRowIndex === index ? (
-                        <Button 
-                          variant="primary" 
-                          size="small"
-                          onClick={() => onNavigateToDoodle?.(0)}
-                        >
-                          Open
-                        </Button>
-                      ) : (
-                        activity.name
-                      )}
+                      <div className="doodler-activities-overview__activity-cell-content">
+                        <span className="doodler-activities-overview__activity-name">{activity.name}</span>
+                        {hoveredRowIndex === index && (
+                          <Button 
+                            variant="primary" 
+                            size="small"
+                            onClick={() => onNavigateToDoodle?.(0)}
+                          >
+                            Open
+                          </Button>
+                        )}
+                      </div>
                     </td>
                     <td className="doodler-activities-overview__cell">
                       <CellButton
@@ -292,6 +293,7 @@ export const ActivitiesOverview: React.FC<ActivitiesOverviewProps> = ({ onNaviga
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         onConfirm={handleConfirmModal}
+        preselectedCategory={selectedColumnKey && selectedColumnKey !== 'name' ? selectedColumnKey : undefined}
       />
     </div>
   );

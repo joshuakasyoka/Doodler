@@ -26,7 +26,7 @@ export const StepsComponent: React.FC<StepsComponentProps> = ({
       <div className="doodler-steps-component">
         <div className="doodler-steps-component__navigation doodler-steps-component__navigation--summary">
           <div className="doodler-steps-component__step doodler-steps-component__step--summary">
-            Review
+            Reviewen
             <div className="doodler-steps-component__check-icon">
               <IconCheckCircle size={16} />
             </div>
@@ -39,7 +39,7 @@ export const StepsComponent: React.FC<StepsComponentProps> = ({
           />
         </div>
         <p className="doodler-steps-component__label doodler-steps-component__label--summary">
-          All Steps Complete
+          Alle stappen zijn doorlopen!
         </p>
       </div>
     );

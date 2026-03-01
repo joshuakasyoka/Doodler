@@ -5,6 +5,9 @@ import dts from 'vite-plugin-dts'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  server: {
+    host: true,
+  },
   plugins: [
     react(),
     dts({

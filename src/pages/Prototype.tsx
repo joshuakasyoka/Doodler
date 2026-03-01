@@ -123,89 +123,89 @@ const AnnotationItem: React.FC<AnnotationItemProps> = ({ annotation, onClick }) 
 const STEP_ANNOTATIONS = {
   Krachten: [
     {
-      chip: 'Taalvaardig',
-      description: 'Sterke verbale vaardigheden en communicatie',
+      chip: 'Goed met taal',
+      description: 'Je kunt goed praten, hebt een sterke woordenschat en denkt graag diep na over dingen.',
       imagePrompt: 'A detailed illustration showing the client\'s strengths and positive qualities',
     },
     {
-      chip: 'Nieuwsgierig',
-      description: 'Actieve vraagstelling en interesse',
+      chip: 'Blijven proberen',
+      description: 'Je hebt een sterke werkhouding en wilt je taken graag goed uitvoeren. Je probeert zo min mogelijk fouten te maken.',
       imagePrompt: 'A visual representation of curiosity and learning',
     },
     {
-      chip: 'Sociaal',
-      description: 'Goede sociale vaardigheden en teamwerk',
+      chip: 'Makkelijk praten met anderen',
+      description: 'Je kunt makkelijk contact maken met nieuwe mensen en toont interesse en medeleven.',
       imagePrompt: 'An artistic depiction of social skills and collaboration',
     },
     {
-      chip: 'Gezinsondersteuning',
-      description: 'Warme, betrokken gezinsomgeving',
+      chip: 'Goede band met zus',
+      description: 'Je hebt een goede band met je zus. Met haar deel je vaak hoe het met je gaat en wat er in je omgaat.',
       imagePrompt: 'A comprehensive visualization of family support',
     },
   ],
   Klachten: [
     {
-      chip: 'Stress',
-      description: 'Hoge stressniveaus en spanning',
+      chip: 'Druk hoofd',
+      description: 'Je hoofd voelt vaak druk en chaotisch, waardoor je moeilijk kunt ontspannen en soms niet weet wat je voelt.',
       imagePrompt: 'A visual representation of stress and tension',
     },
     {
-      chip: 'Onzekerheid',
-      description: 'Gebrek aan zelfvertrouwen',
+      chip: 'Moeizaam slapen',
+      description: 'Je hebt moeite met inslapen en slaapt vaak maar 4 tot 6 uur per nacht doordat je hoofd zo druk is.',
       imagePrompt: 'An artistic depiction of uncertainty and self-doubt',
     },
     {
-      chip: 'Communicatie',
-      description: 'Moeite met uitdrukken van gevoelens',
+      chip: 'Moeilijk overzicht houden',
+      description: 'Je werkt snel maar mist dan informatie. Het is lastig om instructies te volgen, overzicht te houden of op tijd te stoppen om na te denken.',
       imagePrompt: 'A detailed illustration of communication challenges',
     },
     {
-      chip: 'Concentratie',
-      description: 'Moeite met focus en aandacht',
+      chip: 'Lastige emoties',
+      description: 'Je hebt soms heftige uitbarstingen, zoals een \'tornado van gevoelens\', en weet niet altijd wat je voelt.',
       imagePrompt: 'A comprehensive visualization of concentration difficulties',
     },
   ],
   Inzichten: [
     {
-      chip: 'Emotioneel bewust',
-      description: 'Goed inzicht in eigen emoties',
+      chip: 'Anderen niet willen belasten',
+      description: 'Je gaat bij gevoelens eerder naar je oudste zus dan naar je ouders, omdat je hen niet lastig wil vallen.',
       imagePrompt: 'A detailed illustration of emotional awareness',
     },
     {
-      chip: 'Behoefte aan structuur',
-      description: 'Werkt beter met duidelijke routines',
+      chip: 'Botsing thuis',
+      description: 'Mama is meer chaotisch en jij houdt juist sterk vast aan tijden en planning. Dit botst soms en kan spanning geven.',
       imagePrompt: 'A visual representation of need for structure',
     },
     {
-      chip: 'Creatief denken',
-      description: 'Sterke creatieve probleemoplossing',
+      chip: 'Gevoelig door stress',
+      description: 'Mama vertelt dat er veel stress was toen je nog in haar buik zat. Dat kan invloed hebben op hoe gevoelig je nu bent.',
       imagePrompt: 'An artistic depiction of creative thinking',
     },
     {
-      chip: 'Zelfreflectie',
-      description: 'Goed vermogen tot zelfreflectie',
+      chip: 'Veel willen zorgen',
+      description: 'Je maakt je zorgen om mama en wilt goed op haar letten, terwijl dit voor een kind best zwaar kan zijn.',
       imagePrompt: 'A comprehensive visualization of self-reflection',
     },
   ],
   Aanpak: [
     {
-      chip: 'Ontspanning',
-      description: 'Ontspanningstechnieken en stressmanagement',
+      chip: 'Helpen omgaan met gevoelens',
+      description: 'Je krijgt uitleg over hoe jouw hoofd werkt en je gaat leren hoe je beter met je emoties en piekergedachten om kunt gaan.',
       imagePrompt: 'A detailed illustration of relaxation techniques',
     },
     {
-      chip: 'Zelfvertrouwen',
-      description: 'Bouwen aan zelfvertrouwen en zelfbeeld',
+      chip: 'Steun voor jonge helpers',
+      description: 'Je mag meedoen aan activiteiten of groepen voor kinderen die thuis extra zorgen hebben, zodat jij je gesteund voelt.',
       imagePrompt: 'A visual representation of building confidence',
     },
     {
-      chip: 'Gezinscommunicatie',
-      description: 'Verbeteren van gezinscommunicatie',
+      chip: 'Ondersteuning voor je ouders',
+      description: 'Je ouders krijgen uitleg over hoe jouw hoofd werkt en wat jij nodig hebt, zodat ze je beter kunnen helpen als je je overweldigd voelt.',
       imagePrompt: 'An artistic depiction of family communication',
     },
     {
-      chip: 'Monitoring',
-      description: 'Verdere evaluatie en follow-up',
+      chip: 'Afstemming met school',
+      description: 'Er komt een gesprek met school om te zorgen dat zij begrijpen wat er bij jou speelt en hoe ze je kunnen helpen zodat school fijn voelt.',
       imagePrompt: 'A comprehensive visualization of monitoring and evaluation',
     },
   ],
@@ -227,14 +227,31 @@ export const Prototype: React.FC = () => {
   const [toastMessage, setToastMessage] = useState<string>('');
   const [showToast, setShowToast] = useState(false);
   
-  // Store data for each section - initialize with default data
+  // Get caption based on step index
+  const getCaptionForStep = (stepIndex: number) => {
+    if (stepIndex === 0) return 'Dit gaat er goed...';
+    if (stepIndex === 1) return 'Waarom we hier zijn...';
+    if (stepIndex === 2) return 'Over mij...';
+    if (stepIndex === 3) return 'Deze aanpak stel ik voor, wat denk jij?';
+    return 'Dit gaat er goed...';
+  };
+
+  // Store data for each section - initialize with actual annotations
   const [sectionData, setSectionData] = useState(() => {
-    return KRACHTEN_STEPS.map((step) => ({
-      title: step,
-      chip: step,
-      caption: 'Over mij...',
-      cards: TREATMENT_PLAN_CARDS,
-    }));
+    return KRACHTEN_STEPS.map((step, index) => {
+      const stepName = step as keyof typeof STEP_ANNOTATIONS;
+      const stepAnnotations = STEP_ANNOTATIONS[stepName];
+      return {
+        title: step,
+        chip: step,
+        caption: getCaptionForStep(index),
+        cards: stepAnnotations.map((ann) => ({
+          imageUrl: doodleImage,
+          title: ann.chip,
+          description: ann.description,
+        })),
+      };
+    });
   });
 
   const handleNavigateToDoodle = (stepIndex: number = 0) => {
@@ -285,7 +302,8 @@ export const Prototype: React.FC = () => {
         description: ann.description,
       })));
     } else {
-      // We're on the last step (Aanpak), show summary
+      // We're on the last step (Aanpak), save it and show summary
+      updateSectionData(currentKrachtenStep);
       setShowSummary(true);
     }
   };
@@ -296,7 +314,7 @@ export const Prototype: React.FC = () => {
       updated[stepIndex] = {
         title: KRACHTEN_STEPS[stepIndex],
         chip: KRACHTEN_STEPS[stepIndex],
-        caption: 'Over mij...',
+        caption: getCaptionForStep(stepIndex),
         cards: cards.map((card, cardIndex) => ({
           ...card,
           title: annotations[cardIndex]?.chip || card.title,
@@ -453,9 +471,9 @@ export const Prototype: React.FC = () => {
             </div>
             <div className="doodler-prototype__step-section">
               <div className="doodler-prototype__step-title">
-                <h2 className="doodler-prototype__heading">Overzicht Secties</h2>
-                <p className="doodler-prototype__subtitle">
-                  We hebben alle vier secties voltooid. Klik op een sectie om te bekijken.
+                <h2 className="doodler-prototype__heading">Bekijk de doodles</h2>
+                <p className="doodler-prototype__description">
+                  Alle Doodle-onderdelen zijn compleet. Klik op een Doodle om die te bekijken of bewerken.
                 </p>
               </div>
               <div className="doodler-prototype__summary-content">
@@ -465,10 +483,10 @@ export const Prototype: React.FC = () => {
                 />
                 <div className="doodler-prototype__summary-actions">
                   <Button variant="outline" size="small" startIcon={<IconSend size={16} />} onClick={handleEmailDoodles}>
-                    E-mail doodles
+                    Doodles e-mailen
                   </Button>
                   <Button variant="primary" size="small" startIcon={<IconDocument size={16} />} onClick={handlePrintDoodles}>
-                    Print doodles
+                    Doodles afdrukken
                   </Button>
                 </div>
               </div>
@@ -524,14 +542,15 @@ export const Prototype: React.FC = () => {
               <p className="doodler-prototype__subtitle">
                 {currentKrachtenStep === 0 && 'Dit zijn de krachten die je bij je cliënt ziet.'}
                 {currentKrachtenStep === 1 && 'Dit zijn de klachten die je bij je cliënt ziet.'}
-                {currentKrachtenStep === 2 && 'Dit zijn de inzichten die je bij je cliënt ziet.'}
-                {currentKrachtenStep === 3 && 'Dit is de aanpak die je bij je cliënt ziet.'}
+                {currentKrachtenStep === 2 && 'Dit zijn de inzichten over je cliënt.'}
+                {currentKrachtenStep === 3 && 'Dit is de aanpak die je voorstelt aan je cliënt.'}
               </p>
             </div>
             <div className="doodler-prototype__step-content">
               <ImageDisplay
-                caption="Over mij..."
+                caption={getCaptionForStep(currentKrachtenStep)}
                 cards={cards}
+                onCardClick={handleAnnotationClick}
               />
               <div className="doodler-prototype__right-content">
                 <div className="doodler-prototype__top-content">
