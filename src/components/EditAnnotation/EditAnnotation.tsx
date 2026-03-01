@@ -106,10 +106,10 @@ export const EditAnnotation: React.FC<EditAnnotationProps> = ({
       </div>
       <div className="doodler-edit-annotation__actions">
         <Button variant="outline" size="small" onClick={onCancel}>
-          Cancel
+          Annuleren
         </Button>
         <Button variant="primary" size="small" onClick={handleSave}>
-          Save Annotation
+          Annotatie opslaan
         </Button>
       </div>
       <Toast
