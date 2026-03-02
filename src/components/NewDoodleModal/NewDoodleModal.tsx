@@ -6,7 +6,7 @@ import './NewDoodleModal.css';
 export interface NewDoodleModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onConfirm: (selectedCategory?: string, selectedActivity?: string) => void;
+  onConfirm: (selectedCategory?: 'krachten' | 'klachten' | 'inzichten' | 'aanpak', selectedActivity?: string) => void;
   preselectedCategory?: 'krachten' | 'klachten' | 'inzichten' | 'aanpak';
   preselectedActivity?: string;
   isLoading?: boolean;

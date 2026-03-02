@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Button } from '../Button/Button';
 import { IconCheck, IconPlus, IconGalleryToggle } from '../../icons';
 import { DoodlerLogo } from '../../assets/logo';
