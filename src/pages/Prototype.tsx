@@ -264,12 +264,20 @@ export const Prototype: React.FC<PrototypeProps> = ({ isShowcase = false }) => {
   });
 
   const handleNavigateToDoodle = (stepIndex: number = 0, isNewDoodle: boolean = false) => {
-    setShowActivitiesOverview(false);
-    setShowKrachtenPage(true);
-    setCurrentKrachtenStep(stepIndex);
+    // Always reset to the correct step index, regardless of previous state
+    // Ensure stepIndex is valid (0-3)
+    const validStepIndex = Math.max(0, Math.min(3, stepIndex));
+    
+    // Reset all related state first to ensure clean state
+    setEditingIndex(null);
+    setShowSummary(false); // Reset summary screen when navigating to a new activity
+    // Use functional update to ensure we're setting the exact value we want
+    // Force immediate update by using the value directly
+    setCurrentKrachtenStep(validStepIndex);
     setIsSingleDoodleView(isNewDoodle);
+    
     // Update annotations based on the step
-    const stepName = KRACHTEN_STEPS[stepIndex] as keyof typeof STEP_ANNOTATIONS;
+    const stepName = KRACHTEN_STEPS[validStepIndex] as keyof typeof STEP_ANNOTATIONS;
     setAnnotations(STEP_ANNOTATIONS[stepName]);
     // Update cards to match annotations
     const stepAnnotations = STEP_ANNOTATIONS[stepName];
@@ -278,6 +286,9 @@ export const Prototype: React.FC<PrototypeProps> = ({ isShowcase = false }) => {
       title: ann.chip,
       description: ann.description,
     })));
+    // Show the krachten page after updating state
+    setShowActivitiesOverview(false);
+    setShowKrachtenPage(true);
   };
 
   const handleNextStep = () => {
@@ -293,6 +304,7 @@ export const Prototype: React.FC<PrototypeProps> = ({ isShowcase = false }) => {
     setEditingIndex(null);
     setCurrentKrachtenStep(0);
     setIsShowcaseFirstActivity(false);
+    // Don't reset isSingleDoodleView here - it will be set correctly when navigating to a doodle
     setIsSingleDoodleView(false);
   };
 
@@ -541,39 +553,41 @@ export const Prototype: React.FC<PrototypeProps> = ({ isShowcase = false }) => {
           <DoodlerLogo className="doodler-prototype__logo" />
         </div>
         <div className="doodler-prototype__screen">
-          <div className="doodler-prototype__steps">
-            <StepsComponent
-              currentStep={currentKrachtenStep + 1}
-              totalSteps={
-                isShowcase && isShowcaseFirstActivity && currentKrachtenStep === 0
-                  ? 1
-                  : KRACHTEN_STEPS.length
-              }
-              steps={
-                isShowcase && isShowcaseFirstActivity && currentKrachtenStep === 0
-                  ? ['Krachten']
-                  : KRACHTEN_STEPS
-              }
-              activeStepIndex={0}
-              onStepClick={
-                isShowcase && isShowcaseFirstActivity && currentKrachtenStep === 0
-                  ? undefined
-                  : (index) => {
-                      setCurrentKrachtenStep(index);
-                      setEditingIndex(null);
-                      // Update annotations and cards for the clicked step
-                      const stepName = KRACHTEN_STEPS[index] as keyof typeof STEP_ANNOTATIONS;
-                      setAnnotations(STEP_ANNOTATIONS[stepName]);
-                      const stepAnnotations = STEP_ANNOTATIONS[stepName];
-                      setCards(stepAnnotations.map((ann) => ({
-                        imageUrl: doodleImage,
-                        title: ann.chip,
-                        description: ann.description,
-                      })));
-                    }
-              }
-            />
-          </div>
+          {!isSingleDoodleView && (
+            <div className="doodler-prototype__steps">
+              <StepsComponent
+                currentStep={currentKrachtenStep + 1}
+                totalSteps={
+                  isShowcase && isShowcaseFirstActivity && currentKrachtenStep === 0
+                    ? 1
+                    : KRACHTEN_STEPS.length
+                }
+                steps={
+                  isShowcase && isShowcaseFirstActivity && currentKrachtenStep === 0
+                    ? ['Krachten']
+                    : KRACHTEN_STEPS
+                }
+                activeStepIndex={0}
+                onStepClick={
+                  isShowcase && isShowcaseFirstActivity && currentKrachtenStep === 0
+                    ? undefined
+                    : (index) => {
+                        setCurrentKrachtenStep(index);
+                        setEditingIndex(null);
+                        // Update annotations and cards for the clicked step
+                        const stepName = KRACHTEN_STEPS[index] as keyof typeof STEP_ANNOTATIONS;
+                        setAnnotations(STEP_ANNOTATIONS[stepName]);
+                        const stepAnnotations = STEP_ANNOTATIONS[stepName];
+                        setCards(stepAnnotations.map((ann) => ({
+                          imageUrl: doodleImage,
+                          title: ann.chip,
+                          description: ann.description,
+                        })));
+                      }
+                }
+              />
+            </div>
+          )}
           <div className="doodler-prototype__step-section">
             <div className="doodler-prototype__step-title">
               <h2 className="doodler-prototype__heading">{KRACHTEN_STEPS[currentKrachtenStep]}</h2>

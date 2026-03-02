@@ -195,6 +195,49 @@ export const ActivitiesOverview: React.FC<ActivitiesOverviewProps> = ({
     setIsLoading(false);
   };
 
+  // Helper function to check if an activity has only one checked category
+  const hasOnlyOneCheckedCategory = (activity: Activity): boolean => {
+    const checkedCount = [
+      activity.krachten,
+      activity.klachten,
+      activity.inzichten,
+      activity.aanpak,
+    ].filter(state => state === 'added').length;
+    return checkedCount === 1;
+  };
+
+  // Helper function to get the step index for a checked category in an activity
+  const getStepIndexForActivity = (activity: Activity): number => {
+    if (activity.krachten === 'added') return 0;
+    if (activity.klachten === 'added') return 1;
+    if (activity.inzichten === 'added') return 2;
+    if (activity.aanpak === 'added') return 3;
+    return 0; // Default to krachten
+  };
+
+  // Handler for navigating from a cell click
+  const handleCellNavigate = (stepIndex: number, activityIndex: number) => {
+    if (isShowcase) {
+      const activity = activities[activityIndex];
+      if (!activity) {
+        onNavigateToDoodle?.(stepIndex, false);
+        return;
+      }
+      const isSingleDoodle = hasOnlyOneCheckedCategory(activity);
+      // When viewing a single doodle, always find which category is checked and use its step index
+      // Ignore the stepIndex parameter since we need to find the actual checked category
+      if (isSingleDoodle) {
+        const correctStepIndex = getStepIndexForActivity(activity);
+        onNavigateToDoodle?.(correctStepIndex, true);
+      } else {
+        // For activities with multiple checked categories, use the stepIndex from the clicked column
+        onNavigateToDoodle?.(stepIndex, false);
+      }
+    } else {
+      onNavigateToDoodle?.(stepIndex, false);
+    }
+  };
+
   const handleConfirmModal = (selectedCategory?: 'krachten' | 'klachten' | 'inzichten' | 'aanpak', selectedActivity?: string) => {
     setIsLoading(true);
     setIsModalOpen(false);
@@ -243,7 +286,36 @@ export const ActivitiesOverview: React.FC<ActivitiesOverviewProps> = ({
           onNavigateToDoodle(stepIndex, true);
         }
       } else if (onNavigateToDoodle) {
-        // Map column keys to step indices
+        // This is for clicking on an empty cell in an existing activity
+        // Find the activity that was clicked
+        const activityName = selectedActivityName;
+        if (activityName && isShowcase) {
+          // Find the activity in the list
+          const activityIndex = activities.findIndex(a => a.name === activityName);
+          if (activityIndex !== -1) {
+            const activity = activities[activityIndex];
+            // Check how many categories will be checked after adding this one
+            const currentCheckedCount = [
+              activity.krachten,
+              activity.klachten,
+              activity.inzichten,
+              activity.aanpak,
+            ].filter(state => state === 'added').length;
+            // After adding this category, will there be only one checked?
+            const willHaveOnlyOne = currentCheckedCount === 0;
+            const stepIndexMap: Record<'krachten' | 'klachten' | 'inzichten' | 'aanpak', number> = {
+              krachten: 0,
+              klachten: 1,
+              inzichten: 2,
+              aanpak: 3,
+            };
+            const stepIndex = stepIndexMap[categoryToUse] || 0;
+            setIsLoading(false);
+            onNavigateToDoodle(stepIndex, willHaveOnlyOne);
+            return;
+          }
+        }
+        // Fallback: just navigate to the step
         const stepIndexMap: Record<'krachten' | 'klachten' | 'inzichten' | 'aanpak', number> = {
           krachten: 0,
           klachten: 1,
@@ -252,7 +324,7 @@ export const ActivitiesOverview: React.FC<ActivitiesOverviewProps> = ({
         };
         const stepIndex = stepIndexMap[categoryToUse] || 0;
         setIsLoading(false);
-        onNavigateToDoodle(stepIndex, true);
+        onNavigateToDoodle(stepIndex, false);
       }
     }, 1500);
   };
@@ -332,7 +404,16 @@ export const ActivitiesOverview: React.FC<ActivitiesOverviewProps> = ({
                           <Button 
                             variant="primary" 
                             size="small"
-                            onClick={() => onNavigateToDoodle?.(0)}
+                            onClick={() => {
+                              if (isShowcase) {
+                                const isSingleDoodle = hasOnlyOneCheckedCategory(activity);
+                                // Find which category is checked and use its step index
+                                const correctStepIndex = getStepIndexForActivity(activity);
+                                onNavigateToDoodle?.(correctStepIndex, isSingleDoodle);
+                              } else {
+                                onNavigateToDoodle?.(0, false);
+                              }
+                            }}
                           >
                             Open
                           </Button>
@@ -343,7 +424,7 @@ export const ActivitiesOverview: React.FC<ActivitiesOverviewProps> = ({
                       <CellButton
                         state={activity.krachten}
                         onToggle={() => handleCellToggle(index, 'krachten')}
-                        onNavigate={() => onNavigateToDoodle?.(0)}
+                        onNavigate={() => handleCellNavigate(0, index)}
                         onOpenModal={handleOpenModal}
                         columnKey="krachten"
                         activityName={activity.name}
@@ -353,7 +434,7 @@ export const ActivitiesOverview: React.FC<ActivitiesOverviewProps> = ({
                       <CellButton
                         state={activity.klachten}
                         onToggle={() => handleCellToggle(index, 'klachten')}
-                        onNavigate={() => onNavigateToDoodle?.(1)}
+                        onNavigate={() => handleCellNavigate(1, index)}
                         onOpenModal={handleOpenModal}
                         columnKey="klachten"
                         activityName={activity.name}
@@ -363,7 +444,7 @@ export const ActivitiesOverview: React.FC<ActivitiesOverviewProps> = ({
                       <CellButton
                         state={activity.inzichten}
                         onToggle={() => handleCellToggle(index, 'inzichten')}
-                        onNavigate={() => onNavigateToDoodle?.(2)}
+                        onNavigate={() => handleCellNavigate(2, index)}
                         onOpenModal={handleOpenModal}
                         columnKey="inzichten"
                         activityName={activity.name}
@@ -373,7 +454,7 @@ export const ActivitiesOverview: React.FC<ActivitiesOverviewProps> = ({
                       <CellButton
                         state={activity.aanpak}
                         onToggle={() => handleCellToggle(index, 'aanpak')}
-                        onNavigate={() => onNavigateToDoodle?.(3)}
+                        onNavigate={() => handleCellNavigate(3, index)}
                         onOpenModal={handleOpenModal}
                         columnKey="aanpak"
                         activityName={activity.name}
