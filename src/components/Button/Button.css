@@ -18,7 +18,7 @@
   color: var(--doodler-color-white);
 }
 
-.doodler-button--primary:hover:not(:disabled) {
+.doodler-button--primary:hover:not(:disabled):not(.doodler-button--disabled) {
   background-color: var(--doodler-color-hover);
 }
 
@@ -28,7 +28,7 @@
   border: 1px solid var(--doodler-color-active);
 }
 
-.doodler-button--outline:hover:not(:disabled) {
+.doodler-button--outline:hover:not(:disabled):not(.doodler-button--disabled) {
   background-color: rgba(29, 32, 33, 0.05);
 }
 
@@ -79,8 +79,11 @@
   cursor: not-allowed;
 }
 
-.doodler-button--disabled:hover {
-  background-color: inherit;
+.doodler-button--disabled:hover,
+.doodler-button--disabled:focus {
+  background-color: inherit !important;
+  border-color: inherit !important;
+  color: inherit !important;
 }
 
 /* Screen reader only text */

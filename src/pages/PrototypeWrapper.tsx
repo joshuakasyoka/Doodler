@@ -2,10 +2,9 @@ import React, { useState } from 'react';
 import { PrototypeSelector } from '../components/PrototypeSelector/PrototypeSelector';
 import { ThirdPartyPage } from '../components/ThirdPartyPage/ThirdPartyPage';
 import { DoodlerWidgetOverlay } from '../components/DoodlerWidgetOverlay/DoodlerWidgetOverlay';
-import { EHRPage } from '../components/EHRPage/EHRPage';
 import { Prototype } from './Prototype';
 
-export type ViewMode = 'selector' | 'prototype1-widget' | 'prototype1-overview' | 'prototype2' | 'prototype3';
+export type ViewMode = 'selector' | 'prototype1-widget' | 'prototype1-overview' | 'prototype2' | 'showcase';
 
 export const PrototypeWrapper: React.FC = () => {
   const [viewMode, setViewMode] = useState<ViewMode>('selector');
@@ -18,8 +17,8 @@ export const PrototypeWrapper: React.FC = () => {
     setViewMode('prototype2');
   };
 
-  const handleSelectPrototype3 = () => {
-    setViewMode('prototype3');
+  const handleSelectShowcase = () => {
+    setViewMode('showcase');
   };
 
   const handleOverviewClick = () => {
@@ -31,7 +30,7 @@ export const PrototypeWrapper: React.FC = () => {
       <PrototypeSelector
         onSelectPrototype1={handleSelectPrototype1}
         onSelectPrototype2={handleSelectPrototype2}
-        onSelectPrototype3={handleSelectPrototype3}
+        onSelectShowcase={handleSelectShowcase}
       />
     );
   }
@@ -50,17 +49,8 @@ export const PrototypeWrapper: React.FC = () => {
     );
   }
 
-  if (viewMode === 'prototype3') {
-    return (
-      <EHRPage
-        onOverviewClick={() => {
-          // This will trigger the Doodler panel to slide in
-        }}
-        onNewDoodleClick={() => {
-          // This will be handled within the Prototype component in the panel
-        }}
-      />
-    );
+  if (viewMode === 'showcase') {
+    return <Prototype isShowcase={true} />;
   }
 
   if (viewMode === 'prototype1-overview' || viewMode === 'prototype2') {

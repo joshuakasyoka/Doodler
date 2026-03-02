@@ -18,22 +18,22 @@ export interface GalleryProps {
 const GALLERY_SECTIONS = [
   {
     title: 'Krachten',
-    description: 'Alle doodles die betrekking hebben op dit deel van het project.',
+    description: 'Dit zijn de krachten die je bij je cliënt ziet.',
     image: image15,
   },
   {
     title: 'Klachten',
-    description: 'Alle doodles die betrekking hebben op dit deel van het project.',
+    description: 'Dit zijn de klachten die je bij je cliënt ziet.',
     image: image13,
   },
   {
     title: 'Inzichten',
-    description: 'Alle doodles die betrekking hebben op dit deel van het project.',
+    description: 'Dit zijn de inzichten over je cliënt.',
     image: image14,
   },
   {
     title: 'Aanpak',
-    description: 'Alle doodles die betrekking hebben op dit deel van het project.',
+    description: 'Dit is de aanpak die je voorstelt aan je cliënt.',
     image: image3,
   },
 ];

@@ -1,5 +1,5 @@
 import React, { useState, useId } from 'react';
-import { ActivitiesOverview } from '../components/ActivitiesOverview/ActivitiesOverview';
+import { ActivitiesOverview, Activity } from '../components/ActivitiesOverview/ActivitiesOverview';
 import { Gallery } from '../components/Gallery/Gallery';
 import { GalleryDetail } from '../components/GalleryDetail/GalleryDetail';
 import { StepsComponent } from '../components/StepsComponent/StepsComponent';
@@ -211,7 +211,11 @@ const STEP_ANNOTATIONS = {
   ],
 };
 
-export const Prototype: React.FC = () => {
+export interface PrototypeProps {
+  isShowcase?: boolean;
+}
+
+export const Prototype: React.FC<PrototypeProps> = ({ isShowcase = false }) => {
   const [showActivitiesOverview, setShowActivitiesOverview] = useState(true);
   const [showKrachtenPage, setShowKrachtenPage] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
@@ -226,12 +230,17 @@ export const Prototype: React.FC = () => {
   const [selectedGallerySection, setSelectedGallerySection] = useState<string>('');
   const [toastMessage, setToastMessage] = useState<string>('');
   const [showToast, setShowToast] = useState(false);
+  const [isShowcaseFirstActivity, setIsShowcaseFirstActivity] = useState(false);
+  const [showcaseActivities, setShowcaseActivities] = useState<Activity[]>(
+    isShowcase ? [{ name: 'Intake', krachten: 'added', klachten: 'added', inzichten: 'added', aanpak: 'added' }] : []
+  );
+  const [isSingleDoodleView, setIsSingleDoodleView] = useState(false);
   
   // Get caption based on step index
   const getCaptionForStep = (stepIndex: number) => {
     if (stepIndex === 0) return 'Dit gaat er goed...';
     if (stepIndex === 1) return 'Waarom we hier zijn...';
-    if (stepIndex === 2) return 'Over mij...';
+    if (stepIndex === 2) return 'waardoor dat kan komen…';
     if (stepIndex === 3) return 'Deze aanpak stel ik voor, wat denk jij?';
     return 'Dit gaat er goed...';
   };
@@ -254,10 +263,11 @@ export const Prototype: React.FC = () => {
     });
   });
 
-  const handleNavigateToDoodle = (stepIndex: number = 0) => {
+  const handleNavigateToDoodle = (stepIndex: number = 0, isNewDoodle: boolean = false) => {
     setShowActivitiesOverview(false);
     setShowKrachtenPage(true);
     setCurrentKrachtenStep(stepIndex);
+    setIsSingleDoodleView(isNewDoodle);
     // Update annotations based on the step
     const stepName = KRACHTEN_STEPS[stepIndex] as keyof typeof STEP_ANNOTATIONS;
     setAnnotations(STEP_ANNOTATIONS[stepName]);
@@ -282,11 +292,18 @@ export const Prototype: React.FC = () => {
     setShowKrachtenPage(false);
     setEditingIndex(null);
     setCurrentKrachtenStep(0);
+    setIsShowcaseFirstActivity(false);
+    setIsSingleDoodleView(false);
   };
 
   const handleNextKrachtenStep = () => {
     // Save current section data before moving forward
     updateSectionData(currentKrachtenStep);
+    
+    // If we're in showcase mode and just created the first activity, allow navigation after completing krachten
+    if (isShowcase && isShowcaseFirstActivity && currentKrachtenStep === 0) {
+      setIsShowcaseFirstActivity(false);
+    }
     
     if (currentKrachtenStep < KRACHTEN_STEPS.length - 1) {
       const nextStep = currentKrachtenStep + 1;
@@ -420,6 +437,7 @@ export const Prototype: React.FC = () => {
           setShowGalleryDetail(false);
           setShowGallery(true);
         }}
+        isShowcase={isShowcase}
       />
     );
   }
@@ -439,6 +457,14 @@ export const Prototype: React.FC = () => {
       <ActivitiesOverview
         onNavigateToDoodle={handleNavigateToDoodle}
         onNavigateToGallery={() => setShowGallery(true)}
+        isShowcase={isShowcase}
+        activities={isShowcase ? showcaseActivities : undefined}
+        onActivitiesChange={isShowcase ? setShowcaseActivities : undefined}
+        onActivityAdded={(activityName, columnKey) => {
+          if (isShowcase && activityName === 'Adviesgesprek' && columnKey === 'krachten') {
+            setIsShowcaseFirstActivity(true);
+          }
+        }}
       />
     );
   }
@@ -518,22 +544,34 @@ export const Prototype: React.FC = () => {
           <div className="doodler-prototype__steps">
             <StepsComponent
               currentStep={currentKrachtenStep + 1}
-              totalSteps={KRACHTEN_STEPS.length}
-              steps={KRACHTEN_STEPS}
-              activeStepIndex={currentKrachtenStep}
-              onStepClick={(index) => {
-                setCurrentKrachtenStep(index);
-                setEditingIndex(null);
-                // Update annotations and cards for the clicked step
-                const stepName = KRACHTEN_STEPS[index] as keyof typeof STEP_ANNOTATIONS;
-                setAnnotations(STEP_ANNOTATIONS[stepName]);
-                const stepAnnotations = STEP_ANNOTATIONS[stepName];
-                setCards(stepAnnotations.map((ann) => ({
-                  imageUrl: doodleImage,
-                  title: ann.chip,
-                  description: ann.description,
-                })));
-              }}
+              totalSteps={
+                isShowcase && isShowcaseFirstActivity && currentKrachtenStep === 0
+                  ? 1
+                  : KRACHTEN_STEPS.length
+              }
+              steps={
+                isShowcase && isShowcaseFirstActivity && currentKrachtenStep === 0
+                  ? ['Krachten']
+                  : KRACHTEN_STEPS
+              }
+              activeStepIndex={0}
+              onStepClick={
+                isShowcase && isShowcaseFirstActivity && currentKrachtenStep === 0
+                  ? undefined
+                  : (index) => {
+                      setCurrentKrachtenStep(index);
+                      setEditingIndex(null);
+                      // Update annotations and cards for the clicked step
+                      const stepName = KRACHTEN_STEPS[index] as keyof typeof STEP_ANNOTATIONS;
+                      setAnnotations(STEP_ANNOTATIONS[stepName]);
+                      const stepAnnotations = STEP_ANNOTATIONS[stepName];
+                      setCards(stepAnnotations.map((ann) => ({
+                        imageUrl: doodleImage,
+                        title: ann.chip,
+                        description: ann.description,
+                      })));
+                    }
+              }
             />
           </div>
           <div className="doodler-prototype__step-section">
@@ -575,21 +613,47 @@ export const Prototype: React.FC = () => {
                   </div>
                 </div>
                 <div className="doodler-prototype__actions">
-                  <Button 
-                    variant="outline" 
-                    size="small"
-                    onClick={handlePreviousKrachtenStep}
-                    disabled={currentKrachtenStep === 0}
-                  >
-                    Vorige sectie
-                  </Button>
-                  <Button 
-                    variant="primary" 
-                    size="small"
-                    onClick={handleNextKrachtenStep}
-                  >
-                    Volgende sectie
-                  </Button>
+                  {isSingleDoodleView ? (
+                    <>
+                      <Button 
+                        variant="outline" 
+                        size="small"
+                        startIcon={<IconSend size={16} />}
+                        onClick={handleEmailDoodles}
+                      >
+                        Doodles e-mailen
+                      </Button>
+                      <Button 
+                        variant="primary" 
+                        size="small"
+                        startIcon={<IconDocument size={16} />}
+                        onClick={handlePrintDoodles}
+                      >
+                        Doodles afdrukken
+                      </Button>
+                    </>
+                  ) : (
+                    <>
+                      <Button 
+                        variant="outline" 
+                        size="small"
+                        onClick={handlePreviousKrachtenStep}
+                        disabled={currentKrachtenStep === 0}
+                      >
+                        Vorige sectie
+                      </Button>
+                      <Button 
+                        variant="primary" 
+                        size="small"
+                        onClick={handleNextKrachtenStep}
+                        disabled={
+                          isShowcase && isShowcaseFirstActivity && currentKrachtenStep === 0
+                        }
+                      >
+                        Volgende sectie
+                      </Button>
+                    </>
+                  )}
                 </div>
               </div>
             </div>

@@ -1,13 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Button } from '../Button/Button';
-import { IconCross, IconChevronDown, IconCheck, IconPlus } from '../../icons';
+import { IconCross, IconChevronDown, IconCheck, IconPlus, IconDocument } from '../../icons';
 import './NewDoodleModal.css';
 
 export interface NewDoodleModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onConfirm: () => void;
+  onConfirm: (selectedCategory?: string, selectedActivity?: string) => void;
   preselectedCategory?: 'krachten' | 'klachten' | 'inzichten' | 'aanpak';
+  preselectedActivity?: string;
+  isLoading?: boolean;
 }
 
 const DROPDOWN_OPTIONS = ['Krachten', 'Kies onderdeel', 'Inzichten', 'Aanpak'];
@@ -23,7 +25,7 @@ const ACTIVITY_OPTIONS = [
 
 const CATEGORY_MAP: Record<'krachten' | 'klachten' | 'inzichten' | 'aanpak', string> = {
   krachten: 'Krachten',
-  klachten: 'Kies onderdeel',
+  klachten: 'Klachten',
   inzichten: 'Inzichten',
   aanpak: 'Aanpak',
 };
@@ -33,13 +35,17 @@ export const NewDoodleModal: React.FC<NewDoodleModalProps> = ({
   onClose,
   onConfirm,
   preselectedCategory,
+  preselectedActivity,
+  isLoading = false,
 }) => {
   const [selectedContact1, setSelectedContact1] = useState<string>('');
   const [selectedContact2, setSelectedContact2] = useState<string>('');
   const [openDropdown1, setOpenDropdown1] = useState(false);
   const [openDropdown2, setOpenDropdown2] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const dropdown1Ref = useRef<HTMLDivElement>(null);
   const dropdown2Ref = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (isOpen) {
@@ -52,10 +58,17 @@ export const NewDoodleModal: React.FC<NewDoodleModalProps> = ({
         // Reset when opening without preselection
         setSelectedContact1('');
       }
-      // Always reset second dropdown when opening
-      setSelectedContact2('');
+      // Set preselected activity if provided
+      if (preselectedActivity) {
+        setSelectedContact2(preselectedActivity);
+      } else {
+        // Reset second dropdown when opening
+        setSelectedContact2('');
+      }
+      // Reset file when opening
+      setSelectedFile(null);
     }
-  }, [isOpen, preselectedCategory]);
+  }, [isOpen, preselectedCategory, preselectedActivity]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -88,9 +101,39 @@ export const NewDoodleModal: React.FC<NewDoodleModalProps> = ({
     setOpenDropdown2(false);
   };
 
+  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setSelectedFile(file);
+    }
+  };
+
+  const handleUploadClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleRemoveFile = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setSelectedFile(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
   const handleConfirm = () => {
-    onConfirm();
-    onClose();
+    if (!isLoading) {
+      // Map selectedContact1 back to category key
+      const categoryKeyMap: Record<string, 'krachten' | 'klachten' | 'inzichten' | 'aanpak' | undefined> = {
+        'Krachten': 'krachten',
+        'Klachten': 'klachten',
+        'Inzichten': 'inzichten',
+        'Aanpak': 'aanpak',
+      };
+      const categoryKey = selectedContact1 ? categoryKeyMap[selectedContact1] : undefined;
+      // Use selectedContact2 if set, otherwise fall back to preselectedActivity
+      const activityToUse = selectedContact2 || preselectedActivity || undefined;
+      onConfirm(categoryKey, activityToUse);
+    }
   };
 
   return (
@@ -177,19 +220,43 @@ export const NewDoodleModal: React.FC<NewDoodleModalProps> = ({
 
           <div className="doodler-new-doodle-modal__upload-group">
             <label className="doodler-new-doodle-modal__label">Bestand toevoegen</label>
-            <div className="doodler-new-doodle-modal__upload">
-              <IconPlus size={16} />
-              <span className="doodler-new-doodle-modal__upload-text">Bestand toevoegen</span>
-            </div>
+            <input
+              ref={fileInputRef}
+              type="file"
+              className="doodler-new-doodle-modal__file-input"
+              onChange={handleFileSelect}
+              accept="*/*"
+            />
+            {selectedFile ? (
+              <div className="doodler-new-doodle-modal__file-selected">
+                <div className="doodler-new-doodle-modal__file-info">
+                  <IconDocument size={16} />
+                  <span className="doodler-new-doodle-modal__file-name">{selectedFile.name}</span>
+                </div>
+                <button
+                  type="button"
+                  className="doodler-new-doodle-modal__file-remove"
+                  onClick={handleRemoveFile}
+                  aria-label="Remove file"
+                >
+                  <IconCross size={16} />
+                </button>
+              </div>
+            ) : (
+              <div className="doodler-new-doodle-modal__upload" onClick={handleUploadClick}>
+                <IconPlus size={16} />
+                <span className="doodler-new-doodle-modal__upload-text">Bestand toevoegen</span>
+              </div>
+            )}
           </div>
         </div>
 
         <div className="doodler-new-doodle-modal__actions">
-          <Button variant="outline" size="small" onClick={onClose}>
+          <Button variant="outline" size="small" onClick={onClose} disabled={isLoading}>
             Annuleren
           </Button>
-          <Button variant="primary" size="small" onClick={handleConfirm} startIcon={<IconCheck size={16} />}>
-            Doodles genereren
+          <Button variant="primary" size="small" onClick={handleConfirm} startIcon={<IconCheck size={16} />} disabled={isLoading}>
+            {isLoading ? 'Genereren...' : 'Doodles genereren'}
           </Button>
         </div>
       </div>
