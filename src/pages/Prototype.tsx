@@ -14,6 +14,26 @@ import { Toast } from '../components/Toast/Toast';
 import { DoodlerLogo } from '../assets/logo';
 import { IconArrowLeft, IconSend, IconDocument } from '../icons';
 import doodleImage from '../assets/img/Doodle.png';
+// Krachten images
+import krachtenGoedMetTaal from '../assets/img/Krachten_goed met taal 1.png';
+import krachtenBlijvenProberen from '../assets/img/Krachten blijven proberen 1.png';
+import krachtenMakkelijkPraten from '../assets/img/Krachten - makkelijk praten met anderen 1.png';
+import krachtenBandMetZus from '../assets/img/Krachten_band met zus 1.png';
+// Klachten images
+import klachtenDrukHoofd from '../assets/img/Klachten druk hoofd 1.png';
+import klachtenMoeizaamSlapen from '../assets/img/Klachten moeizaam slapen 1.png';
+import klachtenMoeilijkOverzicht from '../assets/img/Klachten moeilijk overzicht houden 1.png';
+import klachtenLastigeEmoties from '../assets/img/Klachten_lastige emoties 1.png';
+// Inzichten images
+import inzichtenAnderenNietBelasten from '../assets/img/Inzichten - anderen niet willen belasten 1.png';
+import inzichtenBotsingThuis from '../assets/img/Inzichten botsing thuis.png';
+import inzichtenGevoeligDoorStress from '../assets/img/Inzichten _ mama buik 1.png';
+import inzichtenVeelWillenZorgen from '../assets/img/Inzichten veel willen.png';
+// Aanpak images
+import aanpakHelpenOmgaan from '../assets/img/Aanpak helpen omgaan.png';
+import aanpakJongeHelpers from '../assets/img/Aanpak_jonge helpers 1.png';
+import aanpakOndersteuning from '../assets/img/Aan pak Ondersteuning.png';
+import aanpakMetSchool from '../assets/img/Aanpak met school.png';
 import './Prototype.css';
 
 const STEPS = ['Strengths', "What's going on?", 'Insights', 'Plan'];
@@ -125,88 +145,104 @@ const STEP_ANNOTATIONS = {
     {
       chip: 'Goed met taal',
       description: 'Je kunt goed praten, hebt een sterke woordenschat en denkt graag diep na over dingen.',
-      imagePrompt: 'A detailed illustration showing the client\'s strengths and positive qualities',
+      imagePrompt: '',
+      imageUrl: krachtenGoedMetTaal,
     },
     {
       chip: 'Blijven proberen',
       description: 'Je hebt een sterke werkhouding en wilt je taken graag goed uitvoeren. Je probeert zo min mogelijk fouten te maken.',
-      imagePrompt: 'A visual representation of curiosity and learning',
+      imagePrompt: '',
+      imageUrl: krachtenBlijvenProberen,
     },
     {
       chip: 'Makkelijk praten met anderen',
       description: 'Je kunt makkelijk contact maken met nieuwe mensen en toont interesse en medeleven.',
-      imagePrompt: 'An artistic depiction of social skills and collaboration',
+      imagePrompt: '',
+      imageUrl: krachtenMakkelijkPraten,
     },
     {
       chip: 'Goede band met zus',
       description: 'Je hebt een goede band met je zus. Met haar deel je vaak hoe het met je gaat en wat er in je omgaat.',
-      imagePrompt: 'A comprehensive visualization of family support',
+      imagePrompt: '',
+      imageUrl: krachtenBandMetZus,
     },
   ],
   Klachten: [
     {
       chip: 'Druk hoofd',
       description: 'Je hoofd voelt vaak druk en chaotisch, waardoor je moeilijk kunt ontspannen en soms niet weet wat je voelt.',
-      imagePrompt: 'A visual representation of stress and tension',
+      imagePrompt: '',
+      imageUrl: klachtenDrukHoofd,
     },
     {
       chip: 'Moeizaam slapen',
       description: 'Je hebt moeite met inslapen en slaapt vaak maar 4 tot 6 uur per nacht doordat je hoofd zo druk is.',
-      imagePrompt: 'An artistic depiction of uncertainty and self-doubt',
+      imagePrompt: '',
+      imageUrl: klachtenMoeizaamSlapen,
     },
     {
       chip: 'Moeilijk overzicht houden',
       description: 'Je werkt snel maar mist dan informatie. Het is lastig om instructies te volgen, overzicht te houden of op tijd te stoppen om na te denken.',
-      imagePrompt: 'A detailed illustration of communication challenges',
+      imagePrompt: '',
+      imageUrl: klachtenMoeilijkOverzicht,
     },
     {
       chip: 'Lastige emoties',
       description: 'Je hebt soms heftige uitbarstingen, zoals een \'tornado van gevoelens\', en weet niet altijd wat je voelt.',
-      imagePrompt: 'A comprehensive visualization of concentration difficulties',
+      imagePrompt: '',
+      imageUrl: klachtenLastigeEmoties,
     },
   ],
   Inzichten: [
     {
       chip: 'Anderen niet willen belasten',
       description: 'Je gaat bij gevoelens eerder naar je oudste zus dan naar je ouders, omdat je hen niet lastig wil vallen.',
-      imagePrompt: 'A detailed illustration of emotional awareness',
+      imagePrompt: '',
+      imageUrl: inzichtenAnderenNietBelasten,
     },
     {
       chip: 'Botsing thuis',
       description: 'Mama is meer chaotisch en jij houdt juist sterk vast aan tijden en planning. Dit botst soms en kan spanning geven.',
-      imagePrompt: 'A visual representation of need for structure',
+      imagePrompt: '',
+      imageUrl: inzichtenBotsingThuis,
     },
     {
       chip: 'Gevoelig door stress',
       description: 'Mama vertelt dat er veel stress was toen je nog in haar buik zat. Dat kan invloed hebben op hoe gevoelig je nu bent.',
-      imagePrompt: 'An artistic depiction of creative thinking',
+      imagePrompt: '',
+      imageUrl: inzichtenGevoeligDoorStress,
     },
     {
       chip: 'Veel willen zorgen',
       description: 'Je maakt je zorgen om mama en wilt goed op haar letten, terwijl dit voor een kind best zwaar kan zijn.',
-      imagePrompt: 'A comprehensive visualization of self-reflection',
+      imagePrompt: '',
+      imageUrl: inzichtenVeelWillenZorgen,
     },
   ],
   Aanpak: [
     {
       chip: 'Helpen omgaan met gevoelens',
       description: 'Je krijgt uitleg over hoe jouw hoofd werkt en je gaat leren hoe je beter met je emoties en piekergedachten om kunt gaan.',
-      imagePrompt: 'A detailed illustration of relaxation techniques',
+      imagePrompt: '',
+      imageUrl: aanpakHelpenOmgaan,
     },
     {
       chip: 'Steun voor jonge helpers',
       description: 'Je mag meedoen aan activiteiten of groepen voor kinderen die thuis extra zorgen hebben, zodat jij je gesteund voelt.',
-      imagePrompt: 'A visual representation of building confidence',
+      imagePrompt: '',
+      imageUrl: aanpakJongeHelpers,
     },
     {
       chip: 'Ondersteuning voor je ouders',
       description: 'Je ouders krijgen uitleg over hoe jouw hoofd werkt en wat jij nodig hebt, zodat ze je beter kunnen helpen als je je overweldigd voelt.',
-      imagePrompt: 'An artistic depiction of family communication',
+      imagePrompt: '',
+      imageUrl: aanpakOndersteuning,
     },
     {
       chip: 'Afstemming met school',
       description: 'Er komt een gesprek met school om te zorgen dat zij begrijpen wat er bij jou speelt en hoe ze je kunnen helpen zodat school fijn voelt.',
-      imagePrompt: 'A comprehensive visualization of monitoring and evaluation',
+      imagePrompt: '',
+      imageUrl: aanpakMetSchool,
     },
   ],
 };
@@ -232,15 +268,16 @@ export const Prototype: React.FC<PrototypeProps> = ({ isShowcase = false }) => {
   const [showToast, setShowToast] = useState(false);
   const [isShowcaseFirstActivity, setIsShowcaseFirstActivity] = useState(false);
   const [showcaseActivities, setShowcaseActivities] = useState<Activity[]>(
-    isShowcase ? [{ name: 'Intake', krachten: 'added', klachten: 'added', inzichten: 'added', aanpak: 'added' }] : []
+    isShowcase ? [{ name: 'Intake', krachten: 'added', klachten: 'added', inzichten: 'empty', aanpak: 'empty' }] : []
   );
   const [isSingleDoodleView, setIsSingleDoodleView] = useState(false);
+  const [currentActivityName, setCurrentActivityName] = useState<string | null>(null);
   
   // Get caption based on step index
   const getCaptionForStep = (stepIndex: number) => {
     if (stepIndex === 0) return 'Dit gaat er goed...';
     if (stepIndex === 1) return 'Waarom we hier zijn...';
-    if (stepIndex === 2) return 'waardoor dat kan komen…';
+    if (stepIndex === 2) return 'Waardoor dat kan komen…';
     if (stepIndex === 3) return 'Deze aanpak stel ik voor, wat denk jij?';
     return 'Dit gaat er goed...';
   };
@@ -255,7 +292,7 @@ export const Prototype: React.FC<PrototypeProps> = ({ isShowcase = false }) => {
         chip: step,
         caption: getCaptionForStep(index),
         cards: stepAnnotations.map((ann) => ({
-          imageUrl: doodleImage,
+          imageUrl: ann.imageUrl || doodleImage,
           title: ann.chip,
           description: ann.description,
         })),
@@ -263,7 +300,7 @@ export const Prototype: React.FC<PrototypeProps> = ({ isShowcase = false }) => {
     });
   });
 
-  const handleNavigateToDoodle = (stepIndex: number = 0, isNewDoodle: boolean = false) => {
+  const handleNavigateToDoodle = (stepIndex: number = 0, isNewDoodle: boolean = false, activityName?: string) => {
     // Always reset to the correct step index, regardless of previous state
     // Ensure stepIndex is valid (0-3)
     const validStepIndex = Math.max(0, Math.min(3, stepIndex));
@@ -271,10 +308,46 @@ export const Prototype: React.FC<PrototypeProps> = ({ isShowcase = false }) => {
     // Reset all related state first to ensure clean state
     setEditingIndex(null);
     setShowSummary(false); // Reset summary screen when navigating to a new activity
+    // Track which activity is being worked on
+    setCurrentActivityName(activityName || null);
+    
+    // Determine if we should show all steps or single step view
+    // In showcase mode: if activity has 0 checked categories (newly created), always show all steps
+    let shouldShowAllSteps = !isNewDoodle; // Default: show all steps unless explicitly single
+    if (isShowcase && activityName) {
+      const activity = showcaseActivities.find(a => a.name === activityName);
+      if (activity) {
+        const checkedCount = [
+          activity.krachten,
+          activity.klachten,
+          activity.inzichten,
+          activity.aanpak,
+        ].filter(state => state === 'added').length;
+        // If activity has 0 checked categories (newly created), show all steps
+        if (checkedCount === 0) {
+          shouldShowAllSteps = true;
+        } else if (checkedCount === 1) {
+          // If only one category is checked, show single step view
+          shouldShowAllSteps = false;
+        } else {
+          // Multiple categories checked, show all steps
+          shouldShowAllSteps = true;
+        }
+      } else {
+        // Activity not found yet (newly created), always show all steps
+        shouldShowAllSteps = true;
+      }
+    }
+    
+    // Explicitly ensure: if isNewDoodle is false (creating new activity), always show all steps
+    if (!isNewDoodle) {
+      shouldShowAllSteps = true;
+    }
+    
     // Use functional update to ensure we're setting the exact value we want
     // Force immediate update by using the value directly
     setCurrentKrachtenStep(validStepIndex);
-    setIsSingleDoodleView(isNewDoodle);
+    setIsSingleDoodleView(!shouldShowAllSteps); // Set to false to show all steps, true for single step, true for single step
     
     // Update annotations based on the step
     const stepName = KRACHTEN_STEPS[validStepIndex] as keyof typeof STEP_ANNOTATIONS;
@@ -282,7 +355,7 @@ export const Prototype: React.FC<PrototypeProps> = ({ isShowcase = false }) => {
     // Update cards to match annotations
     const stepAnnotations = STEP_ANNOTATIONS[stepName];
     setCards(stepAnnotations.map((ann) => ({
-      imageUrl: doodleImage,
+      imageUrl: ann.imageUrl || doodleImage,
       title: ann.chip,
       description: ann.description,
     })));
@@ -304,6 +377,7 @@ export const Prototype: React.FC<PrototypeProps> = ({ isShowcase = false }) => {
     setEditingIndex(null);
     setCurrentKrachtenStep(0);
     setIsShowcaseFirstActivity(false);
+    setCurrentActivityName(null);
     // Don't reset isSingleDoodleView here - it will be set correctly when navigating to a doodle
     setIsSingleDoodleView(false);
   };
@@ -312,10 +386,32 @@ export const Prototype: React.FC<PrototypeProps> = ({ isShowcase = false }) => {
     // Save current section data before moving forward
     updateSectionData(currentKrachtenStep);
     
-    // If we're in showcase mode and just created the first activity, allow navigation after completing krachten
-    if (isShowcase && isShowcaseFirstActivity && currentKrachtenStep === 0) {
-      setIsShowcaseFirstActivity(false);
+    // Mark the current step as completed in the activity table
+    if (isShowcase && currentActivityName && showcaseActivities) {
+      const stepCategoryMap: Record<number, 'krachten' | 'klachten' | 'inzichten' | 'aanpak'> = {
+        0: 'krachten',
+        1: 'klachten',
+        2: 'inzichten',
+        3: 'aanpak',
+      };
+      const category = stepCategoryMap[currentKrachtenStep];
+      if (category) {
+        setShowcaseActivities((prev) => {
+          const updated = prev.map((activity) => {
+            if (activity.name === currentActivityName) {
+              return {
+                ...activity,
+                [category]: 'added',
+              };
+            }
+            return activity;
+          });
+          return updated;
+        });
+      }
     }
+    
+    // Removed special handling for first activity - all activities now show all steps
     
     if (currentKrachtenStep < KRACHTEN_STEPS.length - 1) {
       const nextStep = currentKrachtenStep + 1;
@@ -326,12 +422,26 @@ export const Prototype: React.FC<PrototypeProps> = ({ isShowcase = false }) => {
       setAnnotations(STEP_ANNOTATIONS[stepName]);
       const stepAnnotations = STEP_ANNOTATIONS[stepName];
       setCards(stepAnnotations.map((ann) => ({
-        imageUrl: doodleImage,
+        imageUrl: ann.imageUrl || doodleImage,
         title: ann.chip,
         description: ann.description,
       })));
     } else {
-      // We're on the last step (Aanpak), save it and show summary
+      // We're on the last step (Aanpak), mark it as completed and show summary
+      if (isShowcase && currentActivityName && showcaseActivities) {
+        setShowcaseActivities((prev) => {
+          const updated = prev.map((activity) => {
+            if (activity.name === currentActivityName) {
+              return {
+                ...activity,
+                aanpak: 'added' as const,
+              };
+            }
+            return activity;
+          });
+          return updated;
+        });
+      }
       updateSectionData(currentKrachtenStep);
       setShowSummary(true);
     }
@@ -362,7 +472,7 @@ export const Prototype: React.FC<PrototypeProps> = ({ isShowcase = false }) => {
     setAnnotations(STEP_ANNOTATIONS[stepName]);
     const stepAnnotations = STEP_ANNOTATIONS[stepName];
     setCards(stepAnnotations.map((ann) => ({
-      imageUrl: doodleImage,
+      imageUrl: ann.imageUrl || doodleImage,
       title: ann.chip,
       description: ann.description,
     })));
@@ -378,7 +488,7 @@ export const Prototype: React.FC<PrototypeProps> = ({ isShowcase = false }) => {
       setAnnotations(STEP_ANNOTATIONS[stepName]);
       const stepAnnotations = STEP_ANNOTATIONS[stepName];
       setCards(stepAnnotations.map((ann) => ({
-        imageUrl: doodleImage,
+        imageUrl: ann.imageUrl || doodleImage,
         title: ann.chip,
         description: ann.description,
       })));
@@ -392,7 +502,7 @@ export const Prototype: React.FC<PrototypeProps> = ({ isShowcase = false }) => {
   const handleSaveAnnotation = (index: number, chip: string, description: string, imagePrompt: string) => {
     setAnnotations((prev: typeof STEP_ANNOTATIONS.Krachten) => {
       const updated = [...prev];
-      updated[index] = { chip, description, imagePrompt };
+      updated[index] = { ...updated[index], chip, description, imagePrompt };
       return updated;
     });
     setCards((prev) => {
@@ -450,6 +560,7 @@ export const Prototype: React.FC<PrototypeProps> = ({ isShowcase = false }) => {
           setShowGallery(true);
         }}
         isShowcase={isShowcase}
+        activities={isShowcase ? showcaseActivities : undefined}
       />
     );
   }
@@ -472,10 +583,8 @@ export const Prototype: React.FC<PrototypeProps> = ({ isShowcase = false }) => {
         isShowcase={isShowcase}
         activities={isShowcase ? showcaseActivities : undefined}
         onActivitiesChange={isShowcase ? setShowcaseActivities : undefined}
-        onActivityAdded={(activityName, columnKey) => {
-          if (isShowcase && activityName === 'Adviesgesprek' && columnKey === 'krachten') {
-            setIsShowcaseFirstActivity(true);
-          }
+        onActivityAdded={() => {
+          // Removed special handling for Adviesgesprek - all new activities should show all 4 steps
         }}
       />
     );
@@ -557,21 +666,10 @@ export const Prototype: React.FC<PrototypeProps> = ({ isShowcase = false }) => {
             <div className="doodler-prototype__steps">
               <StepsComponent
                 currentStep={currentKrachtenStep + 1}
-                totalSteps={
-                  isShowcase && isShowcaseFirstActivity && currentKrachtenStep === 0
-                    ? 1
-                    : KRACHTEN_STEPS.length
-                }
-                steps={
-                  isShowcase && isShowcaseFirstActivity && currentKrachtenStep === 0
-                    ? ['Krachten']
-                    : KRACHTEN_STEPS
-                }
+                totalSteps={KRACHTEN_STEPS.length}
+                steps={KRACHTEN_STEPS}
                 activeStepIndex={0}
-                onStepClick={
-                  isShowcase && isShowcaseFirstActivity && currentKrachtenStep === 0
-                    ? undefined
-                    : (index) => {
+                onStepClick={(index) => {
                         setCurrentKrachtenStep(index);
                         setEditingIndex(null);
                         // Update annotations and cards for the clicked step
@@ -579,7 +677,7 @@ export const Prototype: React.FC<PrototypeProps> = ({ isShowcase = false }) => {
                         setAnnotations(STEP_ANNOTATIONS[stepName]);
                         const stepAnnotations = STEP_ANNOTATIONS[stepName];
                         setCards(stepAnnotations.map((ann) => ({
-                          imageUrl: doodleImage,
+                          imageUrl: ann.imageUrl || doodleImage,
                           title: ann.chip,
                           description: ann.description,
                         })));

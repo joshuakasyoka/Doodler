@@ -22,7 +22,7 @@ export const PrototypeWrapper: React.FC = () => {
   };
 
   const handleOverviewClick = () => {
-    setViewMode('prototype1-overview');
+    setViewMode('showcase');
   };
 
   if (viewMode === 'selector') {
@@ -41,8 +41,8 @@ export const PrototypeWrapper: React.FC = () => {
         <DoodlerWidgetOverlay 
           onOverviewClick={handleOverviewClick}
           onNewDoodleClick={() => {
-            // Navigate to overview and open new doodle modal
-            setViewMode('prototype1-overview');
+            // Navigate to showcase prototype
+            setViewMode('showcase');
           }}
         />
       </ThirdPartyPage>

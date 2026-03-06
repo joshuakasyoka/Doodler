@@ -208,6 +208,17 @@
   white-space: pre-wrap;
 }
 
+/* Truncate title in gallery to 1 line */
+.doodler-gallery-detail__doodle-card .doodler-image-display__card-title {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  max-height: 16px;
+}
+
 .doodler-image-display__card-description {
   font-family: var(--doodler-font-body);
   font-size: 10px;

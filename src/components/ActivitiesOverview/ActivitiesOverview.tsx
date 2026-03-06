@@ -17,12 +17,13 @@ export interface Activity {
 }
 
 export interface ActivitiesOverviewProps {
-  onNavigateToDoodle?: (stepIndex?: number, isNewDoodle?: boolean) => void;
+  onNavigateToDoodle?: (stepIndex?: number, isNewDoodle?: boolean, activityName?: string) => void;
   onNavigateToGallery?: () => void;
   isShowcase?: boolean;
   onActivityAdded?: (activityName: string, columnKey: 'krachten' | 'klachten' | 'inzichten' | 'aanpak') => void;
   activities?: Activity[];
   onActivitiesChange?: (activities: Activity[]) => void;
+  onStepCompleted?: (activityName: string, stepIndex: number) => void;
 }
 
 const ACTIVITIES: Activity[] = [
@@ -35,7 +36,7 @@ const ACTIVITIES: Activity[] = [
 ];
 
 const SHOWCASE_ACTIVITIES: Activity[] = [
-  { name: 'Intake', krachten: 'added', klachten: 'added', inzichten: 'added', aanpak: 'added' },
+  { name: 'Intake', krachten: 'added', klachten: 'added', inzichten: 'empty', aanpak: 'empty' },
 ];
 
 const COLUMNS = [
@@ -220,7 +221,6 @@ export const ActivitiesOverview: React.FC<ActivitiesOverviewProps> = ({
     if (isShowcase) {
       const activity = activities[activityIndex];
       if (!activity) {
-        onNavigateToDoodle?.(stepIndex, false);
         return;
       }
       const isSingleDoodle = hasOnlyOneCheckedCategory(activity);
@@ -228,13 +228,14 @@ export const ActivitiesOverview: React.FC<ActivitiesOverviewProps> = ({
       // Ignore the stepIndex parameter since we need to find the actual checked category
       if (isSingleDoodle) {
         const correctStepIndex = getStepIndexForActivity(activity);
-        onNavigateToDoodle?.(correctStepIndex, true);
+        onNavigateToDoodle?.(correctStepIndex, true, activity.name);
       } else {
         // For activities with multiple checked categories, use the stepIndex from the clicked column
-        onNavigateToDoodle?.(stepIndex, false);
+        onNavigateToDoodle?.(stepIndex, false, activity.name);
       }
     } else {
-      onNavigateToDoodle?.(stepIndex, false);
+      const activity = activities[activityIndex];
+      onNavigateToDoodle?.(stepIndex, false, activity?.name);
     }
   };
 
@@ -253,14 +254,14 @@ export const ActivitiesOverview: React.FC<ActivitiesOverviewProps> = ({
         // Use the activity from modal (which should be the preselected one if user didn't change it)
         const activityName = activityToAdd || 'Adviesgesprek';
         
-        // Add new activity to the list with the selected category checked
+        // Add new activity to the list with all categories empty (user will complete them step by step)
         setActivities((prev) => {
           const newActivity: Activity = {
             name: activityName,
-            krachten: categoryToUse === 'krachten' ? 'added' : 'empty',
-            klachten: categoryToUse === 'klachten' ? 'added' : 'empty',
-            inzichten: categoryToUse === 'inzichten' ? 'added' : 'empty',
-            aanpak: categoryToUse === 'aanpak' ? 'added' : 'empty',
+            krachten: 'empty',
+            klachten: 'empty',
+            inzichten: 'empty',
+            aanpak: 'empty',
           };
           return [...prev, newActivity];
         });
@@ -269,21 +270,16 @@ export const ActivitiesOverview: React.FC<ActivitiesOverviewProps> = ({
         setSelectedActivityName(null);
         
         // Notify parent that activity was added (only in showcase mode)
-        if (isShowcase && onActivityAdded && activityName === 'Adviesgesprek') {
-          onActivityAdded(activityName, categoryToUse);
+        if (isShowcase && onActivityAdded) {
+          onActivityAdded(activityName, 'krachten'); // Pass krachten as default starting point
         }
         
-        // Navigate to create the first doodle
+        // Navigate to the first step (krachten) and show all four steps
         if (onNavigateToDoodle) {
-          const stepIndexMap: Record<'krachten' | 'klachten' | 'inzichten' | 'aanpak', number> = {
-            krachten: 0,
-            klachten: 1,
-            inzichten: 2,
-            aanpak: 3,
-          };
-          const stepIndex = stepIndexMap[categoryToUse] || 0;
           setIsLoading(false);
-          onNavigateToDoodle(stepIndex, true);
+          // Pass false for isNewDoodle so all steps are shown, not single step view
+          // Pass the activity name so we can track which activity is being worked on
+          onNavigateToDoodle(0, false, activityName);
         }
       } else if (onNavigateToDoodle) {
         // This is for clicking on an empty cell in an existing activity
@@ -311,7 +307,7 @@ export const ActivitiesOverview: React.FC<ActivitiesOverviewProps> = ({
             };
             const stepIndex = stepIndexMap[categoryToUse] || 0;
             setIsLoading(false);
-            onNavigateToDoodle(stepIndex, willHaveOnlyOne);
+            onNavigateToDoodle(stepIndex, willHaveOnlyOne, activityName);
             return;
           }
         }
@@ -324,7 +320,7 @@ export const ActivitiesOverview: React.FC<ActivitiesOverviewProps> = ({
         };
         const stepIndex = stepIndexMap[categoryToUse] || 0;
         setIsLoading(false);
-        onNavigateToDoodle(stepIndex, false);
+        onNavigateToDoodle(stepIndex, false, activityName || undefined);
       }
     }, 1500);
   };
@@ -401,23 +397,23 @@ export const ActivitiesOverview: React.FC<ActivitiesOverviewProps> = ({
                       <div className="doodler-activities-overview__activity-cell-content">
                         <span className="doodler-activities-overview__activity-name">{activity.name}</span>
                         {hoveredRowIndex === index && (
-                          <Button 
-                            variant="primary" 
-                            size="small"
+                        <Button 
+                          variant="primary" 
+                          size="small"
                             onClick={() => {
                               if (isShowcase) {
                                 const isSingleDoodle = hasOnlyOneCheckedCategory(activity);
                                 // Find which category is checked and use its step index
                                 const correctStepIndex = getStepIndexForActivity(activity);
-                                onNavigateToDoodle?.(correctStepIndex, isSingleDoodle);
+                                onNavigateToDoodle?.(correctStepIndex, isSingleDoodle ? true : false, activity.name);
                               } else {
-                                onNavigateToDoodle?.(0, false);
+                                onNavigateToDoodle?.(0, false, activity.name);
                               }
                             }}
-                          >
-                            Open
-                          </Button>
-                        )}
+                        >
+                          Open
+                        </Button>
+                      )}
                       </div>
                     </td>
                     <td className="doodler-activities-overview__cell">

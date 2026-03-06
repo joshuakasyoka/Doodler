@@ -98,7 +98,7 @@ export const EditAnnotation: React.FC<EditAnnotationProps> = ({
           className="doodler-edit-annotation__input doodler-edit-annotation__input--image-prompt"
           value={imagePrompt}
           onChange={(e) => handleImagePromptChange(e.target.value)}
-          placeholder="Werk de prompt bij om de doodle te wijzigen"
+          placeholder="Typ elke wijziging die je in de afbeelding wilt"
         />
         <div className="doodler-edit-annotation__input-icon" onClick={handleIconClick}>
           <IconArrowUp size={12} />

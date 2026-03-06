@@ -12,7 +12,7 @@ export interface NewDoodleModalProps {
   isLoading?: boolean;
 }
 
-const DROPDOWN_OPTIONS = ['Krachten', 'Kies onderdeel', 'Inzichten', 'Aanpak'];
+const DROPDOWN_OPTIONS = ['Krachten', 'Klachten', 'Inzichten', 'Aanpak'];
 
 const ACTIVITY_OPTIONS = [
   'Intake',
@@ -109,7 +109,9 @@ export const NewDoodleModal: React.FC<NewDoodleModalProps> = ({
   };
 
   const handleUploadClick = () => {
-    fileInputRef.current?.click();
+    // Add a mock file with Dutch name instead of opening file picker
+    const mockFile = new File([''], 'bestand_voorbeeld', { type: 'application/pdf' });
+    setSelectedFile(mockFile);
   };
 
   const handleRemoveFile = (e: React.MouseEvent) => {
@@ -165,7 +167,7 @@ export const NewDoodleModal: React.FC<NewDoodleModalProps> = ({
                 }}
               >
                 <span className="doodler-new-doodle-modal__dropdown-text">
-                  {selectedContact1 || 'Kies onderdeel'}
+                  {selectedContact1 || 'Selecteer wat je wilt visualiseren'}
                 </span>
                 <IconChevronDown size={16} />
               </div>
