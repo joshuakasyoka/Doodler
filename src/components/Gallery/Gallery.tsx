@@ -13,6 +13,7 @@ export interface GalleryProps {
   onBack: () => void;
   onSectionClick?: (sectionTitle: string) => void;
   onNavigateToDoodle?: () => void;
+  onNavigateToOverview?: () => void;
 }
 
 const GALLERY_SECTIONS = [
@@ -38,7 +39,7 @@ const GALLERY_SECTIONS = [
   },
 ];
 
-export const Gallery: React.FC<GalleryProps> = ({ onBack, onSectionClick, onNavigateToDoodle }) => {
+export const Gallery: React.FC<GalleryProps> = ({ onBack, onSectionClick, onNavigateToDoodle, onNavigateToOverview }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleCardClick = (sectionTitle: string) => {
@@ -64,7 +65,21 @@ export const Gallery: React.FC<GalleryProps> = ({ onBack, onSectionClick, onNavi
   return (
     <div className="doodler-gallery">
       <div className="doodler-gallery__header">
-        <DoodlerLogo className="doodler-gallery__logo" />
+        <button
+          type="button"
+          onClick={() => {
+            if (onNavigateToOverview) {
+              onNavigateToOverview();
+            } else {
+              onBack();
+            }
+          }}
+          className="doodler-gallery__logo-button"
+          aria-label="Ga naar cliëntoverzicht"
+          style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
+        >
+          <DoodlerLogo className="doodler-gallery__logo" />
+        </button>
         <div className="doodler-gallery__header-actions">
           <Button variant="outline" size="small" startIcon={<IconOverview size={16} />} onClick={onBack}>
             Overzicht

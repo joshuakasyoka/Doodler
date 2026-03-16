@@ -351,10 +351,21 @@ export const ActivitiesOverview: React.FC<ActivitiesOverviewProps> = ({
   };
 
   return (
-    <div className="doodler-activities-overview">
-      <div className="doodler-activities-overview__header">
-        <DoodlerLogo className="doodler-activities-overview__logo" />
-        <div className="doodler-activities-overview__header-actions">
+      <div className="doodler-activities-overview">
+        <div className="doodler-activities-overview__header">
+          <button
+            type="button"
+            onClick={() => {
+              // Already on cliëntoverzicht, but make it clickable for consistency
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            className="doodler-activities-overview__logo-button"
+            aria-label="Cliëntoverzicht"
+            style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
+          >
+            <DoodlerLogo className="doodler-activities-overview__logo" />
+          </button>
+          <div className="doodler-activities-overview__header-actions">
           <Button variant="outline" size="small" startIcon={<IconGalleryToggle size={16} />} onClick={onNavigateToGallery}>
             Galerij
           </Button>

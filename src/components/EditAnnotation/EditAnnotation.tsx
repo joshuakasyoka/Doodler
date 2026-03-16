@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button } from '../Button/Button';
 import { Toast } from '../Toast/Toast';
 import { IconArrowUp } from '../../icons';
+import { generateImage } from '../../services/imageGeneration';
 import './EditAnnotation.css';
 
 export interface EditAnnotationProps {
@@ -11,6 +12,7 @@ export interface EditAnnotationProps {
   onSave: (chip: string, description: string, imagePrompt: string) => void;
   onCancel: () => void;
   onChange?: (chip: string, description: string, imagePrompt: string) => void;
+  onImageGenerated?: (imageUrl: string) => void;
 }
 
 export const EditAnnotation: React.FC<EditAnnotationProps> = ({
@@ -20,12 +22,14 @@ export const EditAnnotation: React.FC<EditAnnotationProps> = ({
   onSave,
   onCancel,
   onChange,
+  onImageGenerated,
 }) => {
   const [chip, setChip] = useState(initialChip);
   const [description, setDescription] = useState(initialDescription);
   const [imagePrompt, setImagePrompt] = useState(initialImagePrompt);
   const [toastMessage, setToastMessage] = useState<string>('');
   const [showToast, setShowToast] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
 
   useEffect(() => {
     setChip(initialChip);
@@ -67,8 +71,48 @@ export const EditAnnotation: React.FC<EditAnnotationProps> = ({
     setShowToast(false);
   };
 
+  const handleGenerateImage = async () => {
+    // Combine chip and description to create a comprehensive prompt
+    const fullPrompt = imagePrompt.trim() || `${chip}. ${description}`;
+    
+    if (!fullPrompt.trim()) {
+      handleShowToast('Voer een prompt in om een afbeelding te genereren');
+      return;
+    }
+
+    setIsGenerating(true);
+    
+    try {
+      const result = await generateImage(fullPrompt, {
+        size: '512x512',
+      });
+
+      if (result.error && !result.imageUrl) {
+        // Only show error if we don't have a fallback image
+        handleShowToast(`Fout bij genereren: ${result.error}`);
+      } else if (result.imageUrl) {
+        // Show success message (even if it's a mock image)
+        if (result.error) {
+          handleShowToast('Afbeelding gegenereerd (mock)');
+        } else {
+          handleShowToast('Afbeelding gegenereerd');
+        }
+        if (onImageGenerated) {
+          onImageGenerated(result.imageUrl);
+        }
+      } else {
+        handleShowToast('Kon geen afbeelding genereren');
+      }
+    } catch (error) {
+      console.error('Error generating image:', error);
+      handleShowToast('Fout bij het genereren van de afbeelding');
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
   const handleIconClick = () => {
-    handleShowToast('Doodle bijgewerkt');
+    handleGenerateImage();
   };
 
   return (
@@ -100,8 +144,16 @@ export const EditAnnotation: React.FC<EditAnnotationProps> = ({
           onChange={(e) => handleImagePromptChange(e.target.value)}
           placeholder="Typ elke wijziging die je in de afbeelding wilt"
         />
-        <div className="doodler-edit-annotation__input-icon" onClick={handleIconClick}>
-          <IconArrowUp size={12} />
+        <div 
+          className={`doodler-edit-annotation__input-icon ${isGenerating ? 'doodler-edit-annotation__input-icon--loading' : ''}`}
+          onClick={handleIconClick}
+          title={isGenerating ? 'Afbeelding wordt gegenereerd...' : 'Genereer afbeelding'}
+        >
+          {isGenerating ? (
+            <div className="doodler-edit-annotation__spinner" />
+          ) : (
+            <IconArrowUp size={12} />
+          )}
         </div>
       </div>
       <div className="doodler-edit-annotation__actions">

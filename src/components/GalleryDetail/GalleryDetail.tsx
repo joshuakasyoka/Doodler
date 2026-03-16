@@ -125,6 +125,7 @@ export interface GalleryDetailProps {
   sectionTitle: string;
   onBack: () => void;
   onBackToGallery?: () => void;
+  onNavigateToOverview?: () => void;
   isShowcase?: boolean;
   activities?: Activity[];
 }
@@ -209,7 +210,7 @@ const generateMockDoodles = (sectionTitle: string, isShowcase: boolean = false, 
   }));
 };
 
-export const GalleryDetail: React.FC<GalleryDetailProps> = ({ sectionTitle, onBack, onBackToGallery, isShowcase = false, activities = [] }) => {
+export const GalleryDetail: React.FC<GalleryDetailProps> = ({ sectionTitle, onBack, onBackToGallery, onNavigateToOverview, isShowcase = false, activities = [] }) => {
   const [toastMessage, setToastMessage] = useState<string>('');
   const [showToast, setShowToast] = useState(false);
 
@@ -233,7 +234,15 @@ export const GalleryDetail: React.FC<GalleryDetailProps> = ({ sectionTitle, onBa
   return (
     <div className="doodler-gallery-detail">
       <div className="doodler-gallery-detail__header">
-        <DoodlerLogo className="doodler-gallery-detail__logo" />
+        <button
+          type="button"
+          onClick={onNavigateToOverview || onBackToGallery || onBack}
+          className="doodler-gallery-detail__logo-button"
+          aria-label="Ga naar cliëntoverzicht"
+          style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
+        >
+          <DoodlerLogo className="doodler-gallery-detail__logo" />
+        </button>
         <div className="doodler-gallery-detail__header-actions">
           <Button variant="outline" size="small" startIcon={<IconOverview size={16} />} onClick={onBackToGallery || onBack}>
             Overzicht

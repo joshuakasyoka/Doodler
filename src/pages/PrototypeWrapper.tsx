@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { PrototypeSelector } from '../components/PrototypeSelector/PrototypeSelector';
 import { ThirdPartyPage } from '../components/ThirdPartyPage/ThirdPartyPage';
 import { DoodlerWidgetOverlay } from '../components/DoodlerWidgetOverlay/DoodlerWidgetOverlay';
@@ -7,7 +7,31 @@ import { Prototype } from './Prototype';
 export type ViewMode = 'selector' | 'prototype1-widget' | 'prototype1-overview' | 'prototype2' | 'showcase';
 
 export const PrototypeWrapper: React.FC = () => {
-  const [viewMode, setViewMode] = useState<ViewMode>('selector');
+  // Initialize from URL hash if present
+  const getInitialViewMode = (): ViewMode => {
+    const hash = window.location.hash.replace('#', '');
+    if (hash === 'clientoverzicht' || hash === 'cliëntoverzicht') {
+      return 'showcase';
+    }
+    return 'selector';
+  };
+
+  const [viewMode, setViewMode] = useState<ViewMode>(getInitialViewMode());
+
+  // Listen for hash changes
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash.replace('#', '');
+      if (hash === 'clientoverzicht' || hash === 'cliëntoverzicht') {
+        setViewMode('showcase');
+      } else if (hash === '') {
+        setViewMode('selector');
+      }
+    };
+
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
 
   const handleSelectPrototype1 = () => {
     setViewMode('prototype1-widget');

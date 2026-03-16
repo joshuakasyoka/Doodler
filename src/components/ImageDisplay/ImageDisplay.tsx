@@ -21,10 +21,18 @@ export const ImageDisplay: React.FC<ImageDisplayProps> = ({
   onCardClick,
 }) => {
   const [hoveredCardIndex, setHoveredCardIndex] = useState<number | null>(null);
+  const [failedImages, setFailedImages] = useState<Set<number>>(new Set());
+
+  const handleImageError = (index: number) => {
+    setFailedImages((prev) => new Set(prev).add(index));
+  };
 
   const renderCard = (index: number) => {
     const card = cards[index];
     if (!card) return null;
+
+    const imageFailed = failedImages.has(index);
+    const shouldShowImage = card.imageUrl && !imageFailed;
 
     return (
       <div
@@ -34,8 +42,13 @@ export const ImageDisplay: React.FC<ImageDisplayProps> = ({
         onClick={() => onCardClick?.(index)}
       >
         <div className="doodler-image-display__card-image">
-          {card.imageUrl ? (
-            <img src={card.imageUrl} alt={card.imageAlt || card.title} />
+          {shouldShowImage ? (
+            <img 
+              src={card.imageUrl} 
+              alt={card.imageAlt || card.title}
+              onError={() => handleImageError(index)}
+              loading="lazy"
+            />
           ) : (
             <div className="doodler-image-display__card-placeholder" />
           )}

@@ -1,4 +1,4 @@
-import React, { useState, useId } from 'react';
+import React, { useState, useId, useEffect } from 'react';
 import { ActivitiesOverview, Activity } from '../components/ActivitiesOverview/ActivitiesOverview';
 import { Gallery } from '../components/Gallery/Gallery';
 import { GalleryDetail } from '../components/GalleryDetail/GalleryDetail';
@@ -106,7 +106,7 @@ const TREATMENT_PLAN_CARDS = [
 const KRACHTEN_STEPS = ['Krachten', 'Klachten', 'Inzichten', 'Aanpak'];
 
 interface AnnotationItemProps {
-  annotation: { chip: string; description: string; imagePrompt: string };
+  annotation: { chip: string; description: string; imagePrompt: string; imageUrl?: string };
   onClick: () => void;
 }
 
@@ -252,8 +252,33 @@ export interface PrototypeProps {
 }
 
 export const Prototype: React.FC<PrototypeProps> = ({ isShowcase = false }) => {
-  const [showActivitiesOverview, setShowActivitiesOverview] = useState(true);
+  // Initialize from URL hash if present
+  const getInitialView = () => {
+    const hash = window.location.hash.replace('#', '');
+    if (hash === 'clientoverzicht' || hash === 'cliëntoverzicht') {
+      return true; // Show activities overview
+    }
+    return true; // Default to showing overview
+  };
+
+  const [showActivitiesOverview, setShowActivitiesOverview] = useState(getInitialView());
   const [showKrachtenPage, setShowKrachtenPage] = useState(false);
+
+  // Listen for hash changes to navigate to Cliëntoverzicht
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash.replace('#', '');
+      if (hash === 'clientoverzicht' || hash === 'cliëntoverzicht') {
+        setShowActivitiesOverview(true);
+        setShowKrachtenPage(false);
+        setShowGallery(false);
+        setShowGalleryDetail(false);
+      }
+    };
+
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
   const [currentStep, setCurrentStep] = useState(1);
   const [activeTab, setActiveTab] = useState(0);
   const [annotations, setAnnotations] = useState(() => STEP_ANNOTATIONS.Krachten);
@@ -351,9 +376,9 @@ export const Prototype: React.FC<PrototypeProps> = ({ isShowcase = false }) => {
     
     // Update annotations based on the step
     const stepName = KRACHTEN_STEPS[validStepIndex] as keyof typeof STEP_ANNOTATIONS;
-    setAnnotations(STEP_ANNOTATIONS[stepName]);
-    // Update cards to match annotations
     const stepAnnotations = STEP_ANNOTATIONS[stepName];
+    setAnnotations(stepAnnotations);
+    // Update cards to match annotations - use annotations state to preserve generated images
     setCards(stepAnnotations.map((ann) => ({
       imageUrl: ann.imageUrl || doodleImage,
       title: ann.chip,
@@ -374,12 +399,16 @@ export const Prototype: React.FC<PrototypeProps> = ({ isShowcase = false }) => {
   const handleBackToOverview = () => {
     setShowActivitiesOverview(true);
     setShowKrachtenPage(false);
+    setShowGallery(false);
+    setShowGalleryDetail(false);
     setEditingIndex(null);
     setCurrentKrachtenStep(0);
     setIsShowcaseFirstActivity(false);
     setCurrentActivityName(null);
     // Don't reset isSingleDoodleView here - it will be set correctly when navigating to a doodle
     setIsSingleDoodleView(false);
+    // Update URL hash to reflect Cliëntoverzicht
+    window.location.hash = 'clientoverzicht';
   };
 
   const handleNextKrachtenStep = () => {
@@ -419,8 +448,8 @@ export const Prototype: React.FC<PrototypeProps> = ({ isShowcase = false }) => {
       setEditingIndex(null);
       // Update annotations and cards for the new step
       const stepName = KRACHTEN_STEPS[nextStep] as keyof typeof STEP_ANNOTATIONS;
-      setAnnotations(STEP_ANNOTATIONS[stepName]);
       const stepAnnotations = STEP_ANNOTATIONS[stepName];
+      setAnnotations(stepAnnotations);
       setCards(stepAnnotations.map((ann) => ({
         imageUrl: ann.imageUrl || doodleImage,
         title: ann.chip,
@@ -517,6 +546,26 @@ export const Prototype: React.FC<PrototypeProps> = ({ isShowcase = false }) => {
     setEditingIndex(null);
   };
 
+  const handleImageGenerated = (index: number, imageUrl: string) => {
+    // Update the annotation with the generated image URL
+    setAnnotations((prev: typeof STEP_ANNOTATIONS.Krachten) => {
+      const updated = [...prev];
+      updated[index] = { ...updated[index], imageUrl };
+      return updated;
+    });
+    // Update the card with the new image immediately
+    setCards((prev) => {
+      const updated = [...prev];
+      if (updated[index]) {
+        updated[index] = {
+          ...updated[index],
+          imageUrl: imageUrl,
+        };
+      }
+      return updated;
+    });
+  };
+
   const handleCancelEdit = () => {
     setEditingIndex(null);
   };
@@ -559,6 +608,7 @@ export const Prototype: React.FC<PrototypeProps> = ({ isShowcase = false }) => {
           setShowGalleryDetail(false);
           setShowGallery(true);
         }}
+        onNavigateToOverview={handleBackToOverview}
         isShowcase={isShowcase}
         activities={isShowcase ? showcaseActivities : undefined}
       />
@@ -571,6 +621,7 @@ export const Prototype: React.FC<PrototypeProps> = ({ isShowcase = false }) => {
         onBack={() => setShowGallery(false)}
         onSectionClick={handleGallerySectionClick}
         onNavigateToDoodle={handleNavigateToDoodle}
+        onNavigateToOverview={handleBackToOverview}
       />
     );
   }
@@ -603,7 +654,15 @@ export const Prototype: React.FC<PrototypeProps> = ({ isShowcase = false }) => {
             >
               <IconArrowLeft size={20} />
             </button>
-            <DoodlerLogo className="doodler-prototype__logo" />
+            <button
+              type="button"
+              onClick={handleBackToOverview}
+              className="doodler-prototype__logo-button"
+              aria-label="Ga naar cliëntoverzicht"
+              style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
+            >
+              <DoodlerLogo className="doodler-prototype__logo" />
+            </button>
           </div>
           <div className="doodler-prototype__screen">
             <div className="doodler-prototype__steps">
@@ -659,7 +718,15 @@ export const Prototype: React.FC<PrototypeProps> = ({ isShowcase = false }) => {
           >
             <IconArrowLeft size={20} />
           </button>
-          <DoodlerLogo className="doodler-prototype__logo" />
+          <button
+            type="button"
+            onClick={handleBackToOverview}
+            className="doodler-prototype__logo-button"
+            aria-label="Ga naar cliëntoverzicht"
+            style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
+          >
+            <DoodlerLogo className="doodler-prototype__logo" />
+          </button>
         </div>
         <div className="doodler-prototype__screen">
           {!isSingleDoodleView && (
@@ -712,6 +779,7 @@ export const Prototype: React.FC<PrototypeProps> = ({ isShowcase = false }) => {
                         imagePrompt={annotations[editingIndex].imagePrompt}
                         onSave={(chip, description, imagePrompt) => handleSaveAnnotation(editingIndex, chip, description, imagePrompt)}
                         onCancel={handleCancelEdit}
+                        onImageGenerated={(imageUrl) => handleImageGenerated(editingIndex, imageUrl)}
                       />
                     ) : (
                       annotations.map((annotation, index) => (
@@ -786,7 +854,15 @@ export const Prototype: React.FC<PrototypeProps> = ({ isShowcase = false }) => {
         >
           <IconArrowLeft size={20} />
         </button>
-        <DoodlerLogo className="doodler-prototype__logo" />
+        <button
+          type="button"
+          onClick={handleBackToOverview}
+          className="doodler-prototype__logo-button"
+          aria-label="Ga naar cliëntoverzicht"
+          style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
+        >
+          <DoodlerLogo className="doodler-prototype__logo" />
+        </button>
       </div>
       <div className="doodler-prototype__screen">
         <div className="doodler-prototype__steps">
