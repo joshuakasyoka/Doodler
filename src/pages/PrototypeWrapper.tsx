@@ -37,10 +37,6 @@ export const PrototypeWrapper: React.FC = () => {
     setViewMode('prototype1-widget');
   };
 
-  const handleSelectPrototype2 = () => {
-    setViewMode('prototype2');
-  };
-
   const handleSelectShowcase = () => {
     setViewMode('showcase');
   };
@@ -53,7 +49,6 @@ export const PrototypeWrapper: React.FC = () => {
     return (
       <PrototypeSelector
         onSelectPrototype1={handleSelectPrototype1}
-        onSelectPrototype2={handleSelectPrototype2}
         onSelectShowcase={handleSelectShowcase}
       />
     );
@@ -77,7 +72,7 @@ export const PrototypeWrapper: React.FC = () => {
     return <Prototype isShowcase={true} />;
   }
 
-  if (viewMode === 'prototype1-overview' || viewMode === 'prototype2') {
+  if (viewMode === 'prototype1-overview') {
     return <Prototype />;
   }
 

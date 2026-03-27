@@ -17,7 +17,7 @@ export interface Activity {
 }
 
 export interface ActivitiesOverviewProps {
-  onNavigateToDoodle?: (stepIndex?: number, isNewDoodle?: boolean, activityName?: string) => void;
+  onNavigateToDoodle?: (stepIndex?: number, isNewDoodle?: boolean, activityName?: string, visibleStepIndices?: number[]) => void;
   onNavigateToGallery?: () => void;
   isShowcase?: boolean;
   onActivityAdded?: (activityName: string, columnKey: 'krachten' | 'klachten' | 'inzichten' | 'aanpak') => void;
@@ -216,6 +216,15 @@ export const ActivitiesOverview: React.FC<ActivitiesOverviewProps> = ({
     return 0; // Default to krachten
   };
 
+  const getCheckedStepIndices = (activity: Activity): number[] => {
+    const checked: number[] = [];
+    if (activity.krachten === 'added') checked.push(0);
+    if (activity.klachten === 'added') checked.push(1);
+    if (activity.inzichten === 'added') checked.push(2);
+    if (activity.aanpak === 'added') checked.push(3);
+    return checked;
+  };
+
   // Handler for navigating from a cell click
   const handleCellNavigate = (stepIndex: number, activityIndex: number) => {
     if (isShowcase) {
@@ -228,10 +237,10 @@ export const ActivitiesOverview: React.FC<ActivitiesOverviewProps> = ({
       // Ignore the stepIndex parameter since we need to find the actual checked category
       if (isSingleDoodle) {
         const correctStepIndex = getStepIndexForActivity(activity);
-        onNavigateToDoodle?.(correctStepIndex, true, activity.name);
+        onNavigateToDoodle?.(correctStepIndex, true, activity.name, [correctStepIndex]);
       } else {
-        // For activities with multiple checked categories, use the stepIndex from the clicked column
-        onNavigateToDoodle?.(stepIndex, false, activity.name);
+        // Clicking a checkmark should always open that section directly without next/previous navigation.
+        onNavigateToDoodle?.(stepIndex, true, activity.name, [stepIndex]);
       }
     } else {
       const activity = activities[activityIndex];
@@ -239,14 +248,21 @@ export const ActivitiesOverview: React.FC<ActivitiesOverviewProps> = ({
     }
   };
 
-  const handleConfirmModal = (selectedCategory?: 'krachten' | 'klachten' | 'inzichten' | 'aanpak', selectedActivity?: string) => {
+  const handleConfirmModal = (
+    selectedCategories?: Array<'krachten' | 'klachten' | 'inzichten' | 'aanpak'>,
+    selectedActivity?: string
+  ) => {
     setIsLoading(true);
     setIsModalOpen(false);
     
     // Store values before clearing state
     const activityToAdd = selectedActivity || selectedActivityName;
     const isAddingActivityFlag = isAddingActivity;
-    const categoryToUse = selectedCategory || (isAddingActivityFlag && isShowcase ? 'krachten' : (selectedColumnKey && selectedColumnKey !== 'name' ? selectedColumnKey : 'krachten'));
+    const categoryToUse =
+      selectedCategories?.[0] ||
+      (isAddingActivityFlag && isShowcase
+        ? 'krachten'
+        : (selectedColumnKey && selectedColumnKey !== 'name' ? selectedColumnKey : 'krachten'));
     
     // Simulate loading time (1.5 seconds)
     setTimeout(() => {
@@ -256,12 +272,13 @@ export const ActivitiesOverview: React.FC<ActivitiesOverviewProps> = ({
         
         // Add new activity to the list with all categories empty (user will complete them step by step)
         setActivities((prev) => {
+          const selectedSet = new Set(selectedCategories || []);
           const newActivity: Activity = {
             name: activityName,
-            krachten: 'empty',
-            klachten: 'empty',
-            inzichten: 'empty',
-            aanpak: 'empty',
+            krachten: selectedSet.has('krachten') ? 'added' : 'empty',
+            klachten: selectedSet.has('klachten') ? 'added' : 'empty',
+            inzichten: selectedSet.has('inzichten') ? 'added' : 'empty',
+            aanpak: selectedSet.has('aanpak') ? 'added' : 'empty',
           };
           return [...prev, newActivity];
         });
@@ -274,44 +291,21 @@ export const ActivitiesOverview: React.FC<ActivitiesOverviewProps> = ({
           onActivityAdded(activityName, 'krachten'); // Pass krachten as default starting point
         }
         
-        // Navigate to the first step (krachten) and show all four steps
+        // Navigate to the first selected step and show only selected steps.
         if (onNavigateToDoodle) {
           setIsLoading(false);
-          // Pass false for isNewDoodle so all steps are shown, not single step view
-          // Pass the activity name so we can track which activity is being worked on
-          onNavigateToDoodle(0, false, activityName);
+          const stepIndexMap: Record<'krachten' | 'klachten' | 'inzichten' | 'aanpak', number> = {
+            krachten: 0,
+            klachten: 1,
+            inzichten: 2,
+            aanpak: 3,
+          };
+          const visibleStepIndices = (selectedCategories || ['krachten']).map((category) => stepIndexMap[category]);
+          const firstStep = visibleStepIndices[0] ?? 0;
+          onNavigateToDoodle(firstStep, false, activityName, visibleStepIndices);
         }
       } else if (onNavigateToDoodle) {
         // This is for clicking on an empty cell in an existing activity
-        // Find the activity that was clicked
-        const activityName = selectedActivityName;
-        if (activityName && isShowcase) {
-          // Find the activity in the list
-          const activityIndex = activities.findIndex(a => a.name === activityName);
-          if (activityIndex !== -1) {
-            const activity = activities[activityIndex];
-            // Check how many categories will be checked after adding this one
-            const currentCheckedCount = [
-              activity.krachten,
-              activity.klachten,
-              activity.inzichten,
-              activity.aanpak,
-            ].filter(state => state === 'added').length;
-            // After adding this category, will there be only one checked?
-            const willHaveOnlyOne = currentCheckedCount === 0;
-            const stepIndexMap: Record<'krachten' | 'klachten' | 'inzichten' | 'aanpak', number> = {
-              krachten: 0,
-              klachten: 1,
-              inzichten: 2,
-              aanpak: 3,
-            };
-            const stepIndex = stepIndexMap[categoryToUse] || 0;
-            setIsLoading(false);
-            onNavigateToDoodle(stepIndex, willHaveOnlyOne, activityName);
-            return;
-          }
-        }
-        // Fallback: just navigate to the step
         const stepIndexMap: Record<'krachten' | 'klachten' | 'inzichten' | 'aanpak', number> = {
           krachten: 0,
           klachten: 1,
@@ -319,8 +313,36 @@ export const ActivitiesOverview: React.FC<ActivitiesOverviewProps> = ({
           aanpak: 3,
         };
         const stepIndex = stepIndexMap[categoryToUse] || 0;
+
+        // Mark the selected cell as checked immediately after creating the new drawing.
+        if (selectedActivityName) {
+          setActivities((prev) =>
+            prev.map((activity) => {
+              if (activity.name !== selectedActivityName) {
+                return activity;
+              }
+              return {
+                ...activity,
+                [categoryToUse]: 'added',
+              };
+            })
+          );
+        }
+
+        // Find the activity that was clicked
+        const activityName = selectedActivityName;
+        if (activityName && isShowcase) {
+          // Find the activity in the list
+          const activityIndex = activities.findIndex(a => a.name === activityName);
+          if (activityIndex !== -1) {
+            setIsLoading(false);
+            onNavigateToDoodle(stepIndex, true, activityName, [stepIndex]);
+            return;
+          }
+        }
+        // Fallback: always open the single newly created section.
         setIsLoading(false);
-        onNavigateToDoodle(stepIndex, false, activityName || undefined);
+        onNavigateToDoodle(stepIndex, true, activityName || undefined, [stepIndex]);
       }
     }, 1500);
   };
@@ -369,7 +391,7 @@ export const ActivitiesOverview: React.FC<ActivitiesOverviewProps> = ({
           <Button variant="outline" size="small" startIcon={<IconGalleryToggle size={16} />} onClick={onNavigateToGallery}>
             Galerij
           </Button>
-          <Button variant="primary" size="small" startIcon={<IconPlus size={16} />} onClick={() => handleOpenModal()}>
+          <Button variant="primary" size="small" startIcon={<IconPlus size={16} />} onClick={handleAddNewActivity}>
             Nieuwe doodle
           </Button>
         </div>
@@ -414,9 +436,9 @@ export const ActivitiesOverview: React.FC<ActivitiesOverviewProps> = ({
                             onClick={() => {
                               if (isShowcase) {
                                 const isSingleDoodle = hasOnlyOneCheckedCategory(activity);
-                                // Find which category is checked and use its step index
-                                const correctStepIndex = getStepIndexForActivity(activity);
-                                onNavigateToDoodle?.(correctStepIndex, isSingleDoodle ? true : false, activity.name);
+                                const checkedStepIndices = getCheckedStepIndices(activity);
+                                const correctStepIndex = checkedStepIndices[0] ?? getStepIndexForActivity(activity);
+                                onNavigateToDoodle?.(correctStepIndex, isSingleDoodle, activity.name, checkedStepIndices);
                               } else {
                                 onNavigateToDoodle?.(0, false, activity.name);
                               }

@@ -38,9 +38,6 @@ export const StepsComponent: React.FC<StepsComponentProps> = ({
             style={{ width: '100%' }}
           />
         </div>
-        <p className="doodler-steps-component__label doodler-steps-component__label--summary">
-          Alle stappen zijn doorlopen!
-        </p>
       </div>
     );
   }
@@ -71,9 +68,6 @@ export const StepsComponent: React.FC<StepsComponentProps> = ({
           style={{ width: `${progressPercentage}%` }}
         />
       </div>
-      <p className="doodler-steps-component__label">
-        Step {currentStep} of {totalSteps}
-      </p>
     </div>
   );
 };

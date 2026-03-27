@@ -297,6 +297,7 @@ export const Prototype: React.FC<PrototypeProps> = ({ isShowcase = false }) => {
   );
   const [isSingleDoodleView, setIsSingleDoodleView] = useState(false);
   const [currentActivityName, setCurrentActivityName] = useState<string | null>(null);
+  const [visibleStepIndices, setVisibleStepIndices] = useState<number[]>([0, 1, 2, 3]);
   
   // Get caption based on step index
   const getCaptionForStep = (stepIndex: number) => {
@@ -325,7 +326,12 @@ export const Prototype: React.FC<PrototypeProps> = ({ isShowcase = false }) => {
     });
   });
 
-  const handleNavigateToDoodle = (stepIndex: number = 0, isNewDoodle: boolean = false, activityName?: string) => {
+  const handleNavigateToDoodle = (
+    stepIndex: number = 0,
+    isNewDoodle: boolean = false,
+    activityName?: string,
+    selectedVisibleStepIndices?: number[]
+  ) => {
     // Always reset to the correct step index, regardless of previous state
     // Ensure stepIndex is valid (0-3)
     const validStepIndex = Math.max(0, Math.min(3, stepIndex));
@@ -336,9 +342,14 @@ export const Prototype: React.FC<PrototypeProps> = ({ isShowcase = false }) => {
     // Track which activity is being worked on
     setCurrentActivityName(activityName || null);
     
+    const isExplicitSingleSection = selectedVisibleStepIndices?.length === 1;
+
     // Determine if we should show all steps or single step view
     // In showcase mode: if activity has 0 checked categories (newly created), always show all steps
     let shouldShowAllSteps = !isNewDoodle; // Default: show all steps unless explicitly single
+    if (isExplicitSingleSection) {
+      shouldShowAllSteps = false;
+    }
     if (isShowcase && activityName) {
       const activity = showcaseActivities.find(a => a.name === activityName);
       if (activity) {
@@ -349,9 +360,9 @@ export const Prototype: React.FC<PrototypeProps> = ({ isShowcase = false }) => {
           activity.aanpak,
         ].filter(state => state === 'added').length;
         // If activity has 0 checked categories (newly created), show all steps
-        if (checkedCount === 0) {
+        if (checkedCount === 0 && !isExplicitSingleSection) {
           shouldShowAllSteps = true;
-        } else if (checkedCount === 1) {
+        } else if (checkedCount === 1 || isExplicitSingleSection) {
           // If only one category is checked, show single step view
           shouldShowAllSteps = false;
         } else {
@@ -359,18 +370,22 @@ export const Prototype: React.FC<PrototypeProps> = ({ isShowcase = false }) => {
           shouldShowAllSteps = true;
         }
       } else {
-        // Activity not found yet (newly created), always show all steps
-        shouldShowAllSteps = true;
+        // Activity not found yet (newly created), show all unless explicitly single.
+        shouldShowAllSteps = !isExplicitSingleSection;
       }
     }
     
     // Explicitly ensure: if isNewDoodle is false (creating new activity), always show all steps
-    if (!isNewDoodle) {
+    if (!isNewDoodle && !isExplicitSingleSection) {
       shouldShowAllSteps = true;
     }
     
     // Use functional update to ensure we're setting the exact value we want
     // Force immediate update by using the value directly
+    const normalizedVisibleSteps = selectedVisibleStepIndices && selectedVisibleStepIndices.length > 0
+      ? selectedVisibleStepIndices
+      : [0, 1, 2, 3];
+    setVisibleStepIndices(normalizedVisibleSteps);
     setCurrentKrachtenStep(validStepIndex);
     setIsSingleDoodleView(!shouldShowAllSteps); // Set to false to show all steps, true for single step, true for single step
     
@@ -405,6 +420,7 @@ export const Prototype: React.FC<PrototypeProps> = ({ isShowcase = false }) => {
     setCurrentKrachtenStep(0);
     setIsShowcaseFirstActivity(false);
     setCurrentActivityName(null);
+    setVisibleStepIndices([0, 1, 2, 3]);
     // Don't reset isSingleDoodleView here - it will be set correctly when navigating to a doodle
     setIsSingleDoodleView(false);
     // Update URL hash to reflect Cliëntoverzicht
@@ -442,8 +458,9 @@ export const Prototype: React.FC<PrototypeProps> = ({ isShowcase = false }) => {
     
     // Removed special handling for first activity - all activities now show all steps
     
-    if (currentKrachtenStep < KRACHTEN_STEPS.length - 1) {
-      const nextStep = currentKrachtenStep + 1;
+    const currentVisiblePosition = visibleStepIndices.indexOf(currentKrachtenStep);
+    if (currentVisiblePosition < visibleStepIndices.length - 1) {
+      const nextStep = visibleStepIndices[currentVisiblePosition + 1];
       setCurrentKrachtenStep(nextStep);
       setEditingIndex(null);
       // Update annotations and cards for the new step
@@ -456,21 +473,8 @@ export const Prototype: React.FC<PrototypeProps> = ({ isShowcase = false }) => {
         description: ann.description,
       })));
     } else {
-      // We're on the last step (Aanpak), mark it as completed and show summary
-      if (isShowcase && currentActivityName && showcaseActivities) {
-        setShowcaseActivities((prev) => {
-          const updated = prev.map((activity) => {
-            if (activity.name === currentActivityName) {
-              return {
-                ...activity,
-                aanpak: 'added' as const,
-              };
-            }
-            return activity;
-          });
-          return updated;
-        });
-      }
+      // We're on the last visible step for this activity. Only steps the user
+      // actually visited are marked above; do not auto-mark other sections.
       updateSectionData(currentKrachtenStep);
       setShowSummary(true);
     }
@@ -508,8 +512,9 @@ export const Prototype: React.FC<PrototypeProps> = ({ isShowcase = false }) => {
   };
 
   const handlePreviousKrachtenStep = () => {
-    if (currentKrachtenStep > 0) {
-      const prevStep = currentKrachtenStep - 1;
+    const currentVisiblePosition = visibleStepIndices.indexOf(currentKrachtenStep);
+    if (currentVisiblePosition > 0) {
+      const prevStep = visibleStepIndices[currentVisiblePosition - 1];
       setCurrentKrachtenStep(prevStep);
       setEditingIndex(null);
       // Update annotations and cards for the previous step
@@ -642,6 +647,10 @@ export const Prototype: React.FC<PrototypeProps> = ({ isShowcase = false }) => {
   }
 
   if (showKrachtenPage) {
+    const currentVisibleStepPosition = Math.max(visibleStepIndices.indexOf(currentKrachtenStep), 0);
+    const visibleStepLabels = visibleStepIndices.map((stepIndex) => KRACHTEN_STEPS[stepIndex]);
+    const visibleSectionData = visibleStepIndices.map((stepIndex) => sectionData[stepIndex]);
+
     if (showSummary) {
       return (
         <div className="doodler-prototype">
@@ -684,8 +693,8 @@ export const Prototype: React.FC<PrototypeProps> = ({ isShowcase = false }) => {
               </div>
               <div className="doodler-prototype__summary-content">
                 <Summary
-                  sections={sectionData}
-                  onSectionClick={handleSummarySectionClick}
+                  sections={visibleSectionData}
+                  onSectionClick={(index) => handleSummarySectionClick(visibleStepIndices[index] ?? 0)}
                 />
                 <div className="doodler-prototype__summary-actions">
                   <Button variant="outline" size="small" startIcon={<IconSend size={16} />} onClick={handleEmailDoodles}>
@@ -732,15 +741,16 @@ export const Prototype: React.FC<PrototypeProps> = ({ isShowcase = false }) => {
           {!isSingleDoodleView && (
             <div className="doodler-prototype__steps">
               <StepsComponent
-                currentStep={currentKrachtenStep + 1}
-                totalSteps={KRACHTEN_STEPS.length}
-                steps={KRACHTEN_STEPS}
-                activeStepIndex={0}
+                currentStep={currentVisibleStepPosition + 1}
+                totalSteps={visibleStepIndices.length}
+                steps={visibleStepLabels}
+                activeStepIndex={currentVisibleStepPosition}
                 onStepClick={(index) => {
-                        setCurrentKrachtenStep(index);
+                        const stepIndex = visibleStepIndices[index] ?? 0;
+                        setCurrentKrachtenStep(stepIndex);
                         setEditingIndex(null);
                         // Update annotations and cards for the clicked step
-                        const stepName = KRACHTEN_STEPS[index] as keyof typeof STEP_ANNOTATIONS;
+                        const stepName = KRACHTEN_STEPS[stepIndex] as keyof typeof STEP_ANNOTATIONS;
                         setAnnotations(STEP_ANNOTATIONS[stepName]);
                         const stepAnnotations = STEP_ANNOTATIONS[stepName];
                         setCards(stepAnnotations.map((ann) => ({
@@ -814,11 +824,14 @@ export const Prototype: React.FC<PrototypeProps> = ({ isShowcase = false }) => {
                     </>
                   ) : (
                     <>
+                      {/** Determine if current section is the last step 'Aanpak' */}
+                      {/** Use step name for robustness */}
+                      {/** Label will change to 'Ga naar samenvatting' on Aanpak */}
                       <Button 
                         variant="outline" 
                         size="small"
                         onClick={handlePreviousKrachtenStep}
-                        disabled={currentKrachtenStep === 0}
+                        disabled={currentVisibleStepPosition === 0}
                       >
                         Vorige sectie
                       </Button>
@@ -830,7 +843,7 @@ export const Prototype: React.FC<PrototypeProps> = ({ isShowcase = false }) => {
                           isShowcase && isShowcaseFirstActivity && currentKrachtenStep === 0
                         }
                       >
-                        Volgende sectie
+                        {KRACHTEN_STEPS[currentKrachtenStep] === 'Aanpak' ? 'Ga naar samenvatting' : 'Volgende sectie'}
                       </Button>
                     </>
                   )}

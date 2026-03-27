@@ -153,6 +153,17 @@
   background-color: var(--doodler-color-grey);
 }
 
+.doodler-new-doodle-modal__dropdown-item--checkbox {
+  width: 100%;
+  justify-content: space-between;
+  border: none;
+  text-align: left;
+}
+
+.doodler-new-doodle-modal__dropdown-item--checkbox svg {
+  flex-shrink: 0;
+}
+
 .doodler-new-doodle-modal__upload-group {
   display: flex;
   flex-direction: column;

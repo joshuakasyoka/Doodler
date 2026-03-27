@@ -6,13 +6,21 @@ import './NewDoodleModal.css';
 export interface NewDoodleModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onConfirm: (selectedCategory?: 'krachten' | 'klachten' | 'inzichten' | 'aanpak', selectedActivity?: string) => void;
+  onConfirm: (
+    selectedCategories?: Array<'krachten' | 'klachten' | 'inzichten' | 'aanpak'>,
+    selectedActivity?: string
+  ) => void;
   preselectedCategory?: 'krachten' | 'klachten' | 'inzichten' | 'aanpak';
   preselectedActivity?: string;
   isLoading?: boolean;
 }
 
-const DROPDOWN_OPTIONS = ['Krachten', 'Klachten', 'Inzichten', 'Aanpak'];
+const VISUALIZATION_OPTIONS: Array<{ key: 'krachten' | 'klachten' | 'inzichten' | 'aanpak'; label: string }> = [
+  { key: 'krachten', label: 'Krachten' },
+  { key: 'klachten', label: 'Klachten' },
+  { key: 'inzichten', label: 'Inzichten' },
+  { key: 'aanpak', label: 'Aanpak' },
+];
 
 const ACTIVITY_OPTIONS = [
   'Intake',
@@ -23,12 +31,22 @@ const ACTIVITY_OPTIONS = [
   'Signaleringsplan',
 ];
 
-const CATEGORY_MAP: Record<'krachten' | 'klachten' | 'inzichten' | 'aanpak', string> = {
-  krachten: 'Krachten',
-  klachten: 'Klachten',
-  inzichten: 'Inzichten',
-  aanpak: 'Aanpak',
-};
+const DropdownCheckboxIcon: React.FC<{ checked: boolean }> = ({ checked }) => (
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+    <path
+      fillRule="evenodd"
+      clipRule="evenodd"
+      d="M14.5 8C14.5 9.72391 13.8152 11.3772 12.5962 12.5962C11.3772 13.8152 9.72391 14.5 8 14.5C6.27609 14.5 4.62279 13.8152 3.40381 12.5962C2.18482 11.3772 1.5 9.72391 1.5 8C1.5 6.27609 2.18482 4.62279 3.40381 3.40381C4.62279 2.18482 6.27609 1.5 8 1.5C9.72391 1.5 11.3772 2.18482 12.5962 3.40381C13.8152 4.62279 14.5 6.27609 14.5 8ZM16 8C16 10.1217 15.1571 12.1566 13.6569 13.6569C12.1566 15.1571 10.1217 16 8 16C5.87827 16 3.84344 15.1571 2.34315 13.6569C0.842855 12.1566 0 10.1217 0 8C0 5.87827 0.842855 3.84344 2.34315 2.34315C3.84344 0.842855 5.87827 0 8 0C10.1217 0 12.1566 0.842855 13.6569 2.34315C15.1571 3.84344 16 5.87827 16 8Z"
+      fill="#171717"
+    />
+    {checked && (
+      <path
+        d="M11.53 6.53L12.06 6L11 4.94L10.47 5.47L6.5 9.44L5.53 8.47L5 7.94L3.94 9L4.47 9.53L5.97 11.03C6.11063 11.1705 6.30125 11.2493 6.5 11.2493C6.69875 11.2493 6.88937 11.1705 7.03 11.03L11.53 6.53Z"
+        fill="#171717"
+      />
+    )}
+  </svg>
+);
 
 export const NewDoodleModal: React.FC<NewDoodleModalProps> = ({
   isOpen,
@@ -38,7 +56,7 @@ export const NewDoodleModal: React.FC<NewDoodleModalProps> = ({
   preselectedActivity,
   isLoading = false,
 }) => {
-  const [selectedContact1, setSelectedContact1] = useState<string>('');
+  const [selectedCategories, setSelectedCategories] = useState<Array<'krachten' | 'klachten' | 'inzichten' | 'aanpak'>>([]);
   const [selectedContact2, setSelectedContact2] = useState<string>('');
   const [openDropdown1, setOpenDropdown1] = useState(false);
   const [openDropdown2, setOpenDropdown2] = useState(false);
@@ -50,13 +68,9 @@ export const NewDoodleModal: React.FC<NewDoodleModalProps> = ({
   useEffect(() => {
     if (isOpen) {
       if (preselectedCategory) {
-        const categoryName = CATEGORY_MAP[preselectedCategory];
-        if (categoryName) {
-          setSelectedContact1(categoryName);
-        }
+        setSelectedCategories([preselectedCategory]);
       } else {
-        // Reset when opening without preselection
-        setSelectedContact1('');
+        setSelectedCategories([]);
       }
       // Set preselected activity if provided
       if (preselectedActivity) {
@@ -91,9 +105,10 @@ export const NewDoodleModal: React.FC<NewDoodleModalProps> = ({
 
   if (!isOpen) return null;
 
-  const handleSelectOption1 = (option: string) => {
-    setSelectedContact1(option);
-    setOpenDropdown1(false);
+  const handleToggleCategory = (category: 'krachten' | 'klachten' | 'inzichten' | 'aanpak') => {
+    setSelectedCategories((prev) =>
+      prev.includes(category) ? prev.filter((item) => item !== category) : [...prev, category]
+    );
   };
 
   const handleSelectOption2 = (option: string) => {
@@ -125,18 +140,19 @@ export const NewDoodleModal: React.FC<NewDoodleModalProps> = ({
   const handleConfirm = () => {
     if (!isLoading) {
       // Map selectedContact1 back to category key
-      const categoryKeyMap: Record<string, 'krachten' | 'klachten' | 'inzichten' | 'aanpak' | undefined> = {
-        'Krachten': 'krachten',
-        'Klachten': 'klachten',
-        'Inzichten': 'inzichten',
-        'Aanpak': 'aanpak',
-      };
-      const categoryKey = selectedContact1 ? categoryKeyMap[selectedContact1] : undefined;
       // Use selectedContact2 if set, otherwise fall back to preselectedActivity
       const activityToUse = selectedContact2 || preselectedActivity || undefined;
-      onConfirm(categoryKey, activityToUse);
+      onConfirm(selectedCategories.length > 0 ? selectedCategories : undefined, activityToUse);
     }
   };
+
+  const selectedCategoriesText =
+    selectedCategories.length > 0
+      ? VISUALIZATION_OPTIONS
+          .filter((option) => selectedCategories.includes(option.key))
+          .map((option) => option.label)
+          .join(', ')
+      : 'Selecteer wat je wilt visualiseren';
 
   return (
     <div className="doodler-new-doodle-modal__overlay" onClick={onClose}>
@@ -159,7 +175,7 @@ export const NewDoodleModal: React.FC<NewDoodleModalProps> = ({
               Selecteer wat je wilt visualiseren
             </label>
             <div className="doodler-new-doodle-modal__dropdown-wrapper" ref={dropdown1Ref}>
-              <div 
+              <div
                 className="doodler-new-doodle-modal__dropdown"
                 onClick={() => {
                   setOpenDropdown1(!openDropdown1);
@@ -167,21 +183,26 @@ export const NewDoodleModal: React.FC<NewDoodleModalProps> = ({
                 }}
               >
                 <span className="doodler-new-doodle-modal__dropdown-text">
-                  {selectedContact1 || 'Selecteer wat je wilt visualiseren'}
+                  {selectedCategoriesText}
                 </span>
                 <IconChevronDown size={16} />
               </div>
               {openDropdown1 && (
                 <div className="doodler-new-doodle-modal__dropdown-menu">
-                  {DROPDOWN_OPTIONS.map((option) => (
-                    <div
-                      key={option}
-                      className="doodler-new-doodle-modal__dropdown-item"
-                      onClick={() => handleSelectOption1(option)}
-                    >
-                      {option}
-                    </div>
-                  ))}
+                  {VISUALIZATION_OPTIONS.map((option) => {
+                    const isChecked = selectedCategories.includes(option.key);
+                    return (
+                      <button
+                        key={option.key}
+                        type="button"
+                        className="doodler-new-doodle-modal__dropdown-item doodler-new-doodle-modal__dropdown-item--checkbox"
+                        onClick={() => handleToggleCategory(option.key)}
+                      >
+                        <span>{option.label}</span>
+                        <DropdownCheckboxIcon checked={isChecked} />
+                      </button>
+                    );
+                  })}
                 </div>
               )}
             </div>
@@ -196,7 +217,6 @@ export const NewDoodleModal: React.FC<NewDoodleModalProps> = ({
                 className="doodler-new-doodle-modal__dropdown"
                 onClick={() => {
                   setOpenDropdown2(!openDropdown2);
-                  setOpenDropdown1(false);
                 }}
               >
                 <span className="doodler-new-doodle-modal__dropdown-text">
