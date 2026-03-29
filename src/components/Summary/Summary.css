@@ -46,11 +46,29 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 100%;
   border: 1px solid transparent;
   border-radius: var(--doodler-spacing-16);
   transition: border-color 0.2s ease;
   box-sizing: border-box;
+}
+
+@media (min-width: 768px) {
+  .doodler-summary {
+    align-items: flex-start;
+  }
+
+  .doodler-summary__section {
+    height: auto;
+    max-height: 100%;
+  }
+
+  .doodler-summary__image-display {
+    flex: 0 1 auto;
+  }
+
+  .doodler-summary__image-display .doodler-image-display {
+    flex: 0 1 auto;
+  }
 }
 
 @media (max-width: 767px) {
