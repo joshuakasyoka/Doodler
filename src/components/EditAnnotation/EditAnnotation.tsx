@@ -161,7 +161,7 @@ export const EditAnnotation: React.FC<EditAnnotationProps> = ({
           Annuleren
         </Button>
         <Button variant="primary" size="small" onClick={handleSave}>
-          Annotatie opslaan
+          Opslaan
         </Button>
       </div>
       <Toast

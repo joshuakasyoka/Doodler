@@ -1,0 +1,13 @@
+<svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Pot -->
+  <path d="M30 70L35 75L65 75L70 70L70 60L65 55L35 55L30 60L30 70Z" stroke="#171717" stroke-width="2" fill="none"/>
+  <line x1="32" y1="60" x2="68" y2="60" stroke="#171717" stroke-width="2"/>
+  <!-- Stem -->
+  <line x1="50" y1="55" x2="50" y2="45" stroke="#171717" stroke-width="2"/>
+  <!-- Left leaf -->
+  <path d="M50 45L40 40L45 35L50 40L50 45Z" stroke="#171717" stroke-width="2" fill="none"/>
+  <line x1="45" y1="37" x2="50" y2="40" stroke="#171717" stroke-width="1.5"/>
+  <!-- Right leaf -->
+  <path d="M50 45L60 40L55 35L50 40L50 45Z" stroke="#171717" stroke-width="2" fill="none"/>
+  <line x1="55" y1="37" x2="50" y2="40" stroke="#171717" stroke-width="1.5"/>
+</svg>

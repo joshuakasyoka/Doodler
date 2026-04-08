@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { Button } from '../Button/Button';
 import { DoodlerLogo } from '../../assets/logo';
-import { IconPlus, IconOverview } from '../../icons';
+import { IconPlus } from '../../icons';
 import { NewDoodleModal } from '../NewDoodleModal/NewDoodleModal';
 import image3 from '../../assets/img/image 3.png';
 import image13 from '../../assets/img/image 13.png';
 import image14 from '../../assets/img/image 14.png';
 import image15 from '../../assets/img/image 15.png';
+import { ViewModeToggle } from '../ViewModeToggle/ViewModeToggle';
 import './Gallery.css';
 
 export interface GalleryProps {
@@ -81,9 +82,17 @@ export const Gallery: React.FC<GalleryProps> = ({ onBack, onSectionClick, onNavi
           <DoodlerLogo className="doodler-gallery__logo" />
         </button>
         <div className="doodler-gallery__header-actions">
-          <Button variant="outline" size="small" startIcon={<IconOverview size={16} />} onClick={onBack}>
-            Overzicht
-          </Button>
+          <ViewModeToggle
+            mode="timeline"
+            onSelectOverview={() => {
+              if (onNavigateToOverview) {
+                onNavigateToOverview();
+              } else {
+                onBack();
+              }
+            }}
+            onSelectTimeline={() => {}}
+          />
           <Button variant="primary" size="small" startIcon={<IconPlus size={16} />} onClick={handleOpenModal}>
             Nieuwe doodle
           </Button>
@@ -92,9 +101,9 @@ export const Gallery: React.FC<GalleryProps> = ({ onBack, onSectionClick, onNavi
       <div className="doodler-gallery__screen">
         <div className="doodler-gallery__content">
           <div className="doodler-gallery__title-section">
-            <h1 className="doodler-gallery__title">Doodle Galerij</h1>
+            <h1 className="doodler-gallery__title">Tijdlijn</h1>
             <p className="doodler-gallery__subtitle">
-              Bekijk alle doodles van de cliënt per categorie
+              Bekijk alle doodles van de cliënt per categorie op de tijdlijn
             </p>
           </div>
           <div className="doodler-gallery__sections">

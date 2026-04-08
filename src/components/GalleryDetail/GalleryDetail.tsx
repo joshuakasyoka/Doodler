@@ -4,29 +4,30 @@ import { Chip } from '../Chip/Chip';
 import { Button } from '../Button/Button';
 import { Toast } from '../Toast/Toast';
 import { DoodlerLogo } from '../../assets/logo';
-import { IconPlus, IconCross, IconExport, IconOverview } from '../../icons';
+import { IconPlus, IconCross, IconExport } from '../../icons';
 import { Activity } from '../ActivitiesOverview/ActivitiesOverview';
 import doodleImage from '../../assets/img/Doodle.png';
-// Krachten images
-import krachtenGoedMetTaal from '../../assets/img/Krachten_goed met taal 1.png';
-import krachtenBlijvenProberen from '../../assets/img/Krachten blijven proberen 1.png';
-import krachtenMakkelijkPraten from '../../assets/img/Krachten - makkelijk praten met anderen 1.png';
-import krachtenBandMetZus from '../../assets/img/Krachten_band met zus 1.png';
+// Krachten images (2×2 grid: top row, then bottom row)
+import krachtenTopLeft from '../../assets/img/Krachten_top_left.png';
+import krachtenTopRight from '../../assets/img/Krachten_top_right.png';
+import krachtenBottomLeft from '../../assets/img/Krachten_bottom_left.png';
+import krachtenBottomRight from '../../assets/img/Krachten_bottom right.png';
 // Klachten images
-import klachtenDrukHoofd from '../../assets/img/Klachten druk hoofd 1.png';
-import klachtenMoeizaamSlapen from '../../assets/img/Klachten moeizaam slapen 1.png';
-import klachtenMoeilijkOverzicht from '../../assets/img/Klachten moeilijk overzicht houden 1.png';
-import klachtenLastigeEmoties from '../../assets/img/Klachten_lastige emoties 1.png';
+import klachtenTopLeft from '../../assets/img/Klachten_top_left.png';
+import klachtenTopRight from '../../assets/img/Klachten_top_right.png';
+import klachtenBottomLeft from '../../assets/img/Klachten_bottom_left.png';
+import klachtenBottomRight from '../../assets/img/Klachten_bottom_right.png';
 // Inzichten images
-import inzichtenAnderenNietBelasten from '../../assets/img/Inzichten - anderen niet willen belasten 1.png';
-import inzichtenBotsingThuis from '../../assets/img/Inzichten botsing thuis.png';
-import inzichtenGevoeligDoorStress from '../../assets/img/Inzichten _ mama buik 1.png';
-import inzichtenVeelWillenZorgen from '../../assets/img/Inzichten veel willen.png';
+import inzichtenTopLeft from '../../assets/img/Inzichten_top_left.png';
+import inzichtenTopRight from '../../assets/img/Inzichten_top_right.png';
+import inzichtenBottomLeft from '../../assets/img/Inzichten_bottom_left.png';
+import inzichtenBottomRight from '../../assets/img/Inzichten_bottom_right.png';
 // Aanpak images
-import aanpakHelpenOmgaan from '../../assets/img/Aanpak helpen omgaan.png';
-import aanpakJongeHelpers from '../../assets/img/Aanpak_jonge helpers 1.png';
-import aanpakOndersteuning from '../../assets/img/Aan pak Ondersteuning.png';
-import aanpakMetSchool from '../../assets/img/Aanpak met school.png';
+import aanpakTopLeft from '../../assets/img/Aanpak_top_left.png';
+import aanpakTopRight from '../../assets/img/Aanpak_top_right.png';
+import aanpakBottomLeft from '../../assets/img/Aanpak_bottom_left.png';
+import aanpakBottomRight from '../../assets/img/Aanpak_bottom_right.png';
+import { ViewModeToggle } from '../ViewModeToggle/ViewModeToggle';
 import './GalleryDetail.css';
 
 // Section-specific annotations matching the Prototype component
@@ -34,89 +35,89 @@ const STEP_ANNOTATIONS = {
   Krachten: [
     {
       chip: 'Goed met taal',
-      description: 'Je kunt goed praten, hebt een sterke woordenschat en denkt graag diep na over dingen.',
-      imageUrl: krachtenGoedMetTaal,
+      description: 'Je kunt goed praten en denkt graag diep na over dingen.',
+      imageUrl: krachtenTopLeft,
     },
     {
       chip: 'Blijven proberen',
-      description: 'Je hebt een sterke werkhouding en wilt je taken graag goed uitvoeren. Je probeert zo min mogelijk fouten te maken.',
-      imageUrl: krachtenBlijvenProberen,
+      description: 'Je wilt je taken graag goed uitvoeren.',
+      imageUrl: krachtenTopRight,
     },
     {
       chip: 'Makkelijk praten met anderen',
-      description: 'Je kunt makkelijk contact maken met nieuwe mensen en toont interesse en medeleven.',
-      imageUrl: krachtenMakkelijkPraten,
+      description: 'Je kunt makkelijk contact maken met nieuwe mensen.',
+      imageUrl: krachtenBottomLeft,
     },
     {
       chip: 'Goede band met zus',
-      description: 'Je hebt een goede band met je zus. Met haar deel je vaak hoe het met je gaat en wat er in je omgaat.',
-      imageUrl: krachtenBandMetZus,
+      description: 'Met je zus deel je vaak hoe het met je gaat.',
+      imageUrl: krachtenBottomRight,
     },
   ],
   Klachten: [
     {
       chip: 'Druk hoofd',
-      description: 'Je hoofd voelt vaak druk en chaotisch, waardoor je moeilijk kunt ontspannen en soms niet weet wat je voelt.',
-      imageUrl: klachtenDrukHoofd,
+      description: 'Je hoofd voelt vaak druk en chaotisch, waardoor je moeilijk kunt ontspannen.',
+      imageUrl: klachtenTopLeft,
     },
     {
       chip: 'Moeizaam slapen',
-      description: 'Je hebt moeite met inslapen en slaapt vaak maar 4 tot 6 uur per nacht doordat je hoofd zo druk is.',
-      imageUrl: klachtenMoeizaamSlapen,
+      description: 'Je hebt moeite met inslapen.',
+      imageUrl: klachtenTopRight,
     },
     {
       chip: 'Moeilijk overzicht houden',
-      description: 'Je werkt snel maar mist dan informatie. Het is lastig om instructies te volgen, overzicht te houden of op tijd te stoppen om na te denken.',
-      imageUrl: klachtenMoeilijkOverzicht,
+      description: 'Je werkt snel maar mist dan informatie. Het is lastig overzicht te houden.',
+      imageUrl: klachtenBottomLeft,
     },
     {
       chip: 'Lastige emoties',
-      description: 'Je hebt soms heftige uitbarstingen, zoals een \'tornado van gevoelens\', en weet niet altijd wat je voelt.',
-      imageUrl: klachtenLastigeEmoties,
+      description: 'Je hebt soms heftige uitbarstingen.',
+      imageUrl: klachtenBottomRight,
     },
   ],
   Inzichten: [
     {
       chip: 'Anderen niet willen belasten',
-      description: 'Je gaat bij gevoelens eerder naar je oudste zus dan naar je ouders, omdat je hen niet lastig wil vallen.',
-      imageUrl: inzichtenAnderenNietBelasten,
+      description: 'Je gaat bij gevoelens eerder naar je oudste zus dan naar je ouders.',
+      imageUrl: inzichtenTopLeft,
     },
     {
       chip: 'Botsing thuis',
-      description: 'Mama is meer chaotisch en jij houdt juist sterk vast aan tijden en planning. Dit botst soms en kan spanning geven.',
-      imageUrl: inzichtenBotsingThuis,
+      description: 'Mama is meer chaotisch en jij houdt juist sterk vast aan tijden en planning.',
+      imageUrl: inzichtenTopRight,
     },
     {
       chip: 'Gevoelig door stress',
       description: 'Mama vertelt dat er veel stress was toen je nog in haar buik zat. Dat kan invloed hebben op hoe gevoelig je nu bent.',
-      imageUrl: inzichtenGevoeligDoorStress,
+      imageUrl: inzichtenBottomLeft,
     },
     {
       chip: 'Veel willen zorgen',
-      description: 'Je maakt je zorgen om mama en wilt goed op haar letten, terwijl dit voor een kind best zwaar kan zijn.',
-      imageUrl: inzichtenVeelWillenZorgen,
+      description: 'Je maakt je zorgen om mama en wilt goed op haar letten.',
+      imageUrl: inzichtenBottomRight,
     },
   ],
   Aanpak: [
     {
       chip: 'Helpen omgaan met gevoelens',
-      description: 'Je krijgt uitleg over hoe jouw hoofd werkt en je gaat leren hoe je beter met je emoties en piekergedachten om kunt gaan.',
-      imageUrl: aanpakHelpenOmgaan,
+      description: 'Je krijgt uitleg over hoe jouw hoofd werkt en leert hoe je beter met je emoties om kunt gaan.',
+      imageUrl: aanpakTopLeft,
     },
     {
       chip: 'Steun voor jonge helpers',
-      description: 'Je mag meedoen aan activiteiten of groepen voor kinderen die thuis extra zorgen hebben, zodat jij je gesteund voelt.',
-      imageUrl: aanpakJongeHelpers,
+      description: 'Je mag meedoen aan activiteiten voor kinderen die thuis extra zorgen hebben.',
+      imageUrl: aanpakTopRight,
     },
     {
       chip: 'Ondersteuning voor je ouders',
-      description: 'Je ouders krijgen uitleg over hoe jouw hoofd werkt en wat jij nodig hebt, zodat ze je beter kunnen helpen als je je overweldigd voelt.',
-      imageUrl: aanpakOndersteuning,
+      description: 'Je ouders krijgen uitleg over hoe jouw hoofd werkt en wat jij nodig hebt.',
+      imageUrl: aanpakBottomLeft,
     },
     {
       chip: 'Afstemming met school',
-      description: 'Er komt een gesprek met school om te zorgen dat zij begrijpen wat er bij jou speelt en hoe ze je kunnen helpen zodat school fijn voelt.',
-      imageUrl: aanpakMetSchool,
+      description: 'Er komt een gesprek met school om te zorgen dat zij begrijpen wat er bij jou speelt en hoe ze je kunnen helpen.',
+      imageUrl: aanpakBottomRight,
     },
   ],
 };
@@ -244,9 +245,11 @@ export const GalleryDetail: React.FC<GalleryDetailProps> = ({ sectionTitle, onBa
           <DoodlerLogo className="doodler-gallery-detail__logo" />
         </button>
         <div className="doodler-gallery-detail__header-actions">
-          <Button variant="outline" size="small" startIcon={<IconOverview size={16} />} onClick={onBackToGallery || onBack}>
-            Overzicht
-          </Button>
+          <ViewModeToggle
+            mode="timeline"
+            onSelectOverview={() => onNavigateToOverview?.()}
+            onSelectTimeline={() => onBackToGallery?.()}
+          />
           <Button variant="primary" size="small" startIcon={<IconPlus size={16} />}>
             Nieuwe doodle
           </Button>
@@ -255,7 +258,7 @@ export const GalleryDetail: React.FC<GalleryDetailProps> = ({ sectionTitle, onBa
       <div className="doodler-gallery-detail__screen">
         <div className="doodler-gallery-detail__content">
           <div className="doodler-gallery-detail__title-section">
-            <h1 className="doodler-gallery-detail__title">Doodle Galerij</h1>
+            <h1 className="doodler-gallery-detail__title">Tijdlijn</h1>
           </div>
           <div className="doodler-gallery-detail__filter">
             <div className="doodler-gallery-detail__filter-chip">

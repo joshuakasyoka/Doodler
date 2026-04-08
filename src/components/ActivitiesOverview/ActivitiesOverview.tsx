@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Button } from '../Button/Button';
-import { IconCheck, IconPlus, IconGalleryToggle } from '../../icons';
+import { IconCheck, IconPlus } from '../../icons';
 import { DoodlerLogo } from '../../assets/logo';
 import { NewDoodleModal } from '../NewDoodleModal/NewDoodleModal';
 import { LoadingOverlay } from '../LoadingOverlay/LoadingOverlay';
+import { ViewModeToggle } from '../ViewModeToggle/ViewModeToggle';
 import './ActivitiesOverview.css';
 
 export type CellState = 'empty' | 'add' | 'added' | 'number' | 'open';
@@ -26,18 +27,18 @@ export interface ActivitiesOverviewProps {
   onStepCompleted?: (activityName: string, stepIndex: number) => void;
 }
 
-const ACTIVITIES: Activity[] = [
-  { name: 'Intake', krachten: 'added', klachten: 'empty', inzichten: 'added', aanpak: 'added' },
-  { name: 'Adviesgesprek', krachten: 'added', klachten: 'added', inzichten: 'added', aanpak: 'added' },
-  { name: 'Behandelplan', krachten: 'added', klachten: 'empty', inzichten: 'empty', aanpak: 'added' },
-  { name: 'Psycho-educatie', krachten: 'empty', klachten: 'added', inzichten: 'empty', aanpak: 'added' },
-  { name: 'Gesperksverslag', krachten: 'added', klachten: 'added', inzichten: 'added', aanpak: 'added' },
-  { name: 'Signaleringsplan', krachten: 'added', klachten: 'empty', inzichten: 'added', aanpak: 'added' },
+/** Vijf vaste zorgtraject-rijen; kolommen Krachten t/m Aanpak starten leeg, behalve Intake Krachten/Klachten (afgerond). Ook de basis voor showcase. */
+export const DEFAULT_ACTIVITIES_TABLE: Activity[] = [
+  { name: 'Intake', krachten: 'added', klachten: 'added', inzichten: 'empty', aanpak: 'empty' },
+  { name: 'Adviesgesprek', krachten: 'empty', klachten: 'empty', inzichten: 'empty', aanpak: 'empty' },
+  { name: 'Behandelplan', krachten: 'empty', klachten: 'empty', inzichten: 'empty', aanpak: 'empty' },
+  { name: 'Psycho-educatie', krachten: 'empty', klachten: 'empty', inzichten: 'empty', aanpak: 'empty' },
+  { name: 'Gesperksverslag', krachten: 'empty', klachten: 'empty', inzichten: 'empty', aanpak: 'empty' },
 ];
 
-const SHOWCASE_ACTIVITIES: Activity[] = [
-  { name: 'Intake', krachten: 'added', klachten: 'added', inzichten: 'empty', aanpak: 'empty' },
-];
+const ACTIVITIES: Activity[] = DEFAULT_ACTIVITIES_TABLE.map((row) => ({ ...row }));
+
+const SHOWCASE_ACTIVITIES: Activity[] = DEFAULT_ACTIVITIES_TABLE.map((row) => ({ ...row }));
 
 const COLUMNS = [
   { key: 'krachten', label: 'Krachten' },
@@ -356,7 +357,6 @@ export const ActivitiesOverview: React.FC<ActivitiesOverviewProps> = ({
       'Behandelplan',
       'Psycho-educatie',
       'Gesperksverslag',
-      'Signaleringsplan',
     ];
     
     const nextActivity = ACTIVITY_OPTIONS.find(activity => !existingActivityNames.includes(activity));
@@ -388,9 +388,11 @@ export const ActivitiesOverview: React.FC<ActivitiesOverviewProps> = ({
             <DoodlerLogo className="doodler-activities-overview__logo" />
           </button>
           <div className="doodler-activities-overview__header-actions">
-          <Button variant="outline" size="small" startIcon={<IconGalleryToggle size={16} />} onClick={onNavigateToGallery}>
-            Galerij
-          </Button>
+          <ViewModeToggle
+            mode="overview"
+            onSelectOverview={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            onSelectTimeline={() => onNavigateToGallery?.()}
+          />
           <Button variant="primary" size="small" startIcon={<IconPlus size={16} />} onClick={handleAddNewActivity}>
             Nieuwe doodle
           </Button>

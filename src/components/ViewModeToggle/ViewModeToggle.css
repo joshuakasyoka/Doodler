@@ -1,0 +1,5 @@
+.doodler-view-toggle {
+  display: inline-flex;
+  align-items: stretch;
+  gap: var(--doodler-spacing-8);
+}

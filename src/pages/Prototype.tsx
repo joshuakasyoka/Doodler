@@ -1,5 +1,5 @@
 import React, { useState, useId, useEffect } from 'react';
-import { ActivitiesOverview, Activity } from '../components/ActivitiesOverview/ActivitiesOverview';
+import { ActivitiesOverview, Activity, DEFAULT_ACTIVITIES_TABLE } from '../components/ActivitiesOverview/ActivitiesOverview';
 import { Gallery } from '../components/Gallery/Gallery';
 import { GalleryDetail } from '../components/GalleryDetail/GalleryDetail';
 import { StepsComponent } from '../components/StepsComponent/StepsComponent';
@@ -12,28 +12,28 @@ import { EditAnnotation } from '../components/EditAnnotation/EditAnnotation';
 import { Summary } from '../components/Summary/Summary';
 import { Toast } from '../components/Toast/Toast';
 import { DoodlerLogo } from '../assets/logo';
-import { IconArrowLeft, IconSend, IconDocument } from '../icons';
+import { IconArrowLeft, IconSend, IconDocument, IconOverview } from '../icons';
 import doodleImage from '../assets/img/Doodle.png';
-// Krachten images
-import krachtenGoedMetTaal from '../assets/img/Krachten_goed met taal 1.png';
-import krachtenBlijvenProberen from '../assets/img/Krachten blijven proberen 1.png';
-import krachtenMakkelijkPraten from '../assets/img/Krachten - makkelijk praten met anderen 1.png';
-import krachtenBandMetZus from '../assets/img/Krachten_band met zus 1.png';
+// Krachten images (2×2 grid: top row, then bottom row)
+import krachtenTopLeft from '../assets/img/Krachten_top_left.png';
+import krachtenTopRight from '../assets/img/Krachten_top_right.png';
+import krachtenBottomLeft from '../assets/img/Krachten_bottom_left.png';
+import krachtenBottomRight from '../assets/img/Krachten_bottom right.png';
 // Klachten images
-import klachtenDrukHoofd from '../assets/img/Klachten druk hoofd 1.png';
-import klachtenMoeizaamSlapen from '../assets/img/Klachten moeizaam slapen 1.png';
-import klachtenMoeilijkOverzicht from '../assets/img/Klachten moeilijk overzicht houden 1.png';
-import klachtenLastigeEmoties from '../assets/img/Klachten_lastige emoties 1.png';
+import klachtenTopLeft from '../assets/img/Klachten_top_left.png';
+import klachtenTopRight from '../assets/img/Klachten_top_right.png';
+import klachtenBottomLeft from '../assets/img/Klachten_bottom_left.png';
+import klachtenBottomRight from '../assets/img/Klachten_bottom_right.png';
 // Inzichten images
-import inzichtenAnderenNietBelasten from '../assets/img/Inzichten - anderen niet willen belasten 1.png';
-import inzichtenBotsingThuis from '../assets/img/Inzichten botsing thuis.png';
-import inzichtenGevoeligDoorStress from '../assets/img/Inzichten _ mama buik 1.png';
-import inzichtenVeelWillenZorgen from '../assets/img/Inzichten veel willen.png';
+import inzichtenTopLeft from '../assets/img/Inzichten_top_left.png';
+import inzichtenTopRight from '../assets/img/Inzichten_top_right.png';
+import inzichtenBottomLeft from '../assets/img/Inzichten_bottom_left.png';
+import inzichtenBottomRight from '../assets/img/Inzichten_bottom_right.png';
 // Aanpak images
-import aanpakHelpenOmgaan from '../assets/img/Aanpak helpen omgaan.png';
-import aanpakJongeHelpers from '../assets/img/Aanpak_jonge helpers 1.png';
-import aanpakOndersteuning from '../assets/img/Aan pak Ondersteuning.png';
-import aanpakMetSchool from '../assets/img/Aanpak met school.png';
+import aanpakTopLeft from '../assets/img/Aanpak_top_left.png';
+import aanpakTopRight from '../assets/img/Aanpak_top_right.png';
+import aanpakBottomLeft from '../assets/img/Aanpak_bottom_left.png';
+import aanpakBottomRight from '../assets/img/Aanpak_bottom_right.png';
 import './Prototype.css';
 
 const STEPS = ['Strengths', "What's going on?", 'Insights', 'Plan'];
@@ -144,105 +144,105 @@ const STEP_ANNOTATIONS = {
   Krachten: [
     {
       chip: 'Goed met taal',
-      description: 'Je kunt goed praten, hebt een sterke woordenschat en denkt graag diep na over dingen.',
+      description: 'Je kunt goed praten en denkt graag diep na over dingen.',
       imagePrompt: '',
-      imageUrl: krachtenGoedMetTaal,
+      imageUrl: krachtenTopLeft,
     },
     {
       chip: 'Blijven proberen',
-      description: 'Je hebt een sterke werkhouding en wilt je taken graag goed uitvoeren. Je probeert zo min mogelijk fouten te maken.',
+      description: 'Je wilt je taken graag goed uitvoeren.',
       imagePrompt: '',
-      imageUrl: krachtenBlijvenProberen,
+      imageUrl: krachtenTopRight,
     },
     {
       chip: 'Makkelijk praten met anderen',
-      description: 'Je kunt makkelijk contact maken met nieuwe mensen en toont interesse en medeleven.',
+      description: 'Je kunt makkelijk contact maken met nieuwe mensen.',
       imagePrompt: '',
-      imageUrl: krachtenMakkelijkPraten,
+      imageUrl: krachtenBottomLeft,
     },
     {
       chip: 'Goede band met zus',
-      description: 'Je hebt een goede band met je zus. Met haar deel je vaak hoe het met je gaat en wat er in je omgaat.',
+      description: 'Met je zus deel je vaak hoe het met je gaat.',
       imagePrompt: '',
-      imageUrl: krachtenBandMetZus,
+      imageUrl: krachtenBottomRight,
     },
   ],
   Klachten: [
     {
       chip: 'Druk hoofd',
-      description: 'Je hoofd voelt vaak druk en chaotisch, waardoor je moeilijk kunt ontspannen en soms niet weet wat je voelt.',
+      description: 'Je hoofd voelt vaak druk en chaotisch, waardoor je moeilijk kunt ontspannen.',
       imagePrompt: '',
-      imageUrl: klachtenDrukHoofd,
+      imageUrl: klachtenTopLeft,
     },
     {
       chip: 'Moeizaam slapen',
-      description: 'Je hebt moeite met inslapen en slaapt vaak maar 4 tot 6 uur per nacht doordat je hoofd zo druk is.',
+      description: 'Je hebt moeite met inslapen.',
       imagePrompt: '',
-      imageUrl: klachtenMoeizaamSlapen,
+      imageUrl: klachtenTopRight,
     },
     {
       chip: 'Moeilijk overzicht houden',
-      description: 'Je werkt snel maar mist dan informatie. Het is lastig om instructies te volgen, overzicht te houden of op tijd te stoppen om na te denken.',
+      description: 'Je werkt snel maar mist dan informatie. Het is lastig overzicht te houden.',
       imagePrompt: '',
-      imageUrl: klachtenMoeilijkOverzicht,
+      imageUrl: klachtenBottomLeft,
     },
     {
       chip: 'Lastige emoties',
-      description: 'Je hebt soms heftige uitbarstingen, zoals een \'tornado van gevoelens\', en weet niet altijd wat je voelt.',
+      description: 'Je hebt soms heftige uitbarstingen.',
       imagePrompt: '',
-      imageUrl: klachtenLastigeEmoties,
+      imageUrl: klachtenBottomRight,
     },
   ],
   Inzichten: [
     {
       chip: 'Anderen niet willen belasten',
-      description: 'Je gaat bij gevoelens eerder naar je oudste zus dan naar je ouders, omdat je hen niet lastig wil vallen.',
+      description: 'Je gaat bij gevoelens eerder naar je oudste zus dan naar je ouders.',
       imagePrompt: '',
-      imageUrl: inzichtenAnderenNietBelasten,
+      imageUrl: inzichtenTopLeft,
     },
     {
       chip: 'Botsing thuis',
-      description: 'Mama is meer chaotisch en jij houdt juist sterk vast aan tijden en planning. Dit botst soms en kan spanning geven.',
+      description: 'Mama is meer chaotisch en jij houdt juist sterk vast aan tijden en planning.',
       imagePrompt: '',
-      imageUrl: inzichtenBotsingThuis,
+      imageUrl: inzichtenTopRight,
     },
     {
       chip: 'Gevoelig door stress',
       description: 'Mama vertelt dat er veel stress was toen je nog in haar buik zat. Dat kan invloed hebben op hoe gevoelig je nu bent.',
       imagePrompt: '',
-      imageUrl: inzichtenGevoeligDoorStress,
+      imageUrl: inzichtenBottomLeft,
     },
     {
       chip: 'Veel willen zorgen',
-      description: 'Je maakt je zorgen om mama en wilt goed op haar letten, terwijl dit voor een kind best zwaar kan zijn.',
+      description: 'Je maakt je zorgen om mama en wilt goed op haar letten.',
       imagePrompt: '',
-      imageUrl: inzichtenVeelWillenZorgen,
+      imageUrl: inzichtenBottomRight,
     },
   ],
   Aanpak: [
     {
       chip: 'Helpen omgaan met gevoelens',
-      description: 'Je krijgt uitleg over hoe jouw hoofd werkt en je gaat leren hoe je beter met je emoties en piekergedachten om kunt gaan.',
+      description: 'Je krijgt uitleg over hoe jouw hoofd werkt en leert hoe je beter met je emoties om kunt gaan.',
       imagePrompt: '',
-      imageUrl: aanpakHelpenOmgaan,
+      imageUrl: aanpakTopLeft,
     },
     {
       chip: 'Steun voor jonge helpers',
-      description: 'Je mag meedoen aan activiteiten of groepen voor kinderen die thuis extra zorgen hebben, zodat jij je gesteund voelt.',
+      description: 'Je mag meedoen aan activiteiten voor kinderen die thuis extra zorgen hebben.',
       imagePrompt: '',
-      imageUrl: aanpakJongeHelpers,
+      imageUrl: aanpakTopRight,
     },
     {
       chip: 'Ondersteuning voor je ouders',
-      description: 'Je ouders krijgen uitleg over hoe jouw hoofd werkt en wat jij nodig hebt, zodat ze je beter kunnen helpen als je je overweldigd voelt.',
+      description: 'Je ouders krijgen uitleg over hoe jouw hoofd werkt en wat jij nodig hebt.',
       imagePrompt: '',
-      imageUrl: aanpakOndersteuning,
+      imageUrl: aanpakBottomLeft,
     },
     {
       chip: 'Afstemming met school',
-      description: 'Er komt een gesprek met school om te zorgen dat zij begrijpen wat er bij jou speelt en hoe ze je kunnen helpen zodat school fijn voelt.',
+      description: 'Er komt een gesprek met school om te zorgen dat zij begrijpen wat er bij jou speelt en hoe ze je kunnen helpen.',
       imagePrompt: '',
-      imageUrl: aanpakMetSchool,
+      imageUrl: aanpakBottomRight,
     },
   ],
 };
@@ -292,8 +292,8 @@ export const Prototype: React.FC<PrototypeProps> = ({ isShowcase = false }) => {
   const [toastMessage, setToastMessage] = useState<string>('');
   const [showToast, setShowToast] = useState(false);
   const [isShowcaseFirstActivity, setIsShowcaseFirstActivity] = useState(false);
-  const [showcaseActivities, setShowcaseActivities] = useState<Activity[]>(
-    isShowcase ? [{ name: 'Intake', krachten: 'added', klachten: 'added', inzichten: 'empty', aanpak: 'empty' }] : []
+  const [showcaseActivities, setShowcaseActivities] = useState<Activity[]>(() =>
+    isShowcase ? DEFAULT_ACTIVITIES_TABLE.map((row) => ({ ...row })) : []
   );
   const [isSingleDoodleView, setIsSingleDoodleView] = useState(false);
   const [currentActivityName, setCurrentActivityName] = useState<string | null>(null);
@@ -697,8 +697,8 @@ export const Prototype: React.FC<PrototypeProps> = ({ isShowcase = false }) => {
                   onSectionClick={(index) => handleSummarySectionClick(visibleStepIndices[index] ?? 0)}
                 />
                 <div className="doodler-prototype__summary-actions">
-                  <Button variant="outline" size="small" startIcon={<IconSend size={16} />} onClick={handleEmailDoodles}>
-                    Doodles e-mailen
+                  <Button variant="outline" size="small" startIcon={<IconOverview size={16} />} onClick={handleBackToOverview}>
+                    Naar overzicht
                   </Button>
                   <Button variant="primary" size="small" startIcon={<IconDocument size={16} />} onClick={handlePrintDoodles}>
                     Doodles afdrukken
