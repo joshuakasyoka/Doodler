@@ -27,7 +27,7 @@ const ACTIVITY_OPTIONS = [
   'Adviesgesprek',
   'Behandelplan',
   'Psycho-educatie',
-  'Gesperksverslag',
+  'Gespreksverslag',
 ];
 
 const DropdownCheckboxIcon: React.FC<{ checked: boolean }> = ({ checked }) => (

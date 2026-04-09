@@ -3,3 +3,17 @@
   align-items: stretch;
   gap: var(--doodler-spacing-8);
 }
+
+.doodler-view-toggle__button {
+  /* Keep toggle buttons visually distinct from primary actions */
+  background-color: transparent;
+}
+
+.doodler-view-toggle__button--active {
+  background-color: rgba(29, 32, 33, 0.08);
+  border-color: var(--doodler-color-active);
+}
+
+.doodler-view-toggle__button--active:hover:not(:disabled):not(.doodler-button--disabled) {
+  background-color: rgba(29, 32, 33, 0.12);
+}

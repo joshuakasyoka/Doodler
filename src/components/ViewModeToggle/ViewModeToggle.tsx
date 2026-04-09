@@ -19,10 +19,11 @@ export const ViewModeToggle: React.FC<ViewModeToggleProps> = ({
   <div className="doodler-view-toggle" role="tablist" aria-label="Weergave wisselen">
     <Button
       type="button"
-      variant={mode === 'overview' ? 'primary' : 'outline'}
+      variant="outline"
       size="small"
       startIcon={<IconOverview size={16} />}
       onClick={onSelectOverview}
+      className={`doodler-view-toggle__button ${mode === 'overview' ? 'doodler-view-toggle__button--active' : ''}`}
       role="tab"
       aria-selected={mode === 'overview'}
     >
@@ -30,10 +31,11 @@ export const ViewModeToggle: React.FC<ViewModeToggleProps> = ({
     </Button>
     <Button
       type="button"
-      variant={mode === 'timeline' ? 'primary' : 'outline'}
+      variant="outline"
       size="small"
       startIcon={<IconGalleryToggle size={16} />}
       onClick={onSelectTimeline}
+      className={`doodler-view-toggle__button ${mode === 'timeline' ? 'doodler-view-toggle__button--active' : ''}`}
       role="tab"
       aria-selected={mode === 'timeline'}
     >

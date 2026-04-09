@@ -35,7 +35,7 @@ export const DEFAULT_ACTIVITIES_TABLE: Activity[] = [
   { name: 'Adviesgesprek', krachten: 'empty', klachten: 'empty', inzichten: 'empty', aanpak: 'empty', isActive: false },
   { name: 'Behandelplan', krachten: 'empty', klachten: 'empty', inzichten: 'empty', aanpak: 'empty', isActive: false },
   { name: 'Psycho-educatie', krachten: 'empty', klachten: 'empty', inzichten: 'empty', aanpak: 'empty', isActive: false },
-  { name: 'Gesperksverslag', krachten: 'empty', klachten: 'empty', inzichten: 'empty', aanpak: 'empty', isActive: false },
+  { name: 'Gespreksverslag', krachten: 'empty', klachten: 'empty', inzichten: 'empty', aanpak: 'empty', isActive: false },
 ];
 
 const ACTIVITIES: Activity[] = DEFAULT_ACTIVITIES_TABLE.map((row) => ({ ...row }));
