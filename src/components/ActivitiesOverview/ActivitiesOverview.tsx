@@ -15,6 +15,8 @@ export interface Activity {
   klachten: CellState;
   inzichten: CellState;
   aanpak: CellState;
+  /** Inactive rows are shown greyed out until the user activates them. */
+  isActive: boolean;
 }
 
 export interface ActivitiesOverviewProps {
@@ -27,13 +29,13 @@ export interface ActivitiesOverviewProps {
   onStepCompleted?: (activityName: string, stepIndex: number) => void;
 }
 
-/** Vijf vaste zorgtraject-rijen; kolommen Krachten t/m Aanpak starten leeg, behalve Intake Krachten/Klachten (afgerond). Ook de basis voor showcase. */
+/** Vijf vaste zorgtraject-rijen; alleen Intake start actief. */
 export const DEFAULT_ACTIVITIES_TABLE: Activity[] = [
-  { name: 'Intake', krachten: 'added', klachten: 'added', inzichten: 'empty', aanpak: 'empty' },
-  { name: 'Adviesgesprek', krachten: 'empty', klachten: 'empty', inzichten: 'empty', aanpak: 'empty' },
-  { name: 'Behandelplan', krachten: 'empty', klachten: 'empty', inzichten: 'empty', aanpak: 'empty' },
-  { name: 'Psycho-educatie', krachten: 'empty', klachten: 'empty', inzichten: 'empty', aanpak: 'empty' },
-  { name: 'Gesperksverslag', krachten: 'empty', klachten: 'empty', inzichten: 'empty', aanpak: 'empty' },
+  { name: 'Intake', krachten: 'added', klachten: 'added', inzichten: 'empty', aanpak: 'empty', isActive: true },
+  { name: 'Adviesgesprek', krachten: 'empty', klachten: 'empty', inzichten: 'empty', aanpak: 'empty', isActive: false },
+  { name: 'Behandelplan', krachten: 'empty', klachten: 'empty', inzichten: 'empty', aanpak: 'empty', isActive: false },
+  { name: 'Psycho-educatie', krachten: 'empty', klachten: 'empty', inzichten: 'empty', aanpak: 'empty', isActive: false },
+  { name: 'Gesperksverslag', krachten: 'empty', klachten: 'empty', inzichten: 'empty', aanpak: 'empty', isActive: false },
 ];
 
 const ACTIVITIES: Activity[] = DEFAULT_ACTIVITIES_TABLE.map((row) => ({ ...row }));
@@ -45,14 +47,16 @@ const COLUMNS = [
   { key: 'klachten', label: 'Klachten' },
   { key: 'inzichten', label: 'Inzichten' },
   { key: 'aanpak', label: 'Aanpak' },
-];
+] as const;
+
+type ColumnKey = (typeof COLUMNS)[number]['key'];
 
 interface CellButtonProps {
   state: CellState;
   onToggle?: () => void;
   onNavigate?: () => void;
-  onOpenModal?: (columnKey?: keyof Activity, activityName?: string) => void;
-  columnKey?: keyof Activity;
+  onOpenModal?: (columnKey?: ColumnKey, activityName?: string) => void;
+  columnKey?: ColumnKey;
   activityName?: string;
 }
 
@@ -157,12 +161,13 @@ export const ActivitiesOverview: React.FC<ActivitiesOverviewProps> = ({
   };
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [hoveredRowIndex, setHoveredRowIndex] = useState<number | null>(null);
-  const [selectedColumnKey, setSelectedColumnKey] = useState<keyof Activity | null>(null);
+  const [selectedColumnKey, setSelectedColumnKey] = useState<ColumnKey | null>(null);
   const [selectedActivityName, setSelectedActivityName] = useState<string | null>(null);
   const [isAddingActivity, setIsAddingActivity] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleCellToggle = (activityIndex: number, columnKey: keyof Activity) => {
+  const handleCellToggle = (activityIndex: number, columnKey: ColumnKey) => {
+    if (!activities[activityIndex]?.isActive) return;
     setActivities((prev) => {
       const updated = [...prev];
       const currentState = updated[activityIndex][columnKey];
@@ -183,7 +188,7 @@ export const ActivitiesOverview: React.FC<ActivitiesOverviewProps> = ({
     });
   };
 
-  const handleOpenModal = (columnKey?: keyof Activity, activityName?: string) => {
+  const handleOpenModal = (columnKey?: ColumnKey, activityName?: string) => {
     setSelectedColumnKey(columnKey || null);
     setSelectedActivityName(activityName || null);
     setIsModalOpen(true);
@@ -228,11 +233,9 @@ export const ActivitiesOverview: React.FC<ActivitiesOverviewProps> = ({
 
   // Handler for navigating from a cell click
   const handleCellNavigate = (stepIndex: number, activityIndex: number) => {
+    const activity = activities[activityIndex];
+    if (!activity?.isActive) return;
     if (isShowcase) {
-      const activity = activities[activityIndex];
-      if (!activity) {
-        return;
-      }
       const isSingleDoodle = hasOnlyOneCheckedCategory(activity);
       // When viewing a single doodle, always find which category is checked and use its step index
       // Ignore the stepIndex parameter since we need to find the actual checked category
@@ -249,6 +252,12 @@ export const ActivitiesOverview: React.FC<ActivitiesOverviewProps> = ({
     }
   };
 
+  const handleStartAddForActivity = (activityName: string) => {
+    setSelectedActivityName(activityName);
+    setIsAddingActivity(true);
+    setIsModalOpen(true);
+  };
+
   const handleConfirmModal = (
     selectedCategories?: Array<'krachten' | 'klachten' | 'inzichten' | 'aanpak'>,
     selectedActivity?: string
@@ -263,7 +272,7 @@ export const ActivitiesOverview: React.FC<ActivitiesOverviewProps> = ({
       selectedCategories?.[0] ||
       (isAddingActivityFlag && isShowcase
         ? 'krachten'
-        : (selectedColumnKey && selectedColumnKey !== 'name' ? selectedColumnKey : 'krachten'));
+        : (selectedColumnKey ? selectedColumnKey : 'krachten'));
     
     // Simulate loading time (1.5 seconds)
     setTimeout(() => {
@@ -271,17 +280,34 @@ export const ActivitiesOverview: React.FC<ActivitiesOverviewProps> = ({
         // Use the activity from modal (which should be the preselected one if user didn't change it)
         const activityName = activityToAdd || 'Adviesgesprek';
         
-        // Add new activity to the list with all categories empty (user will complete them step by step)
+        // Activate (and optionally check) an existing activity row, never create duplicates.
         setActivities((prev) => {
           const selectedSet = new Set(selectedCategories || []);
-          const newActivity: Activity = {
-            name: activityName,
-            krachten: selectedSet.has('krachten') ? 'added' : 'empty',
-            klachten: selectedSet.has('klachten') ? 'added' : 'empty',
-            inzichten: selectedSet.has('inzichten') ? 'added' : 'empty',
-            aanpak: selectedSet.has('aanpak') ? 'added' : 'empty',
-          };
-          return [...prev, newActivity];
+          const idx = prev.findIndex((a) => a.name === activityName);
+          if (idx === -1) {
+            // Fallback: if somehow missing, append it once.
+            const newActivity: Activity = {
+              name: activityName,
+              krachten: selectedSet.has('krachten') ? 'added' : 'empty',
+              klachten: selectedSet.has('klachten') ? 'added' : 'empty',
+              inzichten: selectedSet.has('inzichten') ? 'added' : 'empty',
+              aanpak: selectedSet.has('aanpak') ? 'added' : 'empty',
+              isActive: true,
+            };
+            return [...prev, newActivity];
+          }
+
+          return prev.map((activity, i) => {
+            if (i !== idx) return activity;
+            return {
+              ...activity,
+              isActive: true,
+              krachten: selectedSet.has('krachten') ? 'added' : activity.krachten,
+              klachten: selectedSet.has('klachten') ? 'added' : activity.klachten,
+              inzichten: selectedSet.has('inzichten') ? 'added' : activity.inzichten,
+              aanpak: selectedSet.has('aanpak') ? 'added' : activity.aanpak,
+            };
+          });
         });
         
         setIsAddingActivity(false);
@@ -349,27 +375,10 @@ export const ActivitiesOverview: React.FC<ActivitiesOverviewProps> = ({
   };
 
   const handleAddNewActivity = () => {
-    // Find the next activity that doesn't exist yet
-    const existingActivityNames = activities.map(a => a.name);
-    const ACTIVITY_OPTIONS = [
-      'Intake',
-      'Adviesgesprek',
-      'Behandelplan',
-      'Psycho-educatie',
-      'Gesperksverslag',
-    ];
-    
-    const nextActivity = ACTIVITY_OPTIONS.find(activity => !existingActivityNames.includes(activity));
-    
-    if (nextActivity) {
-      setSelectedActivityName(nextActivity);
-      setIsAddingActivity(true);
-      setIsModalOpen(true);
-    } else {
-      // If all activities exist, just open modal without preselection
-      setIsAddingActivity(true);
-      setIsModalOpen(true);
-    }
+    const firstInactive = activities.find((a) => !a.isActive)?.name;
+    setSelectedActivityName(firstInactive || 'Adviesgesprek');
+    setIsAddingActivity(true);
+    setIsModalOpen(true);
   };
 
   return (
@@ -422,16 +431,31 @@ export const ActivitiesOverview: React.FC<ActivitiesOverviewProps> = ({
               </thead>
               <tbody>
                 {activities.map((activity, index) => (
+                  (() => {
+                    const isInactive = !activity.isActive;
+                    return (
                   <tr 
                     key={index} 
-                    className="doodler-activities-overview__row"
-                    onMouseEnter={() => setHoveredRowIndex(index)}
-                    onMouseLeave={() => setHoveredRowIndex(null)}
+                    className={`doodler-activities-overview__row ${isInactive ? 'doodler-activities-overview__row--inactive' : ''}`}
+                    onMouseEnter={() => (isInactive ? undefined : setHoveredRowIndex(index))}
+                    onMouseLeave={() => (isInactive ? undefined : setHoveredRowIndex(null))}
                   >
                     <td className="doodler-activities-overview__cell doodler-activities-overview__cell--activity">
                       <div className="doodler-activities-overview__activity-cell-content">
-                        <span className="doodler-activities-overview__activity-name">{activity.name}</span>
-                        {hoveredRowIndex === index && (
+                        <button
+                          type="button"
+                          className={`doodler-activities-overview__activity-name-button ${isInactive ? 'doodler-activities-overview__activity-name-button--inactive' : ''}`}
+                          onClick={() => (isInactive ? handleStartAddForActivity(activity.name) : undefined)}
+                          aria-label={isInactive ? `Activeer ${activity.name}` : activity.name}
+                        >
+                          {isInactive && (
+                            <span className="doodler-activities-overview__inactive-icon" aria-hidden="true">
+                              <IconPlus size={12} />
+                            </span>
+                          )}
+                          <span className="doodler-activities-overview__activity-name">{activity.name}</span>
+                        </button>
+                        {hoveredRowIndex === index && activity.isActive && (
                         <Button 
                           variant="primary" 
                           size="small"
@@ -452,65 +476,85 @@ export const ActivitiesOverview: React.FC<ActivitiesOverviewProps> = ({
                       </div>
                     </td>
                     <td className="doodler-activities-overview__cell">
-                      <CellButton
-                        state={activity.krachten}
-                        onToggle={() => handleCellToggle(index, 'krachten')}
-                        onNavigate={() => handleCellNavigate(0, index)}
-                        onOpenModal={handleOpenModal}
-                        columnKey="krachten"
-                        activityName={activity.name}
-                      />
+                      {isInactive ? (
+                        <div className="doodler-activities-overview__inactive-cell" aria-hidden="true" />
+                      ) : (
+                        <CellButton
+                          state={activity.krachten}
+                          onToggle={() => handleCellToggle(index, 'krachten')}
+                          onNavigate={() => handleCellNavigate(0, index)}
+                          onOpenModal={handleOpenModal}
+                          columnKey="krachten"
+                          activityName={activity.name}
+                        />
+                      )}
                     </td>
                     <td className="doodler-activities-overview__cell">
-                      <CellButton
-                        state={activity.klachten}
-                        onToggle={() => handleCellToggle(index, 'klachten')}
-                        onNavigate={() => handleCellNavigate(1, index)}
-                        onOpenModal={handleOpenModal}
-                        columnKey="klachten"
-                        activityName={activity.name}
-                      />
+                      {isInactive ? (
+                        <div className="doodler-activities-overview__inactive-cell" aria-hidden="true" />
+                      ) : (
+                        <CellButton
+                          state={activity.klachten}
+                          onToggle={() => handleCellToggle(index, 'klachten')}
+                          onNavigate={() => handleCellNavigate(1, index)}
+                          onOpenModal={handleOpenModal}
+                          columnKey="klachten"
+                          activityName={activity.name}
+                        />
+                      )}
                     </td>
                     <td className="doodler-activities-overview__cell">
-                      <CellButton
-                        state={activity.inzichten}
-                        onToggle={() => handleCellToggle(index, 'inzichten')}
-                        onNavigate={() => handleCellNavigate(2, index)}
-                        onOpenModal={handleOpenModal}
-                        columnKey="inzichten"
-                        activityName={activity.name}
-                      />
+                      {isInactive ? (
+                        <div className="doodler-activities-overview__inactive-cell" aria-hidden="true" />
+                      ) : (
+                        <CellButton
+                          state={activity.inzichten}
+                          onToggle={() => handleCellToggle(index, 'inzichten')}
+                          onNavigate={() => handleCellNavigate(2, index)}
+                          onOpenModal={handleOpenModal}
+                          columnKey="inzichten"
+                          activityName={activity.name}
+                        />
+                      )}
                     </td>
                     <td className="doodler-activities-overview__cell">
-                      <CellButton
-                        state={activity.aanpak}
-                        onToggle={() => handleCellToggle(index, 'aanpak')}
-                        onNavigate={() => handleCellNavigate(3, index)}
-                        onOpenModal={handleOpenModal}
-                        columnKey="aanpak"
-                        activityName={activity.name}
-                      />
+                      {isInactive ? (
+                        <div className="doodler-activities-overview__inactive-cell" aria-hidden="true" />
+                      ) : (
+                        <CellButton
+                          state={activity.aanpak}
+                          onToggle={() => handleCellToggle(index, 'aanpak')}
+                          onNavigate={() => handleCellNavigate(3, index)}
+                          onOpenModal={handleOpenModal}
+                          columnKey="aanpak"
+                          activityName={activity.name}
+                        />
+                      )}
                     </td>
                   </tr>
+                    );
+                  })()
                 ))}
-                <tr 
-                  className="doodler-activities-overview__row doodler-activities-overview__row--new"
-                  onClick={handleAddNewActivity}
-                  style={{ cursor: 'pointer' }}
-                >
-                  <td className="doodler-activities-overview__cell doodler-activities-overview__cell--activity doodler-activities-overview__cell--new">
-                    <div className="doodler-activities-overview__new-activity">
-                      <div className="doodler-activities-overview__new-icon">
-                        <IconPlus size={12} />
+                {activities.some((a) => !a.isActive) && (
+                  <tr
+                    className="doodler-activities-overview__row doodler-activities-overview__row--new"
+                    onClick={handleAddNewActivity}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    <td className="doodler-activities-overview__cell doodler-activities-overview__cell--activity doodler-activities-overview__cell--new">
+                      <div className="doodler-activities-overview__new-activity">
+                        <div className="doodler-activities-overview__new-icon">
+                          <IconPlus size={12} />
+                        </div>
+                        <span>Nieuwe activiteit</span>
                       </div>
-                      <span>Nieuwe activiteit</span>
-                    </div>
-                  </td>
-                  <td className="doodler-activities-overview__cell" />
-                  <td className="doodler-activities-overview__cell" />
-                  <td className="doodler-activities-overview__cell" />
-                  <td className="doodler-activities-overview__cell" />
-                </tr>
+                    </td>
+                    <td className="doodler-activities-overview__cell" />
+                    <td className="doodler-activities-overview__cell" />
+                    <td className="doodler-activities-overview__cell" />
+                    <td className="doodler-activities-overview__cell" />
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>
@@ -522,10 +566,8 @@ export const ActivitiesOverview: React.FC<ActivitiesOverviewProps> = ({
         onConfirm={handleConfirmModal}
         preselectedCategory={
           isAddingActivity 
-            ? (isShowcase ? 'krachten' : (selectedColumnKey && selectedColumnKey !== 'name' ? selectedColumnKey : 'krachten'))
-            : selectedColumnKey && selectedColumnKey !== 'name' 
-              ? selectedColumnKey 
-              : undefined
+            ? (isShowcase ? 'krachten' : (selectedColumnKey ? selectedColumnKey : 'krachten'))
+            : selectedColumnKey ? selectedColumnKey : undefined
         }
         preselectedActivity={isAddingActivity ? (selectedActivityName || 'Adviesgesprek') : selectedActivityName || undefined}
         isLoading={isLoading}

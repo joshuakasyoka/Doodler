@@ -138,6 +138,68 @@
   background-color: var(--doodler-color-grey);
 }
 
+.doodler-activities-overview__row--inactive {
+  background-color: transparent;
+}
+
+.doodler-activities-overview__row--inactive:hover {
+  background-color: var(--doodler-color-grey);
+}
+
+.doodler-activities-overview__row--inactive .doodler-activities-overview__cell--activity {
+  color: rgba(0, 0, 0, 0.3);
+}
+
+.doodler-activities-overview__row--new {
+  background-color: transparent;
+}
+
+.doodler-activities-overview__row--new:hover {
+  background-color: var(--doodler-color-grey);
+}
+
+.doodler-activities-overview__activity-name-button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--doodler-spacing-8);
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 0;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: default;
+  min-width: 0;
+}
+
+.doodler-activities-overview__activity-name-button--inactive {
+  cursor: pointer;
+}
+
+.doodler-activities-overview__inactive-icon {
+  width: 20px;
+  height: 20px;
+  border: 1px solid #ccc;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: currentColor;
+  flex-shrink: 0;
+}
+
+.doodler-activities-overview__inactive-cell {
+  width: 25px;
+  height: 25px;
+  border: 1px dashed rgba(0, 0, 0, 0.18);
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.6;
+}
+
 .doodler-activities-overview__row:last-child {
   border-bottom: none;
 }
