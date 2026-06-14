@@ -1,5 +1,5 @@
 import React from 'react';
-import { IconPen, IconCheckCircle } from '../../icons';
+import { IconPen } from '../../icons';
 import './StepsComponent.css';
 
 export interface StepsComponentProps {
@@ -27,9 +27,6 @@ export const StepsComponent: React.FC<StepsComponentProps> = ({
         <div className="doodler-steps-component__navigation doodler-steps-component__navigation--summary">
           <div className="doodler-steps-component__step doodler-steps-component__step--summary">
             Reviewen
-            <div className="doodler-steps-component__check-icon">
-              <IconCheckCircle size={16} />
-            </div>
           </div>
         </div>
         <div className="doodler-steps-component__progress-bar">

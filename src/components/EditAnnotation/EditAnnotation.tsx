@@ -12,7 +12,7 @@ export interface EditAnnotationProps {
   onSave: (chip: string, description: string, imagePrompt: string) => void;
   onCancel: () => void;
   onChange?: (chip: string, description: string, imagePrompt: string) => void;
-  onImageGenerated?: (imageUrl: string) => void;
+  onImageGenerated?: (imageUrl: string, prompt: string) => void;
 }
 
 export const EditAnnotation: React.FC<EditAnnotationProps> = ({
@@ -98,7 +98,7 @@ export const EditAnnotation: React.FC<EditAnnotationProps> = ({
           handleShowToast('Afbeelding gegenereerd');
         }
         if (onImageGenerated) {
-          onImageGenerated(result.imageUrl);
+          onImageGenerated(result.imageUrl, fullPrompt);
         }
       } else {
         handleShowToast('Kon geen afbeelding genereren');

@@ -3,8 +3,9 @@ import { PrototypeSelector } from '../components/PrototypeSelector/PrototypeSele
 import { ThirdPartyPage } from '../components/ThirdPartyPage/ThirdPartyPage';
 import { DoodlerWidgetOverlay } from '../components/DoodlerWidgetOverlay/DoodlerWidgetOverlay';
 import { Prototype } from './Prototype';
+import { MVP } from './MVP';
 
-export type ViewMode = 'selector' | 'prototype1-widget' | 'prototype1-overview' | 'prototype2' | 'showcase';
+export type ViewMode = 'selector' | 'prototype1-widget' | 'prototype1-overview' | 'prototype2' | 'showcase' | 'mvp';
 
 export const PrototypeWrapper: React.FC = () => {
   // Initialize from URL hash if present
@@ -12,6 +13,9 @@ export const PrototypeWrapper: React.FC = () => {
     const hash = window.location.hash.replace('#', '');
     if (hash === 'clientoverzicht' || hash === 'cliëntoverzicht') {
       return 'showcase';
+    }
+    if (hash === 'mvp') {
+      return 'mvp';
     }
     return 'selector';
   };
@@ -24,6 +28,8 @@ export const PrototypeWrapper: React.FC = () => {
       const hash = window.location.hash.replace('#', '');
       if (hash === 'clientoverzicht' || hash === 'cliëntoverzicht') {
         setViewMode('showcase');
+      } else if (hash === 'mvp') {
+        setViewMode('mvp');
       } else if (hash === '') {
         setViewMode('selector');
       }
@@ -41,6 +47,16 @@ export const PrototypeWrapper: React.FC = () => {
     setViewMode('showcase');
   };
 
+  const handleSelectMVP = () => {
+    window.location.hash = 'mvp';
+    setViewMode('mvp');
+  };
+
+  const handleBackFromMVP = () => {
+    window.location.hash = '';
+    setViewMode('selector');
+  };
+
   const handleOverviewClick = () => {
     setViewMode('showcase');
   };
@@ -50,6 +66,7 @@ export const PrototypeWrapper: React.FC = () => {
       <PrototypeSelector
         onSelectPrototype1={handleSelectPrototype1}
         onSelectShowcase={handleSelectShowcase}
+        onSelectMVP={handleSelectMVP}
       />
     );
   }
@@ -70,6 +87,10 @@ export const PrototypeWrapper: React.FC = () => {
 
   if (viewMode === 'showcase') {
     return <Prototype isShowcase={true} />;
+  }
+
+  if (viewMode === 'mvp') {
+    return <MVP onBack={handleBackFromMVP} />;
   }
 
   if (viewMode === 'prototype1-overview') {

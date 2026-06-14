@@ -3,6 +3,8 @@
 // Each icon follows the naming convention: Icon{Name}.tsx
 
 export { IconPen } from './IconPen';
+export { IconImage } from './IconImage';
+export { IconRefresh } from './IconRefresh';
 export { IconCheck } from './IconCheck';
 export { IconCheckCircle } from './IconCheckCircle';
 export { IconCross } from './IconCross';
@@ -16,7 +18,10 @@ export { IconChevronUp } from './IconChevronUp';
 export { IconChevronDown } from './IconChevronDown';
 export { IconPlus } from './IconPlus';
 export { IconGallery } from './IconGallery';
+export { IconLibrary } from './IconLibrary';
 export { IconExport } from './IconExport';
+export { IconShare } from './IconShare';
+export { IconOpenExternal } from './IconOpenExternal';
 export { IconSend } from './IconSend';
 export { IconDocument } from './IconDocument';
 export { IconOverview } from './IconOverview';

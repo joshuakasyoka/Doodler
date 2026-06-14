@@ -97,6 +97,10 @@
   height: 100%;
 }
 
+.doodler-prototype__summary-content > .doodler-summary {
+  margin-top: 30px;
+}
+
 .doodler-prototype__summary-actions {
   display: flex;
   justify-content: center;
@@ -110,7 +114,7 @@
 .doodler-prototype__step-title {
   display: flex;
   flex-direction: column;
-  gap: var(--doodler-spacing-12);
+  gap: 10px;
   align-items: center;
   text-align: center;
 }
@@ -295,7 +299,7 @@
   }
 
   .doodler-prototype__step-title {
-    gap: var(--doodler-spacing-24);
+    gap: 10px;
   }
 
   .doodler-prototype__heading {

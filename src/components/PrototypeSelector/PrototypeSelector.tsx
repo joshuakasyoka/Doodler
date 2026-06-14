@@ -6,11 +6,13 @@ import './PrototypeSelector.css';
 export interface PrototypeSelectorProps {
   onSelectPrototype1: () => void;
   onSelectShowcase: () => void;
+  onSelectMVP: () => void;
 }
 
 export const PrototypeSelector: React.FC<PrototypeSelectorProps> = ({
   onSelectPrototype1,
   onSelectShowcase,
+  onSelectMVP,
 }) => {
   return (
     <div className="doodler-prototype-selector">
@@ -23,6 +25,9 @@ export const PrototypeSelector: React.FC<PrototypeSelectorProps> = ({
           </Button>
           <Button variant="outline" size="small" onClick={onSelectShowcase}>
             Showcase
+          </Button>
+          <Button variant="outline" size="small" onClick={onSelectMVP}>
+            MVP
           </Button>
         </div>
       </div>

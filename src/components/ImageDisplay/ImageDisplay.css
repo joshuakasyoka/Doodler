@@ -52,6 +52,95 @@
   max-width: 100%;
 }
 
+.doodler-image-display__caption--editable {
+  gap: var(--doodler-spacing-8);
+  width: 100%;
+  justify-content: flex-start;
+  cursor: pointer;
+  padding: 12px var(--doodler-spacing-16);
+  box-sizing: border-box;
+  --caption-text-height: calc(14px * 1.4);
+  min-height: calc(var(--caption-text-height) + 24px);
+}
+
+.doodler-image-display__caption--editable.doodler-image-display__caption--editing {
+  cursor: text;
+}
+
+.doodler-image-display__caption-text {
+  flex: 1;
+  min-width: 0;
+  font-family: var(--doodler-font-heading);
+  font-size: 14px;
+  font-weight: var(--doodler-font-weight-medium);
+  line-height: var(--caption-text-height);
+  height: var(--caption-text-height);
+  min-height: var(--caption-text-height);
+  max-height: var(--caption-text-height);
+  color: var(--doodler-color-text-primary);
+  margin: 0;
+  font-variation-settings: var(--doodler-font-variation-settings);
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  box-sizing: border-box;
+}
+
+.doodler-image-display__caption-label {
+  display: block;
+}
+
+.doodler-image-display__caption--editable .doodler-image-display__caption-input {
+  width: auto;
+  background: transparent;
+  border: none;
+  outline: none;
+  padding: 0;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.doodler-image-display__caption-input:focus {
+  outline: none;
+}
+
+@media (min-width: 768px) {
+  .doodler-image-display__caption--editable {
+    --caption-text-height: 16px;
+  }
+
+  .doodler-image-display__caption-text {
+    font-size: 16px;
+    text-align: left;
+  }
+}
+
+.doodler-image-display__caption-edit-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 16px;
+  height: var(--caption-text-height, calc(14px * 1.4));
+  color: var(--doodler-color-text-primary);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+.doodler-image-display__caption-edit-icon--spacer {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.doodler-image-display__caption--editable:hover .doodler-image-display__caption-edit-icon,
+.doodler-image-display__caption--editable:focus-visible .doodler-image-display__caption-edit-icon,
+.doodler-image-display__caption--editable:focus-within
+  .doodler-image-display__caption-edit-icon:not(.doodler-image-display__caption-edit-icon--spacer) {
+  opacity: 1;
+}
+
 @media (min-width: 768px) {
   .doodler-image-display__caption p {
     font-size: 16px;
@@ -195,6 +284,28 @@
   border-radius: 6px;
 }
 
+.doodler-image-display__card-placeholder--grey {
+  background-color: var(--doodler-color-grey);
+}
+
+.doodler-image-display__card-placeholder--refreshing {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--doodler-spacing-8);
+  color: var(--doodler-color-text-primary);
+}
+
+.doodler-image-display__card-version {
+  font-family: var(--doodler-font-heading);
+  font-size: 12px;
+  font-weight: var(--doodler-font-weight-normal);
+  line-height: 16px;
+  color: var(--doodler-color-text-primary);
+  font-variation-settings: var(--doodler-font-variation-settings);
+}
+
 .doodler-image-display__card-edit-icon {
   position: absolute;
   top: 12px;
@@ -207,6 +318,11 @@
   color: var(--doodler-color-text-primary);
   pointer-events: none;
   z-index: 10;
+}
+
+.doodler-image-display__card-edit-icon--interactive {
+  pointer-events: auto;
+  cursor: pointer;
 }
 
 .doodler-image-display__card-edit-icon svg {
