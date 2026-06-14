@@ -61,7 +61,7 @@ export const MVPDoodleLibrary: React.FC<MVPDoodleLibraryProps> = ({
                     <div className="doodler-mvp-library__section-chip">
                       <Chip variant="secondary">{section.chip}</Chip>
                     </div>
-                    <div className="doodler-mvp-library__image-display">
+                    <div className="doodler-mvp-library__image-display doodler-summary__image-display">
                       <ImageDisplay caption={section.caption} cards={section.cards} />
                     </div>
                   </div>
