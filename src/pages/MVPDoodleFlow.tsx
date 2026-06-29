@@ -5,7 +5,8 @@ import { Button } from '../components/Button/Button';
 import { Chip } from '../components/Chip/Chip';
 import { EditAnnotation } from '../components/EditAnnotation/EditAnnotation';
 import { Summary } from '../components/Summary/Summary';
-import { IconLibrary, IconPen } from '../icons';
+import { Toast } from '../components/Toast/Toast';
+import { IconPen, IconSave, IconPrint } from '../icons';
 import { MVPHeader } from './MVPHeader';
 import {
   MVP_KRACHTEN_STEPS,
@@ -65,6 +66,7 @@ export const MVPDoodleFlow: React.FC<MVPDoodleFlowProps> = ({
 
   const [currentStep, setCurrentStep] = useState(0);
   const [showSummary, setShowSummary] = useState(false);
+  const [showPrintToast, setShowPrintToast] = useState(false);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [annotations, setAnnotations] = useState<MVPAnnotation[]>(() =>
     cardsToMVPAnnotations(initialStepCards)
@@ -350,21 +352,31 @@ export const MVPDoodleFlow: React.FC<MVPDoodleFlowProps> = ({
                 onSectionClick={handleSummarySectionClick}
               />
               <div className="doodler-prototype__summary-actions">
-                <Button variant="outline" size="small" onClick={onBack}>
-                  Terug naar start
+                <Button
+                  variant="outline"
+                  size="small"
+                  startIcon={<IconSave size={16} />}
+                  onClick={onOpenLibrary}
+                >
+                  Save
                 </Button>
                 <Button
                   variant="primary"
                   size="small"
-                  startIcon={<IconLibrary size={16} />}
-                  onClick={onOpenLibrary}
+                  startIcon={<IconPrint size={16} />}
+                  onClick={() => setShowPrintToast(true)}
                 >
-                  Bekijk in bibliotheek
+                  Print
                 </Button>
               </div>
             </div>
           </div>
         </div>
+        <Toast
+          message="Sent to printer"
+          isVisible={showPrintToast}
+          onClose={() => setShowPrintToast(false)}
+        />
       </div>
     );
   }

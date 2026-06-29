@@ -96,3 +96,23 @@
     height: 100%;
   }
 }
+
+@media print {
+  .doodler-summary {
+    flex-direction: column;
+    height: auto;
+    overflow: visible;
+  }
+
+  .doodler-summary__section {
+    height: auto;
+    max-height: none;
+    page-break-inside: avoid;
+  }
+
+  .doodler-summary__image-display,
+  .doodler-summary__image-display .doodler-image-display {
+    flex: none;
+    height: auto;
+  }
+}

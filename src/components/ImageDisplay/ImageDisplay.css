@@ -416,3 +416,24 @@
   min-height: calc(16px * 2);
   max-height: calc(16px * 2);
 }
+
+@media print {
+  .doodler-image-display,
+  .doodler-image-display__container,
+  .doodler-image-display__row,
+  .doodler-image-display__card,
+  .doodler-image-display__card-image,
+  .doodler-summary__image-display .doodler-image-display {
+    height: auto;
+    max-height: none;
+    overflow: visible;
+  }
+
+  .doodler-image-display__card-image {
+    min-height: 96px;
+  }
+
+  .doodler-image-display__card {
+    page-break-inside: avoid;
+  }
+}

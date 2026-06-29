@@ -2,7 +2,7 @@ import React from 'react';
 import { Button } from '../components/Button/Button';
 import { Chip } from '../components/Chip/Chip';
 import { ImageDisplay } from '../components/ImageDisplay/ImageDisplay';
-import { IconOpenExternal } from '../icons';
+import { IconOpenExternal, IconShareAlt } from '../icons';
 import { MVPHeader } from './MVPHeader';
 import { formatMVPSessionDate } from './mvpLibraryData';
 import type { MVPSavedDoodleSession } from './mvpLibraryTypes';
@@ -15,6 +15,7 @@ export interface MVPDoodleLibraryProps {
   onBack: () => void;
   onOpenNewDoodle: () => void;
   onOpenSession: (session: MVPSavedDoodleSession) => void;
+  onShareSession?: (session: MVPSavedDoodleSession) => void;
 }
 
 export const MVPDoodleLibrary: React.FC<MVPDoodleLibraryProps> = ({
@@ -22,6 +23,7 @@ export const MVPDoodleLibrary: React.FC<MVPDoodleLibraryProps> = ({
   onBack,
   onOpenNewDoodle,
   onOpenSession,
+  onShareSession,
 }) => {
   return (
     <div className="doodler-mvp-library">
@@ -45,6 +47,14 @@ export const MVPDoodleLibrary: React.FC<MVPDoodleLibraryProps> = ({
                   </p>
                 </div>
                 <div className="doodler-mvp-library__session-actions">
+                  <Button
+                    variant="outline"
+                    size="small"
+                    startIcon={<IconShareAlt size={16} />}
+                    onClick={() => onShareSession?.(session)}
+                  >
+                    Share
+                  </Button>
                   <Button
                     variant="outline"
                     size="small"

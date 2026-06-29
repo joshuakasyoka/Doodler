@@ -26,6 +26,9 @@ export { IconSend } from './IconSend';
 export { IconDocument } from './IconDocument';
 export { IconOverview } from './IconOverview';
 export { IconGalleryToggle } from './IconGalleryToggle';
+export { IconSave } from './IconSave';
+export { IconPrint } from './IconPrint';
+export { IconShareAlt } from './IconShareAlt';
 
 // Add more icon exports as needed
 // To add a new icon:

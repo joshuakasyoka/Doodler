@@ -347,3 +347,23 @@
     padding: var(--doodler-spacing-32);
   }
 }
+
+@media print {
+  .doodler-prototype,
+  .doodler-prototype__screen,
+  .doodler-prototype__step-section,
+  .doodler-prototype__summary-content {
+    height: auto;
+    max-height: none;
+    min-height: 0;
+    overflow: visible;
+  }
+
+  .doodler-prototype {
+    display: block;
+  }
+
+  .doodler-prototype__summary-actions {
+    display: none;
+  }
+}
